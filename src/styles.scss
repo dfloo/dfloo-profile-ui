@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import './app/styles/variables.scss';
+@import './app/styles/colors.scss';
+
+:root {
+    @include mat.sidenav-overrides((
+        container-width: $app-sidenav-width,
+        container-divider-color: $frame-color-light
+    ));
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+}

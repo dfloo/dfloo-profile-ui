@@ -1,0 +1,18 @@
+<app-header [sidenavOpen]="sidenavOpen"></app-header>
+<mat-sidenav-container>
+    <mat-sidenav mode="side" [opened]="sidenavOpen()">
+        <div class="nav-container">
+            <button mat-button routerLink="/welcome">
+                Welcome
+            </button>
+            <button mat-button routerLink="/resume-builder">
+                Resume Builder
+            </button>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content-container">
+            <router-outlet />
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

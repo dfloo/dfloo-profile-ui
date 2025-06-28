@@ -1,0 +1,16 @@
+@import '@variables';
+@import '@colors';
+
+.app-header-container {
+    max-width: 100%;
+    height: $app-header-height;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    border-bottom: 1px solid $frame-color-light;
+}
+
+.user-menu-container {
+    background-color: white;
+}

@@ -1,0 +1,15 @@
+<div class="app-header-container">
+    <button mat-icon-button color="primary" (click)="toggleSidenav()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+        <div class="user-menu-container">
+            <button mat-menu-item>Profile</button>
+            <button mat-menu-item>Settings</button>
+            <button mat-menu-item>Logout</button>
+        </div>
+    </mat-menu>
+</div>

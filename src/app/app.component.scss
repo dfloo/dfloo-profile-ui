@@ -1,0 +1,15 @@
+@import '@variables'; 
+
+.nav-container {
+    display: flex;
+    flex-direction: column;
+    height: $app-content-height;
+    button {
+        margin-top: 10px;
+    }
+}
+
+.content-container {
+    height: $app-content-height;
+    overflow: auto;
+}
