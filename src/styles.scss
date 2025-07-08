@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
-@import './app/styles/variables.scss';
-@import './app/styles/colors.scss';
+
+@use './app/styles/variables.scss' as *;
+@use './app/styles/colors.scss' as *;
 
 :root {
     @include mat.sidenav-overrides((

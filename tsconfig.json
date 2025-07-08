@@ -18,7 +18,9 @@
             "@pages/*": ["./src/app/pages/*"],
             "@components/*": ["./src/app/components/*"],
             "@variables": ["./src/app/styles/variables.scss"],
-            "@colors": ["./src/app/styles/colors.scss"]
+            "@colors": ["./src/app/styles/colors.scss"],
+            "@models/*": ["./src/app/models/*"],
+            "@api/*": ["./src/app/api/*"]
         }
     },
     "angularCompilerOptions": {
@@ -26,7 +28,10 @@
         "strictInjectionParameters": true,
         "strictInputAccessModifiers": true,
         "typeCheckHostBindings": true,
-        "strictTemplates": true
+        "strictTemplates": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "allowUnreachableCode": false,
     },
     "files": [],
     "references": [

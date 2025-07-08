@@ -2,6 +2,7 @@
     <button mat-icon-button color="primary" (click)="toggleSidenav()">
         <mat-icon>menu</mat-icon>
     </button>
+    <h1>{{ activeRouteTitle() }}</h1>
     <button mat-icon-button color="primary" [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
     </button>
