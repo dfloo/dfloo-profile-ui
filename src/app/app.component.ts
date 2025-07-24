@@ -1,10 +1,16 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { Route, Router, RouterOutlet } from '@angular/router';
+import {
+    Component,
+    inject,
+    OnInit,
+    signal
+} from '@angular/core';
+import { ActivationEnd, Route, Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { filter } from 'rxjs';
 
 import { HeaderComponent } from '@components/app-header';
-import { navigableRoutes } from './app.routes';
+import { sidenavRoutes } from './app.routes';
 
 @Component({
     selector: 'app-root',
@@ -17,21 +23,27 @@ import { navigableRoutes } from './app.routes';
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
-export class App {
-    sidenavOpen: WritableSignal<boolean>;
-    activeRouteTitle: WritableSignal<string>;
-    navigableRoutes: Array<Route>;
+export class App implements OnInit {
+    sidenavOpen = signal(false);
+    title = signal('');
+    sidenavRoutes: Route[];
 
-    private router = inject(Router)
+    private router = inject(Router);
 
     constructor() {
-        this.sidenavOpen = signal(false);
-        this.activeRouteTitle = signal('Welcome');
-        this.navigableRoutes = navigableRoutes;
+        this.sidenavRoutes = sidenavRoutes;
     }
 
-    onNavClick({ path, title }: Route): void {
+    ngOnInit(): void {
+        this.router.events.pipe(
+            filter((e): e is ActivationEnd => e instanceof ActivationEnd)
+        ).subscribe(({ snapshot }) => {
+            const title = snapshot.routeConfig?.title ?? '';
+            this.title.set(title as string);
+        });
+    }
+
+    onNavClick({ path }: Route): void {
         this.router.navigate([path]);
-        this.activeRouteTitle.set(title as string);
     }
 }

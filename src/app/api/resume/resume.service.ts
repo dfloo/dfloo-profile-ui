@@ -11,8 +11,8 @@ import { ApiService } from '../api.service';
 export class ResumeService {
     private apiService = inject(ApiService)
 
-    getResume(): Observable<Resume> {
-        return this.apiService.get<ResumeDTO>('/resume')
-            .pipe(map(Resume.normalize))
+    getResumes(): Observable<Resume[]> {
+        return this.apiService.get<ResumeDTO[]>('/resumes')
+            .pipe(map(resumes => resumes.map(Resume.normalize)))
     }
 }

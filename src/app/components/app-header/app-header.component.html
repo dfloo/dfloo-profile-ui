@@ -1,16 +1,31 @@
 <div class="app-header-container">
-    <button mat-icon-button color="primary" (click)="toggleSidenav()">
+    <button matIconButton color="primary" (click)="toggleSidenav()">
         <mat-icon>menu</mat-icon>
     </button>
-    <h1>{{ activeRouteTitle() }}</h1>
-    <button mat-icon-button color="primary" [matMenuTriggerFor]="userMenu">
+    <h1>{{ title() }}</h1>
+    <button matIconButton color="primary" [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userMenu="matMenu">
         <div class="user-menu-container">
-            <button mat-menu-item>Profile</button>
-            <button mat-menu-item>Settings</button>
-            <button mat-menu-item>Logout</button>
+            @if (isAuthenticated$ | async) {
+                <button
+                    mat-menu-item
+                    (click)="openUserModal(UserModalView.Profile)"
+                >
+                    Profile
+                </button>
+                <button
+                    mat-menu-item
+                    (click)="openUserModal(UserModalView.Settings)"
+                >
+                    Settings
+                </button>
+                <button mat-menu-item (click)="logout()">Log Out</button>
+            } @else {
+                <button mat-menu-item (click)="signup()">Sign Up</button>
+                <button mat-menu-item (click)="login()">Log In</button>
+            }
         </div>
     </mat-menu>
 </div>

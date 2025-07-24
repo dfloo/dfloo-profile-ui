@@ -1,11 +1,13 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
     ApplicationConfig,
     provideBrowserGlobalErrorListeners,
     provideZoneChangeDetection
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 
+import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -13,6 +15,7 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
-        provideHttpClient()
+        provideHttpClient(withInterceptors([authHttpInterceptorFn])),
+        provideAuth0(environment.auth0)
     ]
 };

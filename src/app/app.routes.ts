@@ -3,7 +3,8 @@ import { Routes } from '@angular/router';
 import { ResumeBuilderComponent } from '@pages/resume-builder';
 import { WelcomeComponent } from '@pages/welcome';
 
-export const navigableRoutes = [{
+export const sidenavRoutes = [
+    {
         path: 'welcome',
         title: 'Welcome',
         component: WelcomeComponent
@@ -15,7 +16,7 @@ export const navigableRoutes = [{
     }
 ]
 export const routes: Routes = [
-    ...navigableRoutes,
+    ...sidenavRoutes,
     {
         path: '**',
         redirectTo: 'welcome'

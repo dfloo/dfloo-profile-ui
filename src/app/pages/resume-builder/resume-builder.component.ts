@@ -16,11 +16,11 @@ export class ResumeBuilderComponent implements OnInit {
 
     private resumeService = inject(ResumeService);
 
-    resume?: Resume;
+    resumes?: Resume[];
 
     ngOnInit() {
-        this.resumeService.getResume().subscribe(resume => {
-            this.resume = resume;
+        this.resumeService.getResumes().subscribe(resumes => {
+            this.resumes = resumes;
         });
     }
 }

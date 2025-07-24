@@ -1,12 +1,12 @@
 <app-header
     [sidenavOpen]="sidenavOpen"
-    [activeRouteTitle]="activeRouteTitle"
+    [title]="title"
 ></app-header>
 <mat-sidenav-container>
     <mat-sidenav mode="side" [opened]="sidenavOpen()">
         <div class="nav-container">
-            @for (route of navigableRoutes; track route.path) {
-                <button mat-button (click)="onNavClick(route)">
+            @for (route of sidenavRoutes; track route.path) {
+                <button matButton (click)="onNavClick(route)">
                     {{ route.title }}
                 </button>
             }

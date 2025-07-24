@@ -1,24 +1,79 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    inject,
     Input,
+    OnInit,
+    signal,
     WritableSignal
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AuthService } from '@auth0/auth0-angular';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+
+import { UserModalComponent, UserModalView } from '@components/user-modal';
 
 @Component({
     selector: 'app-header',
-    imports: [MatButtonModule, MatIconModule, MatMenuModule],
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatDialogModule,
+        AsyncPipe
+    ],
     templateUrl: './app-header.component.html',
     styleUrl: './app-header.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
     @Input() sidenavOpen!: WritableSignal<boolean>;
-    @Input() activeRouteTitle!: WritableSignal<string>;
+    @Input() title!: WritableSignal<string>;
 
+    userLoggedIn = signal(true);
+    isAuthenticated$?: Observable<boolean>;
+    UserModalView = UserModalView;
+
+    private dialog = inject(MatDialog);
+    private auth = inject(AuthService);
+    private doc = inject(DOCUMENT);
+
+    ngOnInit(): void {
+        this.isAuthenticated$ = this.auth.isAuthenticated$
+        this.auth.user$.subscribe(user => {
+            console.log('user', user);
+        });
+    }
+
+    login(): void {
+        this.auth.loginWithPopup();
+    }
+
+    logout(): void {
+        this.auth.logout({
+            logoutParams: { returnTo: this.doc.location.origin, },
+        });
+    }
+
+    signup(): void {
+        this.auth.loginWithPopup({
+            authorizationParams: { screen_hint: 'signup', },
+        });
+    }
+
+    openUserModal(view: UserModalView): void {
+        this.dialog.open(UserModalComponent, {
+            minHeight: '60vh',
+            minWidth: '60vw',
+            data: { view }
+        });
+    }
+    
     toggleSidenav() {
         this.sidenavOpen.set(!this.sidenavOpen());
     }

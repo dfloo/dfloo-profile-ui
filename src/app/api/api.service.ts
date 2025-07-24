@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class ApiService {
-    private host = 'http://localhost:8080'
-    private http = inject(HttpClient)
+    private host = 'http://localhost:8080';
+    private http = inject(HttpClient);
 
     get<T>(path: string): Observable<T> {
-        return this.http.get<T>(`${this.host}${path}`);
+        return this.http.get<T>(`${this.host}/api/${path}`);
     }
 }
