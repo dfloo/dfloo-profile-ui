@@ -2,11 +2,18 @@
 
 @use './app/styles/variables.scss' as *;
 @use './app/styles/colors.scss' as *;
+@use './app/styles/helpers.scss';
 
 :root {
     @include mat.sidenav-overrides((
         container-width: $app-sidenav-width,
         container-divider-color: $frame-color-light
+    ));
+    @include mat.menu-overrides((
+        container-color: $app-background-color
+    ));
+    @include mat.select-overrides((
+        panel-background-color: $app-background-color
     ));
 }
 

@@ -2,10 +2,9 @@ import {
     ChangeDetectionStrategy,
     Component,
     inject,
-    Input,
+    input,
     OnInit,
-    signal,
-    WritableSignal
+    output
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,10 +31,10 @@ import { UserModalComponent, UserModalView } from '@components/user-modal';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
-    @Input() sidenavOpen!: WritableSignal<boolean>;
-    @Input() title!: WritableSignal<string>;
+    sidenavOpen = input(false);
+    title = input('');
+    toggleSidenav = output();
 
-    userLoggedIn = signal(true);
     isAuthenticated$?: Observable<boolean>;
     UserModalView = UserModalView;
 
@@ -45,9 +44,6 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit(): void {
         this.isAuthenticated$ = this.auth.isAuthenticated$
-        this.auth.user$.subscribe(user => {
-            console.log('user', user);
-        });
     }
 
     login(): void {
@@ -72,9 +68,5 @@ export class HeaderComponent implements OnInit {
             minWidth: '60vw',
             data: { view }
         });
-    }
-    
-    toggleSidenav() {
-        this.sidenavOpen.set(!this.sidenavOpen());
     }
 }

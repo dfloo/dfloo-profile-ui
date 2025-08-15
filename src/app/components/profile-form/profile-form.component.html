@@ -1,1 +1,4 @@
-Profile Form
+<form [formGroup]="form" (ngSubmit)="submitProfile.emit(model)">
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <button matButton type="submit">Submit</button>
+</form>

@@ -6,6 +6,8 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
+import { provideFormlyCore } from '@ngx-formly/core';
+import { withFormlyMaterial } from '@ngx-formly/material';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
@@ -16,6 +18,7 @@ export const appConfig: ApplicationConfig = {
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
         provideHttpClient(withInterceptors([authHttpInterceptorFn])),
-        provideAuth0(environment.auth0)
+        provideAuth0(environment.auth0),
+        provideFormlyCore(withFormlyMaterial())
     ]
 };

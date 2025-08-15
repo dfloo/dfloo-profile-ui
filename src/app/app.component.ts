@@ -1,8 +1,7 @@
 import {
     Component,
     inject,
-    OnInit,
-    signal
+    OnInit
 } from '@angular/core';
 import { ActivationEnd, Route, Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,8 +23,8 @@ import { sidenavRoutes } from './app.routes';
     styleUrl: './app.component.scss'
 })
 export class App implements OnInit {
-    sidenavOpen = signal(false);
-    title = signal('');
+    sidenavOpen = false;
+    title = '';
     sidenavRoutes: Route[];
 
     private router = inject(Router);
@@ -39,11 +38,15 @@ export class App implements OnInit {
             filter((e): e is ActivationEnd => e instanceof ActivationEnd)
         ).subscribe(({ snapshot }) => {
             const title = snapshot.routeConfig?.title ?? '';
-            this.title.set(title as string);
+            this.title = title as string;
         });
     }
 
     onNavClick({ path }: Route): void {
         this.router.navigate([path]);
+    }
+
+    toggleSidenav(): void {
+        this.sidenavOpen = !this.sidenavOpen;
     }
 }

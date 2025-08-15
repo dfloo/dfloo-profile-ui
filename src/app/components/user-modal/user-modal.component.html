@@ -1,7 +1,10 @@
 <div class="user-modal-container">
     <mat-tab-group [selectedIndex]="selectedTab()">
         <mat-tab label="Profile">
-            <!-- Profile Content -->
+            <profile-form
+                [profile]="profile"
+                (submitProfile)="onSubmitProfile($event)"
+            ></profile-form>
         </mat-tab>
         <mat-tab label="Settings">
             <!-- Settings Content -->
