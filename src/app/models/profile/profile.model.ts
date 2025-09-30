@@ -10,26 +10,87 @@ export class Profile extends BaseModel {
     state?: string;
     zipCode?: string;
     country?: string;
+    phoneNumber?: string;
     email?: string;
-    socialAccounts?: string[][]
+    socialAccounts?: SocialAccount[];
 
     constructor(props: Partial<Profile>) {
         super(props);
-        Object.assign(this, props);
+        Object.assign(this, {
+            ...props,
+            created: this.created,
+            updated: this.updated
+        });
     }
 
     static normalize(record: ProfileDTO): Profile {
         return new Profile({
             id: record.profileId,
-            ...record
+            firstName: record.firstName,
+            middleName: record.middleName,
+            lastName: record.lastName,
+            phoneNumber: record.phoneNumber,
+            email: record.email,
+            socialAccounts: record.socialAccounts,
+            address1: record.address1,
+            address2: record.address2,
+            city: record.city,
+            state: record.state,
+            country: record.country,
+            zipCode: record.zipCode,
+            created: record.created,
+            updated: record.updated
         });
     }
 
     static serialize(profile: Profile): ProfileDTO {
+        const socialAccounts = profile.socialAccounts
+            ? profile.socialAccounts.filter(
+                a => (a?.href !== '' && a?.label !== '')
+             )
+            : undefined
         return {
             profileId: profile.id,
-            ...profile
+            firstName: profile.firstName,
+            middleName: profile.middleName,
+            lastName: profile.lastName,
+            phoneNumber: profile.phoneNumber,
+            email: profile.email,
+            socialAccounts,
+            address1: profile.address1,
+            address2: profile.address2,
+            city: profile.city,
+            state: profile.state,
+            country: profile.country,
+            zipCode: profile.zipCode
         }
+    }
+
+    static getMockDTO(profileId: string): ProfileDTO {
+        return {
+            profileId,
+            phoneNumber: "123-456-7890",
+            email: "devin@email.com",
+            firstName: "Devin",
+            middleName: "Patrick",
+            lastName: "Flood",
+            address1: "",
+            address2: "",
+            city: "Bay Area",
+            state: "US-CA",
+            zipCode: "",
+            country: "",
+            socialAccounts: [
+                {
+                    href: 'https://github.com/dfloo',
+                    label: 'github'
+                },
+                {
+                    href: 'https://www.linkedin.com/in/dfloo/',
+                    label: 'linkedin'
+                }
+            ]
+        };
     }
 }
 
@@ -44,6 +105,14 @@ export interface ProfileDTO {
     state?: string;
     zipCode?: string;
     country?: string;
+    phoneNumber?: string;
     email?: string;
-    socialAccounts?: string[][];
+    socialAccounts?: SocialAccount[];
+    created?: string;
+    updated?: string;
+}
+
+interface SocialAccount {
+    href?: string;
+    label?: string
 }

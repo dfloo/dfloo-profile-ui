@@ -20,7 +20,8 @@
             "@variables": ["./src/app/styles/variables.scss"],
             "@colors": ["./src/app/styles/colors.scss"],
             "@models/*": ["./src/app/models/*"],
-            "@api/*": ["./src/app/api/*"]
+            "@api/*": ["./src/app/api/*"],
+            "@core/*": ["./src/app/core/*"]
         }
     },
     "angularCompilerOptions": {

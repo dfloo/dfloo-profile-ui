@@ -1,9 +1,9 @@
 <div class="app-header-container">
-    <button matIconButton color="primary" (click)="toggleSidenav.emit()">
+    <button matIconButton (click)="toggleSidenav.emit()">
         <mat-icon>menu</mat-icon>
     </button>
     <h1>{{ title() }}</h1>
-    <button matIconButton color="primary" [matMenuTriggerFor]="userMenu">
+    <button matIconButton [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userMenu="matMenu">

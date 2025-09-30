@@ -10,20 +10,22 @@ import { ApiService } from '../api.service';
 })
 export class ProfileService {
     private apiService = inject(ApiService);
-    private path = 'profile';
+    private path = '/profiles';
 
-    getProfile(): Observable<Profile> {
+    getUserProfile(): Observable<Profile> {
         return this.apiService.get<ProfileDTO>(this.path)
             .pipe(map(Profile.normalize));
     }
 
-    createProfile(profile: Profile): Observable<Profile> {
-        return this.apiService.post(this.path, Profile.serialize(profile))
+    createUserProfile(profile: Profile): Observable<Profile> {
+        return this.apiService
+            .post<ProfileDTO>(this.path, Profile.serialize(profile))
             .pipe(map(Profile.normalize));
     }
 
-    updateProfile(profile: Profile): Observable<Profile> {
-        return this.apiService.put(this.path, Profile.serialize(profile))
+    updateUserProfile(profile: Profile): Observable<Profile> {
+        return this.apiService
+            .put<ProfileDTO>(this.path, Profile.serialize(profile))
             .pipe(map(Profile.normalize));
     }
 }

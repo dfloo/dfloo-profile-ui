@@ -9,6 +9,8 @@ import { authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 import { provideFormlyCore } from '@ngx-formly/core';
 import { withFormlyMaterial } from '@ngx-formly/material';
 
+import { RepeatSectionComponent } from '@core/form-fields';
+
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 
@@ -19,6 +21,13 @@ export const appConfig: ApplicationConfig = {
         provideRouter(routes),
         provideHttpClient(withInterceptors([authHttpInterceptorFn])),
         provideAuth0(environment.auth0),
-        provideFormlyCore(withFormlyMaterial())
+        provideFormlyCore([
+            ...withFormlyMaterial(),
+            {
+                types: [{
+                    name: 'repeat-section', component: RepeatSectionComponent
+                }]
+            }
+        ])
     ]
 };

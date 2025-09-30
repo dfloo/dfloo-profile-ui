@@ -1,8 +1,8 @@
 export class BaseModel {
     id?: string;
     isNew: boolean;
-    created?: Date;
-    updated?: Date;
+    created?: Date | string;
+    updated?: Date | string;
 
     constructor({ id, created, updated }: Partial<BaseModel>) {
         this.id = id;

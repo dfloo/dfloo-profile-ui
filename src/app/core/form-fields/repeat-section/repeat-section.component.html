@@ -1,0 +1,19 @@
+<div class="field-container">
+    @if (props.label) {
+        {{ props.label }}
+    }
+    <button matButton (click)="add()">
+        <mat-icon>add_circle_outline</mat-icon>
+        {{ props['addText'] }}
+    </button>
+    @for (field of field.fieldGroup; track field) {
+        <div class="repeat-section-container">
+            <formly-field [field]="field"></formly-field>
+            <button
+                matButton
+                [matTooltip]="props['removeText']"
+                (click)="remove($index)"
+            ><mat-icon>remove_circle_outline</mat-icon></button>
+        </div>
+    }
+</div>

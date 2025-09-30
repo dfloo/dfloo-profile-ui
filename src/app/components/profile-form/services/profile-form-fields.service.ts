@@ -4,7 +4,7 @@ import { iso31661, iso31662 } from 'iso-3166';
 import { skip } from 'rxjs';
 
 export interface SelectOption {
-    value: string;
+    value?: string;
     label: string;
 }
 
@@ -13,22 +13,14 @@ export class ProfileFormFieldsService {
     
     getFields(): FormlyFieldConfig[] {
         const {
-            email,
-            firstName,
-            middleName,
-            lastName,
-            address1,
-            address2,
-            city,
-            state,
-            zipCode,
-            country
-        } = this.getBaseFields();
+            firstName, middleName, lastName, address1, address2, city, state,
+            zipCode, country, email, socialAccounts, phoneNumber
+        } = this.getFieldConfigs();
 
         return [
             {
                 fieldGroupClassName: 'd-flex',
-                fieldGroup:[firstName, middleName, lastName]
+                fieldGroup: [firstName, middleName, lastName]
             },
             {
                 fieldGroupClassName: 'd-flex',
@@ -38,16 +30,64 @@ export class ProfileFormFieldsService {
                 fieldGroupClassName: 'd-flex',
                 fieldGroup: [city, state, zipCode, country]
             },
-            email
+            {
+                fieldGroupClassName: 'd-flex',
+                fieldGroup: [phoneNumber, email]
+            },
+            socialAccounts
         ];
     }
 
-    private getBaseFields(): Record<string, FormlyFieldConfig> {
+    
+
+    private getFieldConfigs(): Record<string, FormlyFieldConfig> {
         return {
             email: {
                 key: 'email',
                 type: 'input',
-                props: { label: 'Email' }
+                className: 'flex-grow',
+                props: {
+                    label: 'Email',
+                    type: 'email',
+                    pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'
+                },
+                validation: {
+                    messages: {
+                        pattern: (_, field) => `"${field?.formControl?.value}" is not a valid email address`
+                    }
+                }
+            },
+            socialAccounts: {
+                key: 'socialAccounts',
+                type: 'repeat-section',
+                className: 'flex-grow',
+                props: {
+                    label: 'Social Accounts',
+                    addText: 'Add Social Account',
+                    removeText: 'Remove Social Account'
+                },
+                fieldArray: {
+                    fieldGroup:[{
+                        fieldGroupClassName: 'd-flex',
+                        fieldGroup: [{
+                            key: 'label',
+                            type: 'input',
+                            className: 'flex-grow',
+                            props: { label: 'Label' }
+                        }, {
+                            key: 'href',
+                            type: 'input',
+                            className: 'flex-grow',
+                            props: { label: 'Link' }
+                        }]
+                    }]
+                },
+            },
+            phoneNumber: {
+                key: 'phoneNumber',
+                type: 'input',
+                className: 'flex-grow',
+                props: { label: 'Phone Number' }
             },
             firstName: {
                 key: 'firstName',
@@ -93,15 +133,13 @@ export class ProfileFormFieldsService {
                     label: 'State/Province',
                     options: []
                 },
-                expressions: {
-                    'props.options': this.getStates
-                }
+                expressions: { 'props.options': this.getStates }
             },
             zipCode: {
                 key: 'zipCode',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Zip Code' }
+                props: { label: 'Zip/Postal Code' }
             },
             country: {
                 key: 'country',
@@ -109,15 +147,17 @@ export class ProfileFormFieldsService {
                 className: 'flex-grow',
                 props: {
                     label: 'Country',
-                    options: this.getCountries()
+                    options: []
                 },
-                defaultValue: 'US',
+                expressions: { 'props.options': this.getCountries },
                 hooks: { onInit: this.onCountryInit }
             }
         };
     }
 
-    private onCountryInit({ form, formControl, model }: FormlyFieldConfig): void {
+    private onCountryInit(
+        { form, formControl, model }: FormlyFieldConfig
+    ): void {
         formControl?.valueChanges.pipe(skip(1))
             .subscribe(value => {
                 if (value !== model.country) {
@@ -126,18 +166,28 @@ export class ProfileFormFieldsService {
             })
     }
 
-    private getCountries(): SelectOption[] {
-        return iso31661.map(({ alpha2, name}) => ({
-            value: alpha2,
-            label: name
-        }));
+    private getCountries(
+        { model: { country } }: FormlyFieldConfig
+    ): SelectOption[] {
+        return [
+            ...(country ? [{ label: 'Clear Selection' }] : []),
+            ...iso31661.map(({ alpha2, name }) => ({
+                value: alpha2,
+                label: name
+            }))
+        ];
     }
 
-    private getStates({ model }: FormlyFieldConfig): SelectOption[] {
-        return iso31662.filter(({ parent }) => parent === model.country)
-            .map(({ code, name }) => ({
-                value: code,
-                label: name
-            }));
+    private getStates(
+        { model: { state, country } }: FormlyFieldConfig
+    ): SelectOption[] {
+        return [
+            ...(state ? [{ label: 'Clear Selection' }] : []),
+            ...iso31662.filter(({ parent }) => parent === (country || 'US'))
+                .map(({ code, name }) => ({
+                    value: code,
+                    label: name
+                }))
+        ];
     }
 }
