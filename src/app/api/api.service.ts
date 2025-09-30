@@ -30,6 +30,6 @@ export class ApiService {
     }
 
     private getURL(path: string): string {
-        return `${this.host}/api${path}`
+        return `${this.host}/api${path}`;
     } 
 }

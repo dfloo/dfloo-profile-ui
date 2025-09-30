@@ -114,5 +114,5 @@ export interface ProfileDTO {
 
 interface SocialAccount {
     href?: string;
-    label?: string
+    label?: string;
 }

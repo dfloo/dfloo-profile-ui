@@ -81,7 +81,7 @@ export class ProfileFormFieldsService {
                             props: { label: 'Link' }
                         }]
                     }]
-                },
+                }
             },
             phoneNumber: {
                 key: 'phoneNumber',
