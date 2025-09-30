@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit {
 
     openUserModal(view: UserModalView): void {
         this.dialog.open(UserModalComponent, {
-            minHeight: '60vh',
+            minHeight: '50vh',
             minWidth: '60vw',
             data: { view }
         });

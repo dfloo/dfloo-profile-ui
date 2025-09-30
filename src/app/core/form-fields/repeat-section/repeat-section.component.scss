@@ -1,0 +1,11 @@
+.field-container {
+    margin-bottom: 5px;
+}
+
+.repeat-section-container {
+    display: flex;
+    align-items: center;
+    formly-field {
+        flex-grow: 1;
+    }
+}

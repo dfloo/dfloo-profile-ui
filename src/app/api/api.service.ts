@@ -10,14 +10,26 @@ export class ApiService {
     private http = inject(HttpClient);
 
     get<T>(path: string): Observable<T> {
-        return this.http.get<T>(`${this.host}/api/${path}`);
+        return this.http.get<T>(this.getURL(path));
     }
 
-    post<T>(path: string, body: T): Observable<object> {
-        return this.http.post(`${this.host}/api/${path}`, body)
+    download(path: string): Observable<Blob> {
+        return this.http.get(this.getURL(path), { responseType: 'blob' });
     }
 
-    put<T>(path: string, body: T): Observable<object> {
-        return this.http.put(`${this.host}/api/${path}`, body)
+    post<T>(path: string, body: unknown): Observable<T> {
+        return this.http.post<T>(this.getURL(path), body)
     }
+
+    put<T>(path: string, body: unknown): Observable<T> {
+        return this.http.put<T>(this.getURL(path), body)
+    }
+
+    delete(path: string, body: unknown): Observable<object> {
+        return this.http.delete(path, { body });
+    }
+
+    private getURL(path: string): string {
+        return `${this.host}/api${path}`;
+    } 
 }

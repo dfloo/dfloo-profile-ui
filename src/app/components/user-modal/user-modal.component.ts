@@ -1,20 +1,22 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    effect,
     inject,
     OnInit,
-    signal
+    signal,
+    WritableSignal
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { cloneDeep, isEqual } from 'lodash';
 
 import { ProfileService } from '@api/profile';
 import { ProfileFormComponent } from '@components/profile-form';
 import { Profile } from '@models/profile';
-import { Observable } from 'rxjs';
 
 export enum UserModalView {
     Profile = 0,
@@ -27,6 +29,7 @@ export enum UserModalView {
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
+    MatDialogModule,
     ProfileFormComponent
 ],
     templateUrl: './user-modal.component.html',
@@ -35,16 +38,27 @@ export enum UserModalView {
 })
 export class UserModalComponent implements OnInit {
     selectedTab = signal(UserModalView.Profile);
-    profile = new Profile({});
+    profile: WritableSignal<Profile> = signal(new Profile({}));
+    profileSnapshot?: Profile;
+
+    get profileHasChanges(): boolean {
+        return !isEqual(this.profile(), this.profileSnapshot);
+    }
 
     private data = inject(MAT_DIALOG_DATA);
     private dialogRef = inject(MatDialogRef<UserModalComponent>);
-    private profileService = inject(ProfileService)
+    private profileService = inject(ProfileService);
+
+    constructor() {
+        effect(() => {
+            this.profileSnapshot = cloneDeep(this.profile());
+        });
+    }
 
     ngOnInit(): void {
         this.selectedTab.set(this.data.view);
-        this.profileService.getProfile().subscribe(profile => {
-            this.profile = profile;
+        this.profileService.getUserProfile().subscribe(profile => {
+            this.profile.set(profile);
         });
     }
 
@@ -52,16 +66,19 @@ export class UserModalComponent implements OnInit {
         this.dialogRef.close();
     }
 
-    onSubmitProfile(profile: Profile): void {
-        let submit: Observable<Profile>;
-        if (profile.isNew) {
-            submit = this.profileService.createProfile(profile)
-        } else {
-            submit = this.profileService.updateProfile(profile)
-        }
-        submit.subscribe(profile => {
-            this.profile = profile;
-            this.close();
+    submitProfile(): void {
+        const submit = this.profile().isNew
+            ? this.profileService.createUserProfile(this.profile())
+            : this.profileService.updateUserProfile(this.profile());
+    
+        submit.subscribe(savedProfile => {
+            this.profile.set(savedProfile)
         });
+    }
+
+    revertProfileChanges(): void {
+        if (this.profileSnapshot) {
+            this.profile.set(this.profileSnapshot)
+        }
     }
 }
