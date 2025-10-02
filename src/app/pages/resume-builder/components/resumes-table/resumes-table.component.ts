@@ -71,7 +71,7 @@ export class ResumesTableComponent implements AfterViewInit {
     }
 
     get selectAllIndeterminate(): boolean {
-        return this.selectionModel.hasValue() && !this.allSelected
+        return this.selectionModel.hasValue() && !this.allSelected;
     }
 
     get singleSelection(): boolean {
@@ -94,16 +94,13 @@ export class ResumesTableComponent implements AfterViewInit {
         this.paginator.page.subscribe(({ pageIndex, pageSize }: PageEvent) => {
             this.setVisibleRows(pageIndex, pageSize);
             this.selectionModel.clear();
-        })
+        });
     }
 
     onSelectAll({ checked }: MatCheckboxChange): void {
-        console.log('onSelectAll', checked);
         if (checked) {
-            console.log('visibleRows', this.visibleRows)
             this.selectionModel.setSelection(...this.visibleRows);
         } else {
-            console.log('clear')
             this.selectionModel.clear();
         }
     }
@@ -139,7 +136,7 @@ export class ResumesTableComponent implements AfterViewInit {
                 IDs.push(resume.id)
             }
 
-            return IDs
+            return IDs;
         }, []);
     }
 }

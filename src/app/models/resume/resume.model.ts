@@ -74,7 +74,7 @@ export class Resume extends BaseModel {
             skills: [
                 'Angular, React',
                 'Java, Ruby, Go',
-                'jenkins, CI/CD',
+                'Jenkins, CI/CD',
                 'Code Review',
                 'UI/UX Design',
                 'Product/Technical Requirements'

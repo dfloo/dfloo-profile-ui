@@ -14,7 +14,7 @@ export class ResumeService {
     
     getResumes(): Observable<Resume[]> {
         return this.apiService.get<ResumeDTO[]>(this.path)
-        .pipe(map(resumes => (resumes?.map(Resume.normalize) ?? [])));
+            .pipe(map(resumes => (resumes?.map(Resume.normalize) ?? [])));
     }
     
     deleteResumes(resumeIDs: string[]): Observable<object> {

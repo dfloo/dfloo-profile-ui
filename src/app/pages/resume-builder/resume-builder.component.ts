@@ -25,7 +25,7 @@ export class ResumeBuilderComponent implements OnInit {
     
     resumes = signal<Resume[]>([]);
     resume = signal<Resume | undefined>(undefined);
-    userProfile = toSignal(this.profileService.getUserProfile())
+    userProfile = toSignal(this.profileService.getUserProfile());
 
     ngOnInit(): void {
         this.resumeService.getResumes().subscribe(resumes => {
@@ -37,7 +37,7 @@ export class ResumeBuilderComponent implements OnInit {
         this.resumeService.deleteResumes(resumeIDs)
             .subscribe(() => {
                 this.resumes.set(this.resumes().filter(resume => {
-                    return resume.id && resumeIDs.includes(resume.id)
+                    return resume.id && !resumeIDs.includes(resume.id)
                 }))
             });
     }
