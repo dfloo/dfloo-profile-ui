@@ -1,3 +1,10 @@
 <div class="resume-builder-container">
-
+    @if (resume()) {
+        {{ resume()?.description }}
+    } @else {
+        <resumes-table
+            [resumes]="resumes()"
+            (deleteResumes)="deleteResumes($event)"
+        ></resumes-table>
+    }
 </div>

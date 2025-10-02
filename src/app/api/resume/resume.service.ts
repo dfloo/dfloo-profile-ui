@@ -9,10 +9,15 @@ import { ApiService } from '../api.service';
     providedIn: 'root'
 })
 export class ResumeService {
-    private apiService = inject(ApiService)
-
+    private apiService = inject(ApiService);
+    private path = '/resumes';
+    
     getResumes(): Observable<Resume[]> {
-        return this.apiService.get<ResumeDTO[]>('/resumes')
-            .pipe(map(resumes => resumes.map(Resume.normalize)))
+        return this.apiService.get<ResumeDTO[]>(this.path)
+            .pipe(map(resumes => (resumes?.map(Resume.normalize) ?? [])));
+    }
+    
+    deleteResumes(resumeIDs: string[]): Observable<object> {
+        return this.apiService.delete(this.path, resumeIDs);
     }
 }

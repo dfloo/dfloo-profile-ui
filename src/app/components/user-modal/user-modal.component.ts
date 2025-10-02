@@ -37,6 +37,10 @@ export enum UserModalView {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserModalComponent implements OnInit {
+    private data = inject(MAT_DIALOG_DATA);
+    private dialogRef = inject(MatDialogRef<UserModalComponent>);
+    private profileService = inject(ProfileService);
+
     selectedTab = signal(UserModalView.Profile);
     profile: WritableSignal<Profile> = signal(new Profile({}));
     profileSnapshot?: Profile;
@@ -45,9 +49,6 @@ export class UserModalComponent implements OnInit {
         return !isEqual(this.profile(), this.profileSnapshot);
     }
 
-    private data = inject(MAT_DIALOG_DATA);
-    private dialogRef = inject(MatDialogRef<UserModalComponent>);
-    private profileService = inject(ProfileService);
 
     constructor() {
         effect(() => {

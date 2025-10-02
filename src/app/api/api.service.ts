@@ -26,7 +26,7 @@ export class ApiService {
     }
 
     delete(path: string, body: unknown): Observable<object> {
-        return this.http.delete(path, { body });
+        return this.http.delete(this.getURL(path), { body });
     }
 
     private getURL(path: string): string {

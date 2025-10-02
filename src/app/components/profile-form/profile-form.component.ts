@@ -28,7 +28,7 @@ import { ProfileFormFieldsService } from './services';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileFormComponent implements OnInit {
-    profile = model<Profile | undefined>(new Profile({}));
+    profile = model<Profile>();
     form = new FormGroup({});
     fields: FormlyFieldConfig[] = [];
 

@@ -1,0 +1,104 @@
+<div class="resumes-table-container">
+    <div class="resumes-table-toolbar">
+        <div>
+            <button matButton="filled" (click)="newResume.emit()">
+                New Resume
+            </button>
+        </div>
+        <div>
+            @if (singleSelection) {
+                <button
+                    matIconButton 
+                    (click)="editResume.emit(selectedResume)"
+                    matTooltip="Edit Resume"
+                >
+                    <mat-icon class="material-icons-outlined">edit</mat-icon>
+                </button>
+                <button
+                    matIconButton 
+                    (click)="copyResume.emit(selectedResume)"
+                    matTooltip="Copy Resume"
+                >
+                    <mat-icon class="material-icons-outlined">
+                        content_copy
+                    </mat-icon>
+                </button>
+                <button
+                    matIconButton
+                    (click)="viewResume.emit(selectedResume)"
+                    matTooltip="View Resume"
+                >
+                    <mat-icon class="material-icons-outlined">
+                        pageview
+                    </mat-icon>
+                </button>
+                <button
+                    matIconButton
+                    (click)="onDownloadResume(selectedResume)"
+                    matTooltip="Download Resume"
+                >
+                    <mat-icon class="material-icons-outlined">
+                        download
+                    </mat-icon>
+                </button>
+            }
+            @if (selectionModel.hasValue()) {
+                <button
+                    matIconButton
+                    (click)="onDeleteResumes(selectedResumes)"
+                    matTooltip="Delete Resumes"
+                >
+                    <mat-icon class="material-icons-outlined">delete</mat-icon>
+                </button>
+            }
+        </div>
+    </div>
+    <div class="resumes-table">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox
+                        (change)="onSelectAll($event)"
+                        [checked]="allSelected"
+                        [indeterminate]="selectAllIndeterminate"
+                    ></mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let resume">
+                    <mat-checkbox
+                        (change)="onSelectResume(resume)"
+                        [checked]="selectionModel.isSelected(resume)"
+                        (dblclick)="$event.stopPropagation()"
+                    ></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="fileName">
+                <th mat-header-cell *matHeaderCellDef>File Name</th>
+                <td mat-cell *matCellDef="let resume">{{ resume.fileName }}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let resume">
+                    {{ resume.description }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="updated">
+                <th mat-header-cell *matHeaderCellDef>Last Updated</th>
+                <td mat-cell *matCellDef="let resume">{{ resume.updated }}</td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr
+                mat-row
+                *matRowDef="let resume; columns: columns"
+                (dblclick)="editResume.emit(resume)"
+                class="table-row"
+            ></tr>
+        </table>
+    </div>
+    <mat-paginator
+        class="resumes-table-paginator"
+        [length]="dataSource.data.length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+    ></mat-paginator>
+</div>
