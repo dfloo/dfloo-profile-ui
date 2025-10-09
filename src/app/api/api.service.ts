@@ -13,23 +13,27 @@ export class ApiService {
         return this.http.get<T>(this.getURL(path));
     }
 
-    download(path: string): Observable<Blob> {
-        return this.http.get(this.getURL(path), { responseType: 'blob' });
+    download<Blob>(path: string, body?: unknown): Observable<Blob> {
+        return this.http.post<Blob>(
+            this.getURL(path),
+            body,
+            { responseType: 'blob' as 'json' }
+        )
     }
 
     post<T>(path: string, body: unknown): Observable<T> {
-        return this.http.post<T>(this.getURL(path), body)
+        return this.http.post<T>(this.getURL(path), body);
     }
 
     put<T>(path: string, body: unknown): Observable<T> {
-        return this.http.put<T>(this.getURL(path), body)
+        return this.http.put<T>(this.getURL(path), body);
     }
 
-    delete(path: string, body: unknown): Observable<object> {
-        return this.http.delete(this.getURL(path), { body });
+    delete<T>(path: string, body: unknown): Observable<T> {
+        return this.http.delete<T>(this.getURL(path), { body });
     }
 
     private getURL(path: string): string {
-        return `${this.host}/api${path}`;
-    } 
+        return `${this.host}/api/${path}`;
+    }
 }

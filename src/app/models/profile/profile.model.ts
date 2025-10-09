@@ -69,10 +69,10 @@ export class Profile extends BaseModel {
     static getMockDTO(profileId: string): ProfileDTO {
         return {
             profileId,
-            phoneNumber: "123-456-7890",
-            email: "devin@email.com",
+            phoneNumber: "713-542-3638",
+            email: "devin.p.flood@gmail.com",
             firstName: "Devin",
-            middleName: "Patrick",
+            middleName: "P.",
             lastName: "Flood",
             address1: "",
             address2: "",

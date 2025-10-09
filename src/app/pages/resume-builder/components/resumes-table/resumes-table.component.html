@@ -9,14 +9,14 @@
             @if (singleSelection) {
                 <button
                     matIconButton 
-                    (click)="editResume.emit(selectedResume)"
+                    (click)="onEditResume(selectedResume)"
                     matTooltip="Edit Resume"
                 >
                     <mat-icon class="material-icons-outlined">edit</mat-icon>
                 </button>
                 <button
                     matIconButton 
-                    (click)="copyResume.emit(selectedResume)"
+                    (click)="onCopyResume(selectedResume)"
                     matTooltip="Copy Resume"
                 >
                     <mat-icon class="material-icons-outlined">
@@ -34,7 +34,7 @@
                 </button>
                 <button
                     matIconButton
-                    (click)="onDownloadResume(selectedResume)"
+                    (click)="downloadResume.emit(selectedResume)"
                     matTooltip="Download Resume"
                 >
                     <mat-icon class="material-icons-outlined">
@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class="resumes-table">
-        <table mat-table [dataSource]="dataSource">
+        <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="select">
                 <th mat-header-cell *matHeaderCellDef>
                     <mat-checkbox
@@ -81,6 +81,10 @@
                     {{ resume.description }}
                 </td>
             </ng-container>
+            <ng-container matColumnDef="created">
+                <th mat-header-cell *matHeaderCellDef>Created</th>
+                <td mat-cell *matCellDef="let resume">{{ resume.created }}</td>
+            </ng-container>
             <ng-container matColumnDef="updated">
                 <th mat-header-cell *matHeaderCellDef>Last Updated</th>
                 <td mat-cell *matCellDef="let resume">{{ resume.updated }}</td>
@@ -90,7 +94,7 @@
             <tr
                 mat-row
                 *matRowDef="let resume; columns: columns"
-                (dblclick)="editResume.emit(resume)"
+                (dblclick)="onEditResume(resume)"
                 class="table-row"
             ></tr>
         </table>

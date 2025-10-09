@@ -10,7 +10,7 @@ import { ApiService } from '../api.service';
 })
 export class ProfileService {
     private apiService = inject(ApiService);
-    private path = '/profiles';
+    private path = 'profiles';
 
     getUserProfile(): Observable<Profile> {
         return this.apiService.get<ProfileDTO>(this.path)

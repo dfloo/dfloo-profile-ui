@@ -20,7 +20,10 @@ const envConfigFile = `export const environment = {
         },
         errorPath: '/callback',
         httpInterceptor: {
-            allowedList: ['${process.env['API_SERVER_URL']}/api/*']
+            allowedList: [
+                '${process.env['API_SERVER_URL']}/api/profiles',
+                '${process.env['API_SERVER_URL']}/api/resumes'
+            ]
         }
     },
     api: {
