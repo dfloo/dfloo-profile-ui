@@ -1,10 +1,22 @@
 <div class="resume-builder-container">
     @if (resume()) {
-        {{ resume()?.description }}
+        <resume-editor
+            [resume]="resume()"
+            (saveResume)="saveResume($event)"
+            (downloadResume)="downloadResume($event)"
+            (viewResume)="viewResume($event)"
+            (deleteResume)="deleteResumes($event)"
+            (back)="resume.set(undefined)"
+        ></resume-editor>
     } @else {
         <resumes-table
             [resumes]="resumes()"
+            (newResume)="newResume()"
+            (editResume)="editResume($event)"
+            (copyResume)="copyResume($event)"
             (deleteResumes)="deleteResumes($event)"
+            (viewResume)="viewResume($event)"
+            (downloadResume)="downloadResume($event)"
         ></resumes-table>
     }
 </div>

@@ -64,7 +64,8 @@ export class ProfileFormFieldsService {
                 props: {
                     label: 'Social Accounts',
                     addText: 'Add Social Account',
-                    removeText: 'Remove Social Account'
+                    removeText: 'Remove Social Account',
+                    expand: 'all'
                 },
                 fieldArray: {
                     fieldGroup:[{

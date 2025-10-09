@@ -18,8 +18,7 @@ export class Resume extends BaseModel {
         Object.assign(this, {
             ...props,
             created: this.created,
-            updated: this.updated,
-            sections: props.sections ?? defaultSections
+            updated: this.updated
         });
     }
 
@@ -62,11 +61,11 @@ export class Resume extends BaseModel {
     static getMockDTO(resumeId?: string): ResumeDTO {
         return {
             resumeId,
-            updated: '8/27/2025',
+            // updated: '8/27/2025',
             fileName: `Mock_Resume_${resumeId}`,
             templateSettings: {
                 templateName: 'default',
-                fontFamily: 'helvet'
+                fontFamily: 'default'
             },
             profile: Profile.getMockDTO('1'),
             description: 'Angular Focused',
@@ -124,18 +123,15 @@ export interface ResumeDTO {
 }
 
 export enum SectionType {
-    Experience = 'Experience',
-    Education = 'Education',
+    Summary = 'Summary',
     Skills = 'Skills',
-    Summary = 'Summary'
+    Experience = 'Experience',
+    Education = 'Education'
 }
 
-const defaultSections = [
-    SectionType.Summary,
-    SectionType.Skills,
-    SectionType.Experience,
-    SectionType.Education
-];
+export const defaultSections: SectionType[] = (
+    () => Object.keys(SectionType) as SectionType[]
+)();
 
 export interface Section {
     type?: SectionType,
@@ -161,5 +157,5 @@ interface Education {
 
 interface TemplateSettings {
     templateName: 'default';
-    fontFamily: 'helvet' | 'times'
+    fontFamily: 'default'
 }

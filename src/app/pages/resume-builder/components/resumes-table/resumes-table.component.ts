@@ -4,6 +4,7 @@ import {
     ChangeDetectionStrategy,
     Component,
     effect,
+    inject,
     input,
     output,
     ViewChild
@@ -13,6 +14,7 @@ import {
     MatCheckboxChange,
     MatCheckboxModule
 } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -21,8 +23,11 @@ import {
     MatPaginatorModule,
     PageEvent
 } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { cloneDeep } from 'lodash';
 
 import { Resume } from '@models/resume';
+import { MessageDialogComponent, MessageDialogResult } from '@components/message-dialog';
 
 @Component({
     selector: 'resumes-table',
@@ -35,19 +40,23 @@ import { Resume } from '@models/resume';
         MatCheckboxModule,
         MatButtonModule,
         MatIconModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatSortModule
     ]
 })
 export class ResumesTableComponent implements AfterViewInit {
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    private dialog = inject(MatDialog);
+    @ViewChild(MatPaginator) private paginator!: MatPaginator;
+    @ViewChild(MatSort, { static: true }) private sort!: MatSort;
+
     resumes = input<Resume[]>([]);
     newResume = output();
     editResume = output<Resume>();
     viewResume = output<Resume>();
     copyResume = output<Resume>();
-    downloadResume = output<string>();
+    downloadResume = output<Resume>();
     deleteResumes = output<string[]>();
-    columns = ['select', 'fileName',  'description', 'updated'];
+    columns = ['select', 'fileName',  'description', 'created', 'updated'];
     dataSource = new MatTableDataSource<Resume>([]);
     selectionModel = new SelectionModel<Resume>(true, []);
     visibleRows: Resume[] = [];
@@ -85,12 +94,16 @@ export class ResumesTableComponent implements AfterViewInit {
                 this.pageSizeOptions.push(resumes.length);
             }
             this.dataSource.data = resumes;
+            this.setVisibleRows(this.pageIndex, this.pageSize);
         });
     }
 
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
-        this.setVisibleRows(this.pageIndex, this.pageSize);
+        this.dataSource.sort = this.sort;
+        this.sort.active = 'created';
+        this.sort.direction = 'asc';
+        this.sort.sortChange.emit();
         this.paginator.page.subscribe(({ pageIndex, pageSize }: PageEvent) => {
             this.setVisibleRows(pageIndex, pageSize);
             this.selectionModel.clear();
@@ -113,15 +126,31 @@ export class ResumesTableComponent implements AfterViewInit {
         }
     }
 
-    onDeleteResumes(resumes: Resume[]): void {
-        this.deleteResumes.emit(this.getIDs(resumes));
+    onEditResume(resume: Resume): void {
+        this.editResume.emit(cloneDeep(resume));
+    }
+
+    onCopyResume(resume: Resume): void {
+        this.copyResume.emit(resume);
         this.selectionModel.clear();
     }
 
-    onDownloadResume({ id }: Resume): void {
-        if (id) {
-            this.downloadResume.emit(id);
+    onDeleteResumes(resumes: Resume[]): void {
+        const config = {
+            data: {
+                message: 'Are you sure you want to delete the selected resumes?',
+                confirmLabel: 'Yes',
+                cancelLabel: 'No'
+            }
         }
+        this.dialog.open(MessageDialogComponent, config)
+            .afterClosed()
+            .subscribe(result => {
+                if (result === MessageDialogResult.Confirm) {
+                    this.deleteResumes.emit(this.getIDs(resumes));
+                    this.selectionModel.clear();
+                }
+            });
     }
 
     private setVisibleRows(pageIndex: number, pageSize: number): void {

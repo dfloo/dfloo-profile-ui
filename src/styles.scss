@@ -15,6 +15,10 @@
     @include mat.select-overrides((
         panel-background-color: $app-background-color
     ));
+    @include mat.icon-button-overrides((
+        disabled-icon-color: $frame-color-light
+    ));
+    // @include mat.button-overrides(())
 }
 
 body {
