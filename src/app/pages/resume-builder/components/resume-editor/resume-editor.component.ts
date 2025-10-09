@@ -72,7 +72,6 @@ export class ResumeEditorComponent implements OnInit {
     constructor() {
         effect(() => {
             this.resumeSnapshot = cloneDeep(this.resume());
-            console.log('resume effect', this.resumeSnapshot);
         });
     }
 

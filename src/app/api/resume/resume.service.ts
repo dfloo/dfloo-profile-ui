@@ -46,8 +46,8 @@ export class ResumeService {
 
     createResume(resume: Resume): Observable<Resume> {
         return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenitcated => {
-                if (!isAuthenitcated) {
+            switchMap(isAuthenticated => {
+                if (!isAuthenticated) {
                     return this.createSessionResume(resume);
                 }
 
@@ -60,8 +60,8 @@ export class ResumeService {
 
     updateResume(resume: Resume): Observable<Resume> {
         return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenitcated => {
-                if (!isAuthenitcated) {
+            switchMap(isAuthenticated => {
+                if (!isAuthenticated) {
                     return this.updateSessionResume(resume);
                 }
 

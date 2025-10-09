@@ -141,7 +141,7 @@ export class ResumeFormFieldsService {
                 expand: 'each'
             },
             fieldArray: {
-                fieldGroup:[{
+                fieldGroup: [{
                     fieldGroupClassName: 'd-flex',
                     fieldGroup: [{
                         key: 'name',
