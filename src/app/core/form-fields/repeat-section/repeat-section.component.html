@@ -41,10 +41,7 @@
                             matButton
                             (click)="remove($index)"
                         >
-                            <mat-icon
-                                [matTooltip]="props['removeText']"
-                                matTooltipClass="tooltip-border"
-                            >
+                            <mat-icon [matTooltip]="props['removeText']">
                                 remove_circle_outline
                             </mat-icon>
                         </button>
@@ -71,9 +68,10 @@
                 <button
                     matButton
                     [matTooltip]="props['removeText']"
-                    matTooltipClass="tooltip-border"
                     (click)="remove($index)"
-                ><mat-icon>remove_circle_outline</mat-icon></button>
+                >
+                    <mat-icon>remove_circle_outline</mat-icon>
+                </button>
                 <formly-field [field]="field"></formly-field>
             </div>
         }

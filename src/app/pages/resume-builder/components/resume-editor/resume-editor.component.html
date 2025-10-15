@@ -79,7 +79,7 @@
             <div cdkDropList (cdkDropListDropped)="moveSection($event)">
                 @for (section of resume()?.sections; track section) {
                     <div cdkDrag>
-                        <mat-expansion-panel id="section">
+                        <mat-expansion-panel [attr.id]="section">
                             <mat-expansion-panel-header>
                                 <div class="section-controls">
                                     <mat-icon
