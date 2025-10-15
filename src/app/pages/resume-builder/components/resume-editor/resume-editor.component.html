@@ -1,6 +1,6 @@
 <div class="resume-editor-container">
     <div class="resume-editor-header">
-        <div>
+        <div class="header-buttons">
             <button matIconButton (click)="exit()">
                 <mat-icon>arrow_back</mat-icon>
             </button>
@@ -58,7 +58,7 @@
             <div>
                 <mat-expansion-panel expanded="true">
                     <mat-expansion-panel-header>
-                        <span class="locked-panel-header">Settings</span>
+                        <span>Settings</span>
                     </mat-expansion-panel-header>
                     <resume-section-form
                         [resume]="resume()!"
@@ -69,7 +69,7 @@
             <div>
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
-                        <span class="locked-panel-header">Profile</span>
+                        <span>Profile</span>
                     </mat-expansion-panel-header>
                     <profile-form
                         [profile]="resume()?.profile"
@@ -79,20 +79,22 @@
             <div cdkDropList (cdkDropListDropped)="moveSection($event)">
                 @for (section of resume()?.sections; track section) {
                     <div cdkDrag>
-                        <mat-expansion-panel>
+                        <mat-expansion-panel id="section">
                             <mat-expansion-panel-header>
-                                <mat-icon
-                                    cdkDragHandle
-                                    matTooltip="Move Section"
-                                >drag_handle</mat-icon>
-                                <button
-                                    matButton
-                                    matTooltip="Remove Section"
-                                    (click)="removeSection(section)"
-                                >
-                                    <mat-icon>remove_circle_outline</mat-icon>
-                                </button>
-                                <span>{{ section }}</span>
+                                <div class="section-controls">
+                                    <mat-icon
+                                        cdkDragHandle
+                                        matTooltip="Move Section"
+                                    >drag_handle</mat-icon>
+                                    <button
+                                        matButton
+                                        matTooltip="Remove Section"
+                                        (click)="removeSection(section)"
+                                    >
+                                        <mat-icon>remove_circle_outline</mat-icon>
+                                    </button>
+                                </div>
+                                <span class="movable-panel-header">{{ section }}</span>
                             </mat-expansion-panel-header>
                             @if (section === SectionType.Summary) {
                                 <resume-section-form

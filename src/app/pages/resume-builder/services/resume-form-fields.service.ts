@@ -138,7 +138,9 @@ export class ResumeFormFieldsService {
             props: {
                 addText: 'Add Education',
                 removeText: 'Remove Education',
-                expand: 'each'
+                expand: 'each',
+                subsectionLabel: 'Name',
+                subsectionKey: 'name'
             },
             fieldArray: {
                 fieldGroup: [{
@@ -147,7 +149,7 @@ export class ResumeFormFieldsService {
                         key: 'name',
                         type: 'input',
                         className: 'flex-grow',
-                        props: { label: 'Name' }
+                        props: { label: 'Name' },
                     }, {
                         key: 'location',
                         type: 'input',

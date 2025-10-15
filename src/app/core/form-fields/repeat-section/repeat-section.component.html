@@ -41,9 +41,14 @@
                             matButton
                             (click)="remove($index)"
                         >
-                            <mat-icon>remove_circle_outline</mat-icon>
-                            {{ props['removeText'] }}
+                            <mat-icon
+                                [matTooltip]="props['removeText']"
+                                matTooltipClass="tooltip-border"
+                            >
+                                remove_circle_outline
+                            </mat-icon>
                         </button>
+                        {{ getSubsectionLabel($index) }}
                     </div>
                 </mat-expansion-panel-header>
                 <div class="repeat-section-container">
@@ -63,12 +68,13 @@
         </div>
         @for (field of field.fieldGroup; track field) {
             <div class="repeat-section-container">
-                <formly-field [field]="field"></formly-field>
                 <button
                     matButton
                     [matTooltip]="props['removeText']"
+                    matTooltipClass="tooltip-border"
                     (click)="remove($index)"
                 ><mat-icon>remove_circle_outline</mat-icon></button>
+                <formly-field [field]="field"></formly-field>
             </div>
         }
     }

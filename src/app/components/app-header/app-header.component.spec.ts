@@ -17,7 +17,7 @@ describe('HeaderComponent', () => {
     let mockDialog: jasmine.SpyObj<MatDialog>;
     const AUTH0_CLIENT = new InjectionToken('auth0.client');
 
-    const setup = async (authenticated: boolean) => {
+    const setup = async (isAuthenticated: boolean) => {
         mockDialog = jasmine.createSpyObj('MatDialog', ['open']);
         await TestBed.configureTestingModule({
             imports: [HeaderComponent, WrapperComponent],
@@ -26,7 +26,7 @@ describe('HeaderComponent', () => {
                 {
                     provide: AuthService,
                     useValue: {
-                        isAuthenticated$: of(authenticated),
+                        isAuthenticated$: of(isAuthenticated),
                         loginWithPopup: jasmine.createSpy('loginWithPopup'),
                         logout: jasmine.createSpy('logout')
                     }

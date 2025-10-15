@@ -27,7 +27,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { cloneDeep } from 'lodash';
 
 import { Resume } from '@models/resume';
-import { MessageDialogComponent, MessageDialogResult } from '@components/message-dialog';
+import { WarningDialogComponent, WarningDialogResult } from '@components/warning-dialog';
 
 @Component({
     selector: 'resumes-table',
@@ -143,10 +143,10 @@ export class ResumesTableComponent implements AfterViewInit {
                 cancelLabel: 'No'
             }
         }
-        this.dialog.open(MessageDialogComponent, config)
+        this.dialog.open(WarningDialogComponent, config)
             .afterClosed()
             .subscribe(result => {
-                if (result === MessageDialogResult.Confirm) {
+                if (result === WarningDialogResult.Confirm) {
                     this.deleteResumes.emit(this.getIDs(resumes));
                     this.selectionModel.clear();
                 }

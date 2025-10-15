@@ -17,4 +17,15 @@ import { FieldArrayType, FormlyField } from '@ngx-formly/core';
     MatExpansionModule
 ]
 })
-export class RepeatSectionComponent extends FieldArrayType {}
+export class RepeatSectionComponent extends FieldArrayType {
+    getSubsectionLabel(index: number): string {
+        const key = this.props['subsectionKey'];
+        const model = this.field.model[index];
+
+        if (model && model[key]) {
+            return model[key]
+        }
+
+        return this.props['subsectionLabel']
+    }
+}
