@@ -18,7 +18,16 @@
     @include mat.icon-button-overrides((
         disabled-icon-color: $frame-color-light
     ));
-    // @include mat.button-overrides(())
+    @include mat.expansion-overrides((
+        container-background-color: $app-background-color,
+    ));
+    @include mat.tooltip-overrides((
+        container-color: $app-background-color
+    ));
+}
+
+.mdc-tooltip {
+    border: 1px solid $frame-color-dark;
 }
 
 body {

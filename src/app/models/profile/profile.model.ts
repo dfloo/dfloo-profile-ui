@@ -69,7 +69,6 @@ export class Profile extends BaseModel {
     static getMockDTO(profileId: string): ProfileDTO {
         return {
             profileId,
-            phoneNumber: "713-542-3638",
             email: "devin.p.flood@gmail.com",
             firstName: "Devin",
             middleName: "P.",

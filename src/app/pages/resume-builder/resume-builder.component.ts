@@ -6,16 +6,13 @@ import {
     signal
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AuthService } from '@auth0/auth0-angular';
 import { cloneDeep } from 'lodash';
-import { Observable, of, switchMap } from 'rxjs';
 
 import { ProfileService } from '@api/profile';
 import { ResumeService } from '@api/resume';
 import { Resume } from '@models/resume';
 
 import { ResumeEditorComponent, ResumesTableComponent } from './components';
-import { Profile } from '@models/profile';
 
 @Component({
     templateUrl: './resume-builder.component.html',
@@ -26,11 +23,10 @@ import { Profile } from '@models/profile';
 export class ResumeBuilderComponent implements OnInit {
     private resumeService = inject(ResumeService);
     private profileService = inject(ProfileService);
-    private auth = inject(AuthService);
     
     resumes = signal<Resume[]>([]);
     resume = signal<Resume | undefined>(undefined);
-    userProfile = toSignal(this.getUserProfile());
+    userProfile = toSignal(this.profileService.getUserProfile());
 
     ngOnInit(): void {
         this.resumeService.getResumes().subscribe(resumes => {
@@ -82,7 +78,11 @@ export class ResumeBuilderComponent implements OnInit {
     }
 
     newResume(): void {
-        this.resume.set(new Resume({ profile: this.userProfile() }));
+        this.resume.set(new Resume({
+            profile: this.userProfile(),
+            experience: [{}],
+            education: [{}]
+        }));
     }
 
     downloadResume(resume: Resume): void {
@@ -98,17 +98,5 @@ export class ResumeBuilderComponent implements OnInit {
     viewResume(resume: Resume): void {
         this.resumeService.downloadResume(resume)
             .subscribe(pdf => window.open(URL.createObjectURL(pdf)));
-    }
-
-    private getUserProfile(): Observable<Profile> {
-        return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenticated => {
-                if (!isAuthenticated) {
-                    return of(new Profile({}))
-                }
-
-                return this.profileService.getUserProfile()
-            })
-        )
     }
 }

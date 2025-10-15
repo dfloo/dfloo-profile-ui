@@ -1,20 +1,38 @@
-import { Component, effect, inject, model, OnInit, output } from '@angular/core';
+import {
+    Component,
+    effect,
+    inject,
+    model,
+    OnInit,
+    output,
+    QueryList,
+    ViewChildren
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {
+    MatExpansionModule,
+    MatExpansionPanel
+} from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+    CdkDragDrop,
+    DragDropModule,
+    moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { cloneDeep, isEqual } from 'lodash';
 
 import { ProfileFormComponent } from '@components/profile-form';
+import {
+    WarningDialogComponent,
+    WarningDialogResult
+} from '@components/warning-dialog';
 import { defaultSections, Resume, Section, SectionType } from '@models/resume';
 
 import { ResumeFormFieldsService } from '../../services';
 import { ResumeSectionFormComponent } from '../resume-section-form';
-import { MessageDialogComponent, MessageDialogResult } from '@components/message-dialog';
 
 @Component({
     selector: 'resume-editor',
@@ -49,6 +67,10 @@ export class ResumeEditorComponent implements OnInit {
     experienceFields: FormlyFieldConfig[] = [];
     educationFields: FormlyFieldConfig[] = [];
     SectionType = SectionType;
+    expandLastPanel?: boolean;
+
+    @ViewChildren(MatExpansionPanel)
+        expansionPanels!: QueryList<MatExpansionPanel>;
 
     get resumeHasChanged(): boolean {
         return !isEqual(this.resume(), this.resumeSnapshot);
@@ -72,6 +94,12 @@ export class ResumeEditorComponent implements OnInit {
     constructor() {
         effect(() => {
             this.resumeSnapshot = cloneDeep(this.resume());
+            if (this.expandLastPanel) {
+                setTimeout(() => {
+                    this.expansionPanels.last.expanded = true;
+                    this.expandLastPanel = false;
+                })
+            }
         });
     }
 
@@ -92,10 +120,10 @@ export class ResumeEditorComponent implements OnInit {
             },
 
         }
-        this.dialog.open(MessageDialogComponent, config)
+        this.dialog.open(WarningDialogComponent, config)
             .afterClosed()
             .subscribe(result => {
-                if (result === MessageDialogResult.Confirm) {
+                if (result === WarningDialogResult.Confirm) {
                     const resume = this.resume();
                     if (resume?.id) {
                         this.deleteResume.emit([resume.id]);
@@ -109,20 +137,23 @@ export class ResumeEditorComponent implements OnInit {
         if (this.resume()?.isNew || this.resumeHasChanged) {
             const config = {
                 data: {
-                    message: 'There are unsaved changes. Are you sure you want to exit?',
-                    confirmLabel: 'Exit without saving',
-                    cancelLabel: 'Continue editing',
-                    alternateLabel: 'Save and exit'
+                    message: `
+                        There are unsaved changes. 
+                        Are you sure you want to exit?
+                    `,
+                    confirmLabel: 'Exit without Saving',
+                    cancelLabel: 'Continue Editing',
+                    alternateLabel: 'Save and Exit'
                 },
     
             }
-            this.dialog.open(MessageDialogComponent, config)
+            this.dialog.open(WarningDialogComponent, config)
                 .afterClosed()
                 .subscribe(result => {
-                    if (result === MessageDialogResult.Confirm) {
+                    if (result === WarningDialogResult.Confirm) {
                         this.cancelChanges();
                         this.back.emit();
-                    } else if (result === MessageDialogResult.Alternate) {
+                    } else if (result === WarningDialogResult.Alternate) {
                         const resume = this.resume()
                         if (resume) {
                             this.saveResume.emit(resume)
@@ -142,18 +173,19 @@ export class ResumeEditorComponent implements OnInit {
     addSection(section: SectionType): void {
         const resume = this.resume();
 
-        if (resume !== undefined) {
+        if (resume) {
             this.resume.set(new Resume({
                 ...resume,
                 sections: [...(resume.sections ?? []), section]
             }));
+            this.expandLastPanel = true;
         }
     }
 
     removeSection(section: SectionType): void {
         const resume = this.resume();
 
-        if (resume !== undefined) {
+        if (resume) {
             this.resume.set(new Resume({
                 ...resume,
                 sections: [...(resume.sections ?? []).filter(s => {
