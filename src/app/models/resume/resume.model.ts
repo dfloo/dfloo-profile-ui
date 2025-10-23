@@ -59,8 +59,8 @@ export class Resume extends BaseModel {
         };
     }
 
-    static getMockDTO(resumeId?: string): ResumeDTO {
-        return getMockResumeDTO(resumeId);
+    static getMockDTO(): ResumeDTO {
+        return getMockResumeDTO();
     }
 }
 

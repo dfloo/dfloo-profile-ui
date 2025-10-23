@@ -41,7 +41,7 @@ describe('ResumeService', () => {
     describe('#getResumes', () => {
         it('should make a get request and normalize result', done => {
             setup();
-            const mockDTO = Resume.getMockDTO('id');
+            const mockDTO = Resume.getMockDTO();
             const normalized = Resume.normalize(mockDTO);
             mockApiService.get.and.returnValue(of([mockDTO]));
 
@@ -55,7 +55,7 @@ describe('ResumeService', () => {
 
         it('should get from session storage for unauthenticated user', done => {
             setup(false);
-            const mockResumes = [Resume.normalize(Resume.getMockDTO('id'))];
+            const mockResumes = [Resume.normalize(Resume.getMockDTO())];
             mockSessionStorage.getData.and.returnValue(
                 { resumes: mockResumes }
             );
@@ -88,7 +88,7 @@ describe('ResumeService', () => {
         it("should delete from session storage for unauth'd user", done => {
             setup(false);
             mockSessionStorage.getData.and.returnValue(
-                { resumes: [Resume.normalize(Resume.getMockDTO('id'))] }
+                { resumes: [Resume.normalize(Resume.getMockDTO())] }
             );
             service.deleteResumes(['id']).subscribe(result => {
                 expect(result).toEqual(true);
@@ -105,7 +105,7 @@ describe('ResumeService', () => {
     describe('#createResume', () => {
         it('should post serialized resume and normalize result', done => {
             setup();
-            const mockDTO = Resume.getMockDTO('id')
+            const mockDTO = Resume.getMockDTO()
             const normalized = Resume.normalize(mockDTO);
             const serialized = Resume.serialize(normalized);
             mockApiService.post.and.returnValue(of(mockDTO));
@@ -141,7 +141,7 @@ describe('ResumeService', () => {
     describe('#updateResume', () => {
         it('should put serialized resume and normalize result', done => {
             setup();
-            const mockDTO = Resume.getMockDTO('id');
+            const mockDTO = Resume.getMockDTO();
             const normalized = Resume.normalize(mockDTO);
             const serialized = Resume.serialize(normalized);
             mockApiService.put.and.returnValue(of(mockDTO));
@@ -158,7 +158,7 @@ describe('ResumeService', () => {
 
         it("should edit session storage for unauth'd users", done => {
             setup(false);
-            const existing = Resume.normalize(Resume.getMockDTO('id'));
+            const existing = Resume.normalize(Resume.getMockDTO());
             mockSessionStorage.getData.and.returnValue({ resumes: [existing] });
             const updated = new Resume({ ...existing, summary: 'updated' });
 
