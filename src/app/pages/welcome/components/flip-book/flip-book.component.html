@@ -1,0 +1,68 @@
+<div class="flip-book-container">
+    <div
+        class="back-cover-container"
+        [class.all-open]="allPagesOpen()"
+    >
+        <div class="back-cover" [class.open]="open">
+            <img src="assets/back_cover.png">
+            <div class="back-cover-buttons">
+                <button matButton (click)="viewResume()">View Resume</button>
+            </div>
+        </div>
+    </div>
+
+    @for (page of reversePages(); track page) {
+        <div class="page-container">
+            <div
+                class="page"
+                [class.open]="open"
+                [class.flipped]="page.flipped"
+                [class.reverse-flip]="page.reverseFlip"
+                (click)="flipPage(page)"
+            >
+                <div class="page--back-face">
+                    <img [src]="page.back">
+                </div>
+                <div class="page--front-face">
+                    <img [src]="page.front">
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="front-cover-container">
+        <div
+            class="front-cover"
+            [class.open]="open"
+            (click)="toggleOpen()"
+        >
+            <div class="front-cover--inner-face">
+                <img src="assets/front_cover_inner.png">
+            </div>
+            <div class="front-cover--outer-face">
+                <img src="assets/front_cover.png">
+            </div>
+        </div>
+    </div>
+
+    @for (page of pages(); track page) {
+        @if (page.flipped) {
+            <div class="page-container">
+                <div
+                    class="page"
+                    [class.open]="open"
+                    [class.flipped]="page.flipped"
+                    [class.reverse-flip]="page.reverseFlip"
+                    (click)="reverseFlipPage(page)"
+                >
+                    <div class="page--front-face">
+                        <img [src]="page.front">
+                    </div>
+                    <div class="page--back-face">
+                        <img [src]="page.back">
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
