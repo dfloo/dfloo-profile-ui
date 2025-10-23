@@ -37,7 +37,7 @@ export class FlipBookComponent {
         front: 'assets/page_2_front.png',
         back: 'assets/page_2_back.png'
     }];
-    pages = signal<Page[]>(this.initialPages)
+    pages = signal<Page[]>(this.initialPages);
     reversePages = computed(() => ([...this.pages()].reverse()));
     allPagesOpen = signal(false);
 
@@ -86,7 +86,7 @@ export class FlipBookComponent {
 }
 
 interface Page {
-    id: number
+    id: number;
     reverseFlip?: boolean;
     flipped?: boolean;
     front?: string;
