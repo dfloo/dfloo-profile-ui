@@ -8,20 +8,31 @@
                     }
                     <button matButton (click)="add()">
                         <mat-icon>add_circle_outline</mat-icon>
-                        {{ props['addText'] }}
+                        {{ addText }}
                     </button>
                 </div>
             </mat-expansion-panel-header>
-            @for (field of field.fieldGroup; track field) {
-                <div class="repeat-section-container">
-                    <formly-field [field]="field"></formly-field>
-                    <button
-                        matButton
-                        [matTooltip]="props['removeText']"
-                        (click)="remove($index)"
-                    ><mat-icon>remove_circle_outline</mat-icon></button>
-                </div>
-            }
+            <div cdkDropList (cdkDropListDropped)="moveField($event)">
+                @for (field of field.fieldGroup; track field) {
+                    <div cdkDrag>
+                        <div class="repeat-section-container">
+                            <mat-icon
+                                cdkDragHandle
+                                [matTooltip]="moveText"
+                            >drag_handle</mat-icon>
+                            <button
+                                matButton
+                                [matTooltip]="removeText"
+                                (click)="remove($index)"
+                            >
+                                <mat-icon>remove_circle_outline</mat-icon>
+                            </button>
+                            <formly-field [field]="field"></formly-field>
+                            
+                        </div>
+                    </div>
+                }
+            </div>
         </mat-expansion-panel>
     } @else if (props['expand'] === 'each') {
         <div class="label-container">
@@ -30,29 +41,37 @@
             }
             <button matButton (click)="add()">
                 <mat-icon>add_circle_outline</mat-icon>
-                {{ props['addText'] }}
+                {{ addText }}
             </button>
         </div>
-        @for (field of field.fieldGroup; track field) {
-            <mat-expansion-panel expanded="true">
-                <mat-expansion-panel-header>
-                    <div class="label-container">
-                        <button
-                            matButton
-                            (click)="remove($index)"
-                        >
-                            <mat-icon [matTooltip]="props['removeText']">
-                                remove_circle_outline
-                            </mat-icon>
-                        </button>
-                        {{ getSubsectionLabel($index) }}
-                    </div>
-                </mat-expansion-panel-header>
-                <div class="repeat-section-container">
-                    <formly-field [field]="field"></formly-field>
+        <div cdkDropList (cdkDropListDropped)="moveField($event)">
+            @for (field of field.fieldGroup; track field) {
+                <div cdkDrag>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <div class="label-container">
+                                <mat-icon
+                                    cdkDragHandle
+                                    [matTooltip]="moveText"
+                                >drag_handle</mat-icon>
+                                <button
+                                    matButton
+                                    (click)="remove($index)"
+                                >
+                                    <mat-icon [matTooltip]="removeText">
+                                        remove_circle_outline
+                                    </mat-icon>
+                                </button>
+                                {{ getSubsectionLabel($index) }}
+                            </div>
+                        </mat-expansion-panel-header>
+                        <div class="repeat-section-container">
+                            <formly-field [field]="field"></formly-field>
+                        </div>
+                    </mat-expansion-panel>
                 </div>
-            </mat-expansion-panel>
-        }
+            }
+        </div>
     } @else {
         <div class="label-container">
             @if (props.label) {
@@ -60,20 +79,28 @@
             }
             <button matButton (click)="add()">
                 <mat-icon>add_circle_outline</mat-icon>
-                {{ props['addText'] }}
+                {{ addText }}
             </button>
         </div>
-        @for (field of field.fieldGroup; track field) {
-            <div class="repeat-section-container">
-                <button
-                    matButton
-                    [matTooltip]="props['removeText']"
-                    (click)="remove($index)"
-                >
-                    <mat-icon>remove_circle_outline</mat-icon>
-                </button>
-                <formly-field [field]="field"></formly-field>
-            </div>
-        }
+        <div cdkDropList (cdkDropListDropped)="moveField($event)">
+            @for (field of field.fieldGroup; track field) {
+                <div cdkDrag>
+                    <div class="repeat-section-container">
+                        <mat-icon
+                            cdkDragHandle
+                            [matTooltip]="moveText"
+                        >drag_handle</mat-icon>
+                        <button
+                            matButton
+                            [matTooltip]="removeText"
+                            (click)="remove($index)"
+                        >
+                            <mat-icon>remove_circle_outline</mat-icon>
+                        </button>
+                        <formly-field [field]="field"></formly-field>
+                    </div>
+                </div>
+            }
+        </div>
     }
 </div>
