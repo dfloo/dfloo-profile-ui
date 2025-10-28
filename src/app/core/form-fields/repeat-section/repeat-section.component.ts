@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatExpansionModule } from "@angular/material/expansion";
+import { MatExpansionModule, MatExpansionPanel } from "@angular/material/expansion";
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FieldArrayType, FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
@@ -21,6 +21,9 @@ import { FormArray } from '@angular/forms';
 ]
 })
 export class RepeatSectionComponent extends FieldArrayType {
+    @ViewChildren(MatExpansionPanel)
+        expansionPanels!: QueryList<MatExpansionPanel>;
+
     get sectionName(): string {
         return this.props['sectionName'] ?? '';
     }
@@ -69,5 +72,14 @@ export class RepeatSectionComponent extends FieldArrayType {
         }
 
         this.field.formControl?.updateValueAndValidity();
+    }
+
+    override add(): void {
+        super.add();
+        if (this.expansionPanels.last) {
+            setTimeout(() => {
+                this.expansionPanels.last.expanded = true;
+            });
+        }
     }
 }
