@@ -63,8 +63,7 @@ export class ProfileFormFieldsService {
                 className: 'flex-grow',
                 props: {
                     label: 'Social Accounts',
-                    addText: 'Add Social Account',
-                    removeText: 'Remove Social Account',
+                    sectionName: 'Social Account',
                     expand: 'all'
                 },
                 fieldArray: {

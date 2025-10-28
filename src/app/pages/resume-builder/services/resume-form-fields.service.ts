@@ -58,8 +58,7 @@ export class ResumeFormFieldsService {
             type: 'repeat-section',
             className: 'flex-grow',
             props: {
-                addText: 'Add Skill',
-                removeText: 'Remove Skill'
+                sectionName: 'Skill',
             },
             fieldArray: { type: 'input' }
         }];
@@ -71,8 +70,7 @@ export class ResumeFormFieldsService {
             type: 'repeat-section',
             className: 'flex-grow',
             props: {
-                addText: 'Add Experience',
-                removeText: 'Remove Experience',
+                sectionName: 'Experience',
                 expand: 'each',
                 subsectionLabel: 'Employer',
                 subsectionKey: 'employer'
@@ -120,8 +118,7 @@ export class ResumeFormFieldsService {
                     type: 'repeat-section',
                     props: {
                         label: 'Bullet Points',
-                        addText: 'Add Bullet Point',
-                        removeText: 'Remove Bullet Point',
+                        sectionName: 'Bullet Point',
                         expand: 'all'
                     },
                     fieldArray: { type: 'input' }
@@ -136,8 +133,7 @@ export class ResumeFormFieldsService {
             type: 'repeat-section',
             className: 'flex-grow',
             props: {
-                addText: 'Add Education',
-                removeText: 'Remove Education',
+                sectionName: 'Education',
                 expand: 'each',
                 subsectionLabel: 'Name',
                 subsectionKey: 'name'

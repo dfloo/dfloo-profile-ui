@@ -1,4 +1,11 @@
 @use '@variables' as *;
+@use '@colors' as *;
+
+.resume-editor-container {
+    display: flex;
+    flex-direction: column;
+    height: $app-content-height;
+}
 
 .resume-editor-header {
     display: flex;
@@ -6,6 +13,11 @@
     justify-content: space-between;
     width: 75vw;
     height: $app-header-height;
+}
+
+.resume-editor {
+    flex-grow: 1;
+    overflow: auto;
 }
 
 .header-buttons {
