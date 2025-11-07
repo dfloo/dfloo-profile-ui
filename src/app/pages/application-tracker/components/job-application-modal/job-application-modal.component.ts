@@ -71,7 +71,7 @@ export class JobApplicationModalComponent implements OnInit {
     }
 
     submit(): void {
-        this.dialogRef.close(this.jobApplication())
+        this.dialogRef.close(this.jobApplication());
     }
 }
 

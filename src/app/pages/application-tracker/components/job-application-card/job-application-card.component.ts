@@ -17,6 +17,6 @@ export class JobApplicationCardComponent {
     get displayName(): string {
         const { company, role } = this.jobApplication() ?? {};
 
-        return `${company} - ${role}`
+        return `${company} - ${role}`;
     }
 }

@@ -77,6 +77,6 @@ export class JobApplicationFormFieldsService {
 
     private getStatusOptions(): SelectOption[] {
         return Object.values(JobApplicationStatus)
-            .map(status => ({ value: status, label: status}));
+            .map(status => ({ value: status, label: status }));
     }
 }
