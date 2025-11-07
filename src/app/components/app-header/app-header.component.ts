@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
 
     logout(): void {
         this.auth.logout({
-            logoutParams: { returnTo: this.doc.location.origin, },
+            logoutParams: { returnTo: this.doc.location.origin }
         });
     }
 

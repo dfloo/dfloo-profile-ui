@@ -3,10 +3,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import { iso31661, iso31662 } from 'iso-3166';
 import { skip } from 'rxjs';
 
-export interface SelectOption {
-    value?: string;
-    label: string;
-}
+import { SelectOption } from '@core/form-fields';
 
 @Injectable()
 export class ProfileFormFieldsService {

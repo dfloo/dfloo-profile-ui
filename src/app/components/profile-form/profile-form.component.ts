@@ -15,17 +15,12 @@ import { Profile } from '@models/profile';
 import { ProfileFormFieldsService } from './services';
 
 @Component({
-    imports: [
-        MatInputModule,
-        FormlyForm,
-        ReactiveFormsModule,
-        MatButtonModule
-    ],
-    providers: [ProfileFormFieldsService],
     selector: 'profile-form',
     templateUrl: './profile-form.component.html',
     styleUrl: './profile-form.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [ProfileFormFieldsService],
+    imports: [MatInputModule, FormlyForm, ReactiveFormsModule, MatButtonModule]
 })
 export class ProfileFormComponent implements OnInit {
     profile = model<Profile>();

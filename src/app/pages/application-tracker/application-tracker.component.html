@@ -1,0 +1,33 @@
+<div class="application-tracker-container">
+    <div class="application-tracker-header">
+        <button
+            matButton
+            (click)="openJobApplicationModal()"
+        >Start New Application</button>
+    </div>
+    <div class="column-headers">
+        @for (status of ActiveStatuses; track status) {
+            <div class="header-cell">{{ status }}</div>
+        }
+    </div>
+    <div class="application-tracker-board" cdkDropListGroup>
+        @for (status of ActiveStatuses; track status) {
+            <div
+                class="column"
+                [id]="status"
+                cdkDropList
+                [cdkDropListData]="appsByStatus()[status]"
+                (cdkDropListDropped)="drop($event)"
+            >
+                @for (app of appsByStatus()[status]; track app) {
+                    <div cdkDrag [cdkDragData]="app">
+                        <job-application-card
+                            [jobApplication]="app"
+                            (dblclick)="openJobApplicationModal(app)"
+                        ></job-application-card>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
