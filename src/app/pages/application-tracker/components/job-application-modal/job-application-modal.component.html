@@ -1,0 +1,15 @@
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <formly-form
+            [form]="form"
+            [fields]="fields"
+            [model]="jobApplication()"
+        ></formly-form>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton (click)="close()">Cancel</button>
+    @if (hasChanged) {
+        <button matButton (click)="submit()">{{ submitLabel }}</button>
+    }
+</mat-dialog-actions>

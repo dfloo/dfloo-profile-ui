@@ -48,7 +48,10 @@ export class ResumeFormFieldsService {
         return [{
             key: 'summary',
             type: 'textarea',
-            props: { rows: 5 }
+            props: {
+                autosize: true,
+                autosizeMaxRows: 10
+            }
         }];
     }
 
@@ -109,7 +112,7 @@ export class ResumeFormFieldsService {
                     }]
                 }, {
                     key: 'description',
-                    type: 'textarea',
+                    type: 'input',
                     props: {
                         label: 'Description'
                     }

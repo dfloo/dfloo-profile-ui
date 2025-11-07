@@ -1,0 +1,44 @@
+@use '@variables' as *;
+
+.application-tracker-container {
+    display: flex;
+    flex-direction: column;
+    height: $app-content-height;
+}
+
+.application-tracker-header {
+    display: flex;
+    align-items: center;
+    height: $app-header-height;
+
+    button {
+        margin-left: 10px;
+    }
+}
+
+.column-headers {
+    display: flex;
+    padding-right: 17px;
+    
+    .header-cell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: $app-header-height;
+        width: 25%;
+    }
+}
+
+.application-tracker-board {
+    display: flex;
+    flex-direction: row;
+    overflow-y: scroll;
+    flex: 1;
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        width: 25%;
+        min-height: 100%;
+    }
+}
