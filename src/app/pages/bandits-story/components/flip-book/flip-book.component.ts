@@ -50,7 +50,7 @@ export class FlipBookComponent {
         effect(() => {
             const pages = this.pages();
             if (!pages.some(page => (!page.flipped || page.reverseFlip))) {
-                setTimeout(() => (this.allPagesOpen.set(true)), 1000)
+                setTimeout(() => (this.allPagesOpen.set(true)), 1000);
             }
         });
     }

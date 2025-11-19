@@ -117,7 +117,7 @@ export class ResumeBuilderComponent implements OnInit {
                         if (updated) return updated;
                     }
 
-                    return resume
+                    return resume;
                 });
             });
         });

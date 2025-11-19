@@ -44,7 +44,7 @@ export class ResumeService {
                 updatedMap.set(resume.id, resume);
             });
 
-            return updatedMap
+            return updatedMap;
         }));
     }
 
@@ -96,7 +96,7 @@ export class ResumeService {
     }
 
     downloadDefaultResume(): Observable<Blob> {
-        return this.apiService.download<Blob>('download/resume/default')
+        return this.apiService.download<Blob>('download/resume/default');
     }
 
     private getSessionResumes(): Resume[] {
