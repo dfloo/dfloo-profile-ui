@@ -10,6 +10,7 @@ import { cloneDeep } from 'lodash';
 
 import { ProfileService } from '@api/profile';
 import { ResumeService } from '@api/resume';
+import { Role, UserService } from '@core/services';
 import { Resume } from '@models/resume';
 
 import { ResumeEditorComponent, ResumesTableComponent } from './components';
@@ -23,10 +24,15 @@ import { ResumeEditorComponent, ResumesTableComponent } from './components';
 export class ResumeBuilderComponent implements OnInit {
     private resumeService = inject(ResumeService);
     private profileService = inject(ProfileService);
+    private userService = inject(UserService);
     
     resumes = signal<Resume[]>([]);
     resume = signal<Resume | undefined>(undefined);
     userProfile = toSignal(this.profileService.getUserProfile());
+    isSuperUser = toSignal(
+        this.userService.hasRole(Role.SuperUser),
+        { initialValue: false }
+    );
 
     ngOnInit(): void {
         this.resumeService.getResumes().subscribe(resumes => {
@@ -70,6 +76,7 @@ export class ResumeBuilderComponent implements OnInit {
         const copy = cloneDeep(resume);
         copy.id = undefined;
         copy.isNew = true;
+        copy.default = false;
         const date = new Date().toLocaleString();
         copy.created = date;
         copy.updated = date;
@@ -98,5 +105,21 @@ export class ResumeBuilderComponent implements OnInit {
     viewResume(resume: Resume): void {
         this.resumeService.downloadResume(resume)
             .subscribe(pdf => window.open(URL.createObjectURL(pdf)));
+    }
+
+    setDefaultResume(resumeId: string): void {
+        this.resumeService.setDefaultResume(resumeId).subscribe(updatedMap => {
+            this.resumes.update(resumes => {
+                return resumes.map(resume => {
+                    if (resume.id && updatedMap.has(resume.id)) {
+                        const updated = updatedMap.get(resume.id);
+
+                        if (updated) return updated;
+                    }
+
+                    return resume
+                });
+            });
+        });
     }
 }

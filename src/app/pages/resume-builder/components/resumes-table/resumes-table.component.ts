@@ -49,6 +49,7 @@ export class ResumesTableComponent implements AfterViewInit {
     @ViewChild(MatPaginator) private paginator!: MatPaginator;
     @ViewChild(MatSort, { static: true }) private sort!: MatSort;
 
+    isSuperUser = input<boolean>(false);
     resumes = input<Resume[]>([]);
     newResume = output();
     editResume = output<Resume>();
@@ -56,7 +57,8 @@ export class ResumesTableComponent implements AfterViewInit {
     copyResume = output<Resume>();
     downloadResume = output<Resume>();
     deleteResumes = output<string[]>();
-    columns = ['select', 'fileName',  'description', 'created', 'updated'];
+    setDefault = output<string>();
+    columns: string[] = [];
     dataSource = new MatTableDataSource<Resume>([]);
     selectionModel = new SelectionModel<Resume>(true, []);
     visibleRows: Resume[] = [];
@@ -95,6 +97,17 @@ export class ResumesTableComponent implements AfterViewInit {
             }
             this.dataSource.data = resumes;
             this.setVisibleRows(this.pageIndex, this.pageSize);
+        });
+
+        effect(() => {
+            this.columns = [
+                'select',
+                ...(this.isSuperUser() ? ['default'] : []),
+                'fileName', 
+                'description',
+                'created',
+                'updated'
+            ];
         });
     }
 
@@ -151,6 +164,12 @@ export class ResumesTableComponent implements AfterViewInit {
                     this.selectionModel.clear();
                 }
             });
+    }
+
+    setDefaultResume(resume: Resume): void {
+        if (!resume.id) return;
+
+        this.setDefault.emit(resume.id);
     }
 
     private setVisibleRows(pageIndex: number, pageSize: number): void {

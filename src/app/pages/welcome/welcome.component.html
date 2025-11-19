@@ -1,3 +1,32 @@
-<div class="welcome-container">
-    <flip-book></flip-book>
+<div class="welcome-container" #container>
+    <div class="background-container">
+        <div class="background-1"></div>
+        <div class="background-2"></div>
+        <div class="background-3"></div>
+    </div>
+    <div class="scroll-marker-container">
+        @for (id of scrollMarkerIds; track id) {
+            <div
+                class="scroll-marker"
+                [attr.data-id]="id"
+                #scrollMarker
+            ></div>
+        }
+    </div>
 </div>
+
+@if (showSnippets()) {
+    <div 
+        class="text-overlay"
+        [innerHTML]="currentSnippet()"
+    ></div>
+} @else {
+    <div class="contact-section">
+        <div class="profile-picture"></div>
+        <div class="contact-buttons">
+            <button matButton (click)="viewResume()">View Resume</button>
+            <button matButton (click)="viewSocial('github')">Github</button>
+            <button matButton (click)="viewSocial('linkedin')">LinkedIn</button>
+        </div>
+    </div>
+}

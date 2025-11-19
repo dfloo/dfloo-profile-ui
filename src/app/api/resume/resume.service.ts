@@ -31,7 +31,23 @@ export class ResumeService {
             })
         );
     }
-    
+
+    setDefaultResume(resumeId: string): Observable<Map<string, Resume>> {
+        return this.apiService.put<ResumeDTO[]>(
+            `${this.path}/default`,
+            { resumeId }
+        ).pipe(map(resumes => {
+            const updatedMap = new Map<string, Resume>();
+            resumes?.map(Resume.normalize)?.forEach(resume => {
+                if (!resume.id) return;
+
+                updatedMap.set(resume.id, resume);
+            });
+
+            return updatedMap
+        }));
+    }
+
     deleteResumes(resumeIds: string[]): Observable<unknown> {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
@@ -77,6 +93,10 @@ export class ResumeService {
             'download/resume',
             Resume.serialize(resume)
         );
+    }
+
+    downloadDefaultResume(): Observable<Blob> {
+        return this.apiService.download<Blob>('download/resume/default')
     }
 
     private getSessionResumes(): Resume[] {
