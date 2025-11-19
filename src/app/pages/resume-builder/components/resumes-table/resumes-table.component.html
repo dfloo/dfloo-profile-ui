@@ -14,6 +14,17 @@
                 >
                     <mat-icon class="material-icons-outlined">edit</mat-icon>
                 </button>
+                @if (isSuperUser() && !selectedResume.default) {
+                    <button
+                        matIconButton
+                        (click)="setDefaultResume(selectedResume)"
+                        matTooltip="Set Default Resume"
+                    >
+                        <mat-icon class="material-icons-outlined">
+                            star_outlined
+                        </mat-icon>
+                    </button>
+                }
                 <button
                     matIconButton 
                     (click)="onCopyResume(selectedResume)"
@@ -71,6 +82,26 @@
                     ></mat-checkbox>
                 </td>
             </ng-container>
+            @if (isSuperUser()) {
+                <ng-container matColumnDef="default">
+                    <th mat-header-cell *matHeaderCellDef>Default</th>
+                    <td mat-cell *matCellDef="let resume">
+                        @if (resume.default) {
+                            <button matIconButton>
+                                <mat-icon>star</mat-icon>
+                            </button>
+                        } @else {
+                            <button
+                                matIconButton
+                                (click)="setDefaultResume(resume)"
+                                matTooltip="Set Default Resume"
+                            >
+                                <mat-icon>star_outlined</mat-icon>
+                            </button>
+                        }
+                    </td>
+                </ng-container>
+            }
             <ng-container matColumnDef="fileName">
                 <th mat-header-cell *matHeaderCellDef>File Name</th>
                 <td mat-cell *matCellDef="let resume">{{ resume.fileName }}</td>

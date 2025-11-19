@@ -23,6 +23,7 @@ const envConfigFile = `export const environment = {
             allowedList: [
                 '${process.env['API_SERVER_URL']}/api/profiles',
                 '${process.env['API_SERVER_URL']}/api/resumes',
+                '${process.env['API_SERVER_URL']}/api/resumes/default',
                 '${process.env['API_SERVER_URL']}/api/job-applications'
             ]
         }

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { ApplicationTrackerComponent } from '@pages/application-tracker';
+import { BanditsStoryComponent } from '@pages/bandits-story';
 import { ResumeBuilderComponent } from '@pages/resume-builder';
 import { WelcomeComponent } from '@pages/welcome';
 
@@ -19,6 +20,11 @@ export const sidenavRoutes = [
         path: 'application-tracker',
         title: 'Application Tracker',
         component: ApplicationTrackerComponent
+    },
+    {
+        path: 'bandits-story',
+        title: "Bandit's Story",
+        component: BanditsStoryComponent
     }
 ];
 

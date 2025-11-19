@@ -18,8 +18,8 @@ export class JobApplicationService {
     getJobApplications(): Observable<JobApplication[]> {
         return this.apiService.get<JobApplicationDTO[]>(this.path)
             .pipe(map(apps => {
-                return apps.map(JobApplication.normalize)
-                    .sort((a, b) => a.sortIndex - b.sortIndex);
+                return apps?.map(JobApplication.normalize)
+                    .sort((a, b) => a.sortIndex - b.sortIndex) ?? [];
             }));
     }
 

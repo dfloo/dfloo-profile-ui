@@ -12,6 +12,7 @@ export class Resume extends BaseModel {
     education?: Education[];
     experience?: Experience[];
     description?: string;
+    default?: boolean;
     templateSettings?: TemplateSettings;
 
     constructor(props: Partial<Resume>) {
@@ -37,6 +38,7 @@ export class Resume extends BaseModel {
             fileName: record.fileName,
             templateSettings: record.templateSettings,
             description: record.description,
+            default: record.default,
             created: record.created,
             updated: record.updated
         });
@@ -55,7 +57,8 @@ export class Resume extends BaseModel {
             education: resume.education,
             fileName: resume.fileName,
             templateSettings: resume.templateSettings,
-            description: resume.description
+            description: resume.description,
+            default: resume.default
         };
     }
 
@@ -75,6 +78,7 @@ export interface ResumeDTO {
     education?: Education[];
     summary?: string;
     description?: string;
+    default?: boolean;
     updated?: string;
     created?: string;
 }

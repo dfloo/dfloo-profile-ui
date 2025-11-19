@@ -62,8 +62,9 @@ export class UserModalComponent implements OnInit {
 
     ngOnInit(): void {
         this.selectedTab.set(this.data.view);
-        this.profileService.getUserProfile().subscribe(profile => {
-            this.profile.set(profile);
+        this.profileService.getUserProfile().subscribe({
+            next: profile => (this.profile.set(profile)),
+            error: () => undefined
         });
     }
 
