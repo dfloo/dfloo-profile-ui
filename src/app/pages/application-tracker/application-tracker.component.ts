@@ -6,10 +6,15 @@ import {
     OnInit,
     signal,
 } from '@angular/core';
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { MatButtonModule } from '@angular/material/button';
+import {
+    CdkDrag,
+    CdkDragDrop,
+    CdkDropList,
+    CdkDropListGroup
+} from '@angular/cdk/drag-drop';
+import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 
 import { JobApplicationService } from '@api/job-application';
 import { ResumeService } from '@api/resume';
@@ -29,7 +34,13 @@ import {
     templateUrl: './application-tracker.component.html',
     styleUrl: './application-tracker.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [JobApplicationCardComponent, DragDropModule, MatButtonModule]
+    imports: [
+        JobApplicationCardComponent,
+        CdkDrag,
+        CdkDropList,
+        CdkDropListGroup,
+        MatButton
+    ]
 })
 export class ApplicationTrackerComponent implements OnInit {
     private jobApplicationService = inject(JobApplicationService);

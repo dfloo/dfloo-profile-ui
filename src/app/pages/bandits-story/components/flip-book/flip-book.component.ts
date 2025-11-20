@@ -2,11 +2,9 @@ import {
     ChangeDetectionStrategy,
     Component,
     computed,
-    effect,
     inject,
     signal
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 
 import { ResumeService } from '@api/resume';
 import { Resume } from '@models/resume';
@@ -15,7 +13,6 @@ import { Resume } from '@models/resume';
     selector: 'flip-book',
     templateUrl: './flip-book.component.html',
     styleUrl: './flip-book.component.scss',
-    imports: [MatButtonModule],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FlipBookComponent {
@@ -44,23 +41,12 @@ export class FlipBookComponent {
     ];
     pages = signal<Page[]>(this.initialPages);
     reversePages = computed(() => ([...this.pages()].reverse()));
-    allPagesOpen = signal(false);
-
-    constructor() {
-        effect(() => {
-            const pages = this.pages();
-            if (!pages.some(page => (!page.flipped || page.reverseFlip))) {
-                setTimeout(() => (this.allPagesOpen.set(true)), 1000);
-            }
-        });
-    }
 
     close(): void {
         this.open = false;
         this.pages.update(pages => 
             pages.map(p => ({ ...p, flipped: false, reverseFlip: false }))
         );
-        this.allPagesOpen.set(false);
     }
     
     flipPage({ id }: Page): void {
@@ -74,7 +60,6 @@ export class FlipBookComponent {
             pages.map(p => (p.id === id ? { ...p, reverseFlip: true } : p))
         );
 
-        this.allPagesOpen.set(false);
         setTimeout(() => {
             this.pages.update(pages =>
                 pages.map(p => 
@@ -94,8 +79,8 @@ export class FlipBookComponent {
 
 interface Page {
     id: number;
-    reverseFlip?: boolean;
+    front: string;
+    back: string;
     flipped?: boolean;
-    front?: string;
-    back?: string;
+    reverseFlip?: boolean;
 }

@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, model } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCard, MatCardContent } from '@angular/material/card';
 
 import { JobApplication } from '@models/job-application';
 
@@ -9,7 +7,7 @@ import { JobApplication } from '@models/job-application';
     selector: 'job-application-card',
     templateUrl: './job-application-card.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatCardModule, MatExpansionModule, MatButtonModule]
+    imports: [MatCard, MatCardContent]
 })
 export class JobApplicationCardComponent {
     jobApplication = model<JobApplication>();

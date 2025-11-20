@@ -17,6 +17,7 @@
     color: white;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
 }
 
 .contact-section {
@@ -25,11 +26,12 @@
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
     height: 500px;
-    width: 1000px;
+    width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
 
     .profile-picture {
         background-color: $frame-color-dark;
@@ -38,6 +40,7 @@
     }
 
     .contact-buttons {
+        pointer-events: all;
         margin-top: 30px;
         button:not(:last-child) {
             margin-right: 10px;

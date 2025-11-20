@@ -7,16 +7,15 @@ import {
     signal,
     WritableSignal
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import {
     MAT_DIALOG_DATA,
-    MatDialogModule,
+    MatDialogActions,
+    MatDialogContent,
     MatDialogRef
 } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule } from '@angular/material/tabs';
-import { cloneDeep, isEqual } from 'lodash';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { cloneDeep, isEqual } from 'lodash-es';
 
 import { ProfileService } from '@api/profile';
 import { ProfileFormComponent } from '@components/profile-form';
@@ -28,17 +27,17 @@ export enum UserModalView {
 }
 
 @Component({
-    imports: [
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTabsModule,
-    MatDialogModule,
-    ProfileFormComponent
-],
     templateUrl: './user-modal.component.html',
     styleUrl: './user-modal.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButton,
+        MatDialogActions,
+        MatDialogContent,
+        MatTab,
+        MatTabGroup,
+        ProfileFormComponent
+    ]
 })
 export class UserModalComponent implements OnInit {
     private data = inject(MAT_DIALOG_DATA);

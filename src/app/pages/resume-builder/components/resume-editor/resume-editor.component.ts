@@ -1,4 +1,11 @@
 import {
+    CdkDrag,
+    CdkDragDrop,
+    CdkDragHandle,
+    CdkDropList,
+    moveItemInArray
+} from '@angular/cdk/drag-drop';
+import {
     Component,
     effect,
     inject,
@@ -8,21 +15,18 @@ import {
     QueryList,
     ViewChildren
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import {
-    MatExpansionModule,
-    MatExpansionPanel
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader
 } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-    CdkDragDrop,
-    DragDropModule,
-    moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatTooltip } from '@angular/material/tooltip';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { cloneDeep, isEqual } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash-es';
 
 import { ProfileFormComponent } from '@components/profile-form';
 import {
@@ -40,12 +44,19 @@ import { ResumeSectionFormComponent } from '../resume-section-form';
     styleUrl: './resume-editor.component.scss',
     providers: [ResumeFormFieldsService],
     imports: [
-        MatButtonModule,
-        MatExpansionModule,
-        MatIconModule,
-        MatMenuModule,
-        MatTooltipModule,
-        DragDropModule,
+        CdkDrag,
+        CdkDropList,
+        CdkDragHandle,
+        MatAccordion,
+        MatButton,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatIcon,
+        MatIconButton,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+        MatTooltip,
         ProfileFormComponent,
         ResumeSectionFormComponent
     ]

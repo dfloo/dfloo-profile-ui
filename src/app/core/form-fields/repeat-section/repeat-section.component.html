@@ -13,7 +13,7 @@
                 </div>
             </mat-expansion-panel-header>
             <div cdkDropList (cdkDropListDropped)="moveField($event)">
-                @for (field of field.fieldGroup; track field) {
+                @for (field of field.fieldGroup; track field.key) {
                     <div cdkDrag>
                         <div class="repeat-section-container">
                             <mat-icon
@@ -44,7 +44,7 @@
             </button>
         </div>
         <div cdkDropList (cdkDropListDropped)="moveField($event)">
-            @for (field of field.fieldGroup; track field) {
+            @for (field of field.fieldGroup; track field.key) {
                 <div cdkDrag>
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
@@ -82,7 +82,7 @@
             </button>
         </div>
         <div cdkDropList (cdkDropListDropped)="moveField($event)">
-            @for (field of field.fieldGroup; track field) {
+            @for (field of field.fieldGroup; track field.key) {
                 <div cdkDrag>
                     <div class="repeat-section-container">
                         <mat-icon

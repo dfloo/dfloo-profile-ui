@@ -10,7 +10,7 @@ import {
     ViewChild,
     ViewChildren
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 
 import { ResumeService } from '@api/resume';
 
@@ -20,7 +20,7 @@ import { textSnippets } from './welcome';
     templateUrl: './welcome.component.html',
     styleUrl: './welcome.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatButtonModule]
+    imports: [MatButton]
 })
 export class WelcomeComponent implements AfterViewInit {
     @ViewChild('container') container!: ElementRef;
