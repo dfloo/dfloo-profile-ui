@@ -6,7 +6,7 @@ import {
     signal
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { cloneDeep } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 import { ProfileService } from '@api/profile';
 import { ResumeService } from '@api/resume';

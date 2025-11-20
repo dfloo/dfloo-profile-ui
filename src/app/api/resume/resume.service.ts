@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { cloneDeep } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { map, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 

@@ -15,7 +15,8 @@ import {
     MatDialogRef
 } from '@angular/material/dialog';
 import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
-import { cloneDeep, isEqual } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
 
 import { JobApplication } from '@models/job-application';
 import { Resume } from '@models/resume';

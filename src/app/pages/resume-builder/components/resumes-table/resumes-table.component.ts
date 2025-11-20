@@ -13,12 +13,8 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import {
-    MatPaginator,
-    MatPaginatorModule,
-    PageEvent
-} from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator,  PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {
     MatCell,
     MatCellDef,
@@ -33,7 +29,7 @@ import {
     MatTableDataSource
 } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { cloneDeep } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 import {
     WarningDialogComponent,
@@ -58,10 +54,10 @@ import { Resume } from '@models/resume';
         MatHeaderRowDef,
         MatIcon,
         MatIconButton,
-        MatPaginatorModule,
+        MatPaginator,
         MatRow,
         MatRowDef,
-        MatSortModule,
+        MatSort,
         MatTable,
         MatTooltip,
     ]

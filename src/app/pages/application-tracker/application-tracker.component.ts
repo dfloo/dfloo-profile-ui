@@ -14,7 +14,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { isEqual } from 'lodash-es';
+import isEqual from 'lodash-es/isEqual';
 
 import { JobApplicationService } from '@api/job-application';
 import { ResumeService } from '@api/resume';

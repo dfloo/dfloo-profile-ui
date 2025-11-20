@@ -15,7 +15,8 @@ import {
     MatDialogRef
 } from '@angular/material/dialog';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { cloneDeep, isEqual } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
 
 import { ProfileService } from '@api/profile';
 import { ProfileFormComponent } from '@components/profile-form';

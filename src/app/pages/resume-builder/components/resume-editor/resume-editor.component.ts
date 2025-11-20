@@ -26,7 +26,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { cloneDeep, isEqual } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
 
 import { ProfileFormComponent } from '@components/profile-form';
 import {
