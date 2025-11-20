@@ -4,16 +4,13 @@
     display: flex;
     flex-direction: column;
     height: $app-content-height;
+    padding: 0 2vw 0 2vw;
 }
 
 .application-tracker-header {
     display: flex;
     align-items: center;
     height: $app-header-height;
-
-    button {
-        margin-left: 10px;
-    }
 }
 
 .column-headers {

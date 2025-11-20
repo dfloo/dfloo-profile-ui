@@ -1,24 +1,38 @@
+import {
+    CdkDrag,
+    CdkDragDrop,
+    CdkDropList,
+    moveItemInArray
+} from '@angular/cdk/drag-drop';
 import { Component, QueryList, ViewChildren } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatExpansionModule, MatExpansionPanel } from "@angular/material/expansion";
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { FieldArrayType, FormlyField, FormlyFieldConfig } from '@ngx-formly/core';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from "@angular/cdk/drag-drop";
 import { FormArray } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import {
+    MatExpansionPanel,
+    MatExpansionPanelHeader
+} from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+    FieldArrayType,
+    FormlyField,
+    FormlyFieldConfig
+} from '@ngx-formly/core';
 
 @Component({
     selector: 'formly-repeat-section',
     templateUrl: './repeat-section.component.html',
     styleUrl: './repeat-section.component.scss',
     imports: [
-    FormlyField,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatExpansionModule,
-    DragDropModule,
-]
+        FormlyField,
+        MatButton,
+        MatIcon,
+        MatTooltip,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        CdkDrag,
+        CdkDropList
+    ]
 })
 export class RepeatSectionComponent extends FieldArrayType {
     @ViewChildren(MatExpansionPanel)

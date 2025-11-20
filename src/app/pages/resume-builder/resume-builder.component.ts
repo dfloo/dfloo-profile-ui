@@ -6,7 +6,7 @@ import {
     signal
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 import { ProfileService } from '@api/profile';
 import { ResumeService } from '@api/resume';
@@ -19,7 +19,7 @@ import { ResumeEditorComponent, ResumesTableComponent } from './components';
     templateUrl: './resume-builder.component.html',
     styleUrl: './resume-builder.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ResumesTableComponent, ResumeEditorComponent]
+    imports: [ResumeEditorComponent, ResumesTableComponent]
 })
 export class ResumeBuilderComponent implements OnInit {
     private resumeService = inject(ResumeService);

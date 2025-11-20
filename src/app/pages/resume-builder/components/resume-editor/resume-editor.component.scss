@@ -1,17 +1,21 @@
 @use '@variables' as *;
 @use '@colors' as *;
 
+:host {
+    width: 100%;
+}
+
 .resume-editor-container {
     display: flex;
     flex-direction: column;
     height: $app-content-height;
+    padding: 0 2vw 0 2vw;
 }
 
 .resume-editor-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 75vw;
     height: $app-header-height;
 }
 

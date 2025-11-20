@@ -9,25 +9,33 @@ import {
     output,
     ViewChild
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import {
-    MatCheckboxChange,
-    MatCheckboxModule
-} from '@angular/material/checkbox';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator,  PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {
-    MatPaginator,
-    MatPaginatorModule,
-    PageEvent
-} from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { cloneDeep } from 'lodash';
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    MatTableDataSource
+} from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
+import cloneDeep from 'lodash-es/cloneDeep';
 
+import {
+    WarningDialogComponent,
+    WarningDialogResult
+} from '@components/warning-dialog';
 import { Resume } from '@models/resume';
-import { WarningDialogComponent, WarningDialogResult } from '@components/warning-dialog';
 
 @Component({
     selector: 'resumes-table',
@@ -35,13 +43,23 @@ import { WarningDialogComponent, WarningDialogResult } from '@components/warning
     styleUrl: './resumes-table.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        MatTableModule,
-        MatPaginatorModule,
-        MatCheckboxModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-        MatSortModule
+        MatButton,
+        MatCheckbox,
+        MatColumnDef,
+        MatCell,
+        MatCellDef,
+        MatHeaderCell,
+        MatHeaderCellDef,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatIcon,
+        MatIconButton,
+        MatPaginator,
+        MatRow,
+        MatRowDef,
+        MatSort,
+        MatTable,
+        MatTooltip,
     ]
 })
 export class ResumesTableComponent implements AfterViewInit {

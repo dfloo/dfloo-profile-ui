@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import {
     MAT_DIALOG_DATA,
-    MatDialogModule,
+    MatDialogActions,
+    MatDialogContent,
     MatDialogRef
 } from '@angular/material/dialog';
 
 @Component({
     templateUrl: './warning-dialog.component.html',
-    imports: [MatButtonModule, MatDialogModule],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatDialogActions, MatButton, MatDialogContent]
 })
 export class WarningDialogComponent {
     private data = inject(MAT_DIALOG_DATA);

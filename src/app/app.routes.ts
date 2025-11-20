@@ -1,30 +1,29 @@
 import { Routes } from '@angular/router';
 
-import { ApplicationTrackerComponent } from '@pages/application-tracker';
-import { BanditsStoryComponent } from '@pages/bandits-story';
-import { ResumeBuilderComponent } from '@pages/resume-builder';
-import { WelcomeComponent } from '@pages/welcome';
-
 export const sidenavRoutes = [
     {
         path: 'welcome',
         title: 'Welcome',
-        component: WelcomeComponent
+        loadComponent: () => import('@pages/welcome')
+            .then(m => m.WelcomeComponent)
     },
     {
         path: 'resume-builder',
         title: 'Resume Builder',
-        component: ResumeBuilderComponent
+        loadComponent: () => import('@pages/resume-builder')
+            .then(m => m.ResumeBuilderComponent)
     },
     {
         path: 'application-tracker',
         title: 'Application Tracker',
-        component: ApplicationTrackerComponent
+        loadComponent: () => import('@pages/application-tracker')
+            .then(m => m.ApplicationTrackerComponent)
     },
     {
         path: 'bandits-story',
         title: "Bandit's Story",
-        component: BanditsStoryComponent
+        loadComponent: () => import('@pages/bandits-story')
+            .then(m => m.BanditsStoryComponent)
     }
 ];
 

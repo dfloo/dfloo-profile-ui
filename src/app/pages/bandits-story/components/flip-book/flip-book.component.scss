@@ -16,6 +16,7 @@
         max-width: 100%;
         height: auto;
     }
+    will-change: transform;
 }
 
 .front-cover, .back-cover {
@@ -26,14 +27,10 @@
     transform-origin: left center;
 }
 
-.front-cover, .page {
+.front-cover, .back-cover, .page {
     cursor: pointer;
 }
 
-.back-cover-container.all-open {
-    transition-delay: 1s;
-    z-index: 10;
-}
 
 .back-cover {
     img, .back-cover-buttons {

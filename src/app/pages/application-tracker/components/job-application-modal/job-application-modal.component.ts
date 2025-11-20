@@ -7,31 +7,32 @@ import {
     signal
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import {
     MAT_DIALOG_DATA,
-    MatDialogModule,
+    MatDialogActions,
+    MatDialogContent,
     MatDialogRef
 } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
 import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
 
 import { JobApplication } from '@models/job-application';
 import { Resume } from '@models/resume';
 
 import { JobApplicationFormFieldsService } from '../../services';
-import { cloneDeep, isEqual } from 'lodash';
 
 @Component({
     templateUrl: './job-application-modal.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [JobApplicationFormFieldsService],
     imports: [
-        MatInputModule,
         FormlyForm,
         ReactiveFormsModule,
-        MatButtonModule,
-        MatDialogModule
+        MatButton,
+        MatDialogContent,
+        MatDialogActions
     ]
 })
 export class JobApplicationModalComponent implements OnInit {

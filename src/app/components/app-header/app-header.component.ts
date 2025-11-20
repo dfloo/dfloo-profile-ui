@@ -6,29 +6,29 @@ import {
     OnInit,
     output
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AsyncPipe, DOCUMENT } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
 
 import { UserModalComponent, UserModalView } from '@components/user-modal';
 
 @Component({
     selector: 'app-header',
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatDialogModule,
-        AsyncPipe
-    ],
     templateUrl: './app-header.component.html',
     styleUrl: './app-header.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatIconButton,
+        MatIcon,
+        MatMenu,
+        MatMenuItem,
+        MatMenuTrigger,
+        AsyncPipe
+    ]
 })
 export class HeaderComponent implements OnInit {
     sidenavOpen = input(false);

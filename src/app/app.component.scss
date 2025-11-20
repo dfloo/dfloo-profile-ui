@@ -11,5 +11,8 @@
 
 .content-container {
     height: $app-content-height;
-    overflow: auto;
+}
+
+.mat-sidenav-content {
+    overflow: hidden;
 }

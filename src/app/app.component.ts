@@ -4,8 +4,12 @@ import {
     OnInit
 } from '@angular/core';
 import { ActivationEnd, Route, Router, RouterOutlet } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButton } from '@angular/material/button';
+import {
+    MatSidenav,
+    MatSidenavContainer,
+    MatSidenavContent
+} from '@angular/material/sidenav';
 import { filter } from 'rxjs';
 
 import { HeaderComponent } from '@components/app-header';
@@ -15,8 +19,10 @@ import { sidenavRoutes } from './app.routes';
     selector: 'app-root',
     imports: [
         RouterOutlet,
-        MatButtonModule,
-        MatSidenavModule,
+        MatButton,
+        MatSidenav,
+        MatSidenavContainer,
+        MatSidenavContent,
         HeaderComponent
     ],
     templateUrl: './app.component.html',

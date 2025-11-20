@@ -19,7 +19,7 @@
                 [cdkDropListData]="appsByStatus()[status]"
                 (cdkDropListDropped)="drop($event)"
             >
-                @for (app of appsByStatus()[status]; track app) {
+                @for (app of appsByStatus()[status]; track app.id) {
                     <div cdkDrag [cdkDragData]="app">
                         <job-application-card
                             [jobApplication]="app"

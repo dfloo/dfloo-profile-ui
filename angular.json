@@ -17,6 +17,7 @@
                 "build": {
                     "builder": "@angular/build:application",
                     "options": {
+                        "optimization": true,
                         "browser": "src/main.ts",
                         "polyfills": [
                             "zone.js"
@@ -39,8 +40,8 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "500kB",
-                                    "maximumError": "1MB"
+                                    "maximumWarning": "500KB",
+                                    "maximumError": "1.5MB"
                                 },
                                 {
                                     "type": "anyComponentStyle",
