@@ -48,14 +48,14 @@ export class ResumeService {
         }));
     }
 
-    deleteResumes(resumeIds: string[]): Observable<unknown> {
+    deleteResumes(resumeIds: string[]): Observable<string[]> {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
                 if (!isAuthenticated) {
                     return this.deleteSessionResumes(resumeIds);
                 }
 
-                return this.apiService.delete(this.path, resumeIds);
+                return this.apiService.delete<string[]>(this.path, resumeIds);
             })
         );
     }
@@ -105,7 +105,7 @@ export class ResumeService {
         return resumes ?? [];
     }
 
-    private deleteSessionResumes(resumeIds: string[]): Observable<boolean> {
+    private deleteSessionResumes(resumeIds: string[]): Observable<string[]> {
         const resumes = this.getSessionResumes();
         this.storage.setData({
             resumes: resumes.filter(resume => {
@@ -113,7 +113,7 @@ export class ResumeService {
             })
         })
         
-        return of(true);
+        return of(resumeIds);
     }
 
     private createSessionResume(resume: Resume): Observable<Resume> {

@@ -10,7 +10,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 
 import { ProfileService } from '@api/profile';
 import { ResumeService } from '@api/resume';
-import { Role, UserService } from '@core/services';
+import { Role, SnackBarService, UserService } from '@core/services';
 import { Resume } from '@models/resume';
 
 import { ResumeEditorComponent, ResumesTableComponent } from './components';
@@ -25,6 +25,7 @@ export class ResumeBuilderComponent implements OnInit {
     private resumeService = inject(ResumeService);
     private profileService = inject(ProfileService);
     private userService = inject(UserService);
+    private snackBar = inject(SnackBarService);
     
     resumes = signal<Resume[]>([]);
     resume = signal<Resume | undefined>(undefined);
@@ -40,11 +41,19 @@ export class ResumeBuilderComponent implements OnInit {
         });
     }
 
-    deleteResumes(resumeIDs: string[]): void {
-        this.resumeService.deleteResumes(resumeIDs)
-            .subscribe(() => {
+    deleteResumes(resumeIds: string[]): void {
+        this.resumeService.deleteResumes(resumeIds)
+            .subscribe(deletedIds => {
+                if (deletedIds.length !== resumeIds.length) {
+                    this.snackBar.open(
+                        'Some resumes were not deleted',
+                        'warning'
+                    );
+                } else {
+                    this.snackBar.open('Resumes deleted successfully');
+                }
                 this.resumes.set(this.resumes().filter(resume => {
-                    return resume.id && !resumeIDs.includes(resume.id);
+                    return resume.id && !deletedIds.includes(resume.id);
                 }))
             });
     }
