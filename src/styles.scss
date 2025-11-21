@@ -30,6 +30,26 @@
     border: 1px solid $frame-color-dark;
 }
 
+.mat-mdc-snack-bar-container {
+    &.success {
+        .mat-mdc-snackbar-surface {
+            background-color: $success-color;
+        }
+    }
+    
+    &.warning {
+        .mat-mdc-snackbar-surface {
+            background-color: $warning-color;
+        }
+    }
+    
+    &.error {
+        .mat-mdc-snackbar-surface {
+            background-color: $error-color;
+        }
+    }
+}
+
 body {
     margin: 0;
     overflow: hidden;

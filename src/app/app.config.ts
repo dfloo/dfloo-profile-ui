@@ -10,6 +10,7 @@ import { provideFormlyCore } from '@ngx-formly/core';
 import { withFormlyMaterial } from '@ngx-formly/material';
 
 import { RepeatSectionComponent } from '@core/form-fields';
+import { errorInterceptorFn } from '@core/interceptors';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
@@ -19,7 +20,10 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
-        provideHttpClient(withInterceptors([authHttpInterceptorFn])),
+        provideHttpClient(withInterceptors([
+            authHttpInterceptorFn,
+            errorInterceptorFn
+        ])),
         provideAuth0(environment.auth0),
         provideFormlyCore([
             ...withFormlyMaterial(),
