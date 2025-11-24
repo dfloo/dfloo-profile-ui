@@ -9,7 +9,7 @@ export const errorInterceptorFn: HttpInterceptorFn = (req, next) => {
 
     return next(req).pipe(
         catchError((error: HttpErrorResponse) => {
-            let errorMessage :string;
+            let errorMessage: string;
 
             if (error.error instanceof ErrorEvent) {
                 errorMessage = error.error.message;
