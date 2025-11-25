@@ -1,34 +1,46 @@
 steps:
     - id: "Build Docker Image"
-      name: "gcr.io/cloud-builders/docker"
+      name: gcr.io/cloud-builders/docker
       args:
-          - "build"
+          - build
+          - "--no-cache"
           - "-t"
-          - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
-          - "."
+          - >-
+              $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+          - .
+          - "-f"
+          - Dockerfile
 
     - id: "Publish Image to Artifact Registry"
-      name: "gcr.io/cloud-builders/docker"
+      name: gcr.io/cloud-builders/docker
       args:
-          - "push"
-          - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
+          - push
+          - >-
+              $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
 
     - id: "Deploy Image to Cloud Run"
-      name: "gcr.io/cloud-builders/gcloud"
+      name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
       args:
-          - "run"
-          - "deploy"
-          - "$_SERVICE_NAME"
-          - "--image"
-          - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
-          - "--region"
-          - "$_DEPLOY_REGION"
-          - "--port"
-          - "8080"
-          - "--allow-unauthenticated"
+          - run
+          - services
+          - update
+          - $_SERVICE_NAME
+          - "--platform=managed"
+          - >-
+              --image=$_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+          - >-
+              --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID
+          - "--region=$_DEPLOY_REGION"
+          - "--quiet"
+      entrypoint: gcloud
 
+images:
+    - >-
+        $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
 options:
-    machineType: "E2_MEDIUM"
-    logging: "CLOUD_LOGGING_ONLY"
-
-timeout: "1200s"
+    substitutionOption: ALLOW_LOOSE
+    logging: CLOUD_LOGGING_ONLY
+tags:
+    - gcp-cloud-build-deploy-cloud-run
+    - gcp-cloud-build-deploy-cloud-run-managed
+    - dfloo-profile-ui
