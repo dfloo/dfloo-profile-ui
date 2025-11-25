@@ -23,8 +23,8 @@ steps:
           - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
           - "--region"
           - "$_DEPLOY_REGION"
-          - "--platform"
-          - "$_PLATFORM"
+          - "--port"
+          - "8080"
           - "--allow-unauthenticated"
 
 options:
