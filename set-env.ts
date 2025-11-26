@@ -21,15 +21,15 @@ const envConfigFile = `export const environment = {
         errorPath: '/callback',
         httpInterceptor: {
             allowedList: [
-                '${process.env['API_SERVER_URL']}/api/profiles',
-                '${process.env['API_SERVER_URL']}/api/resumes',
-                '${process.env['API_SERVER_URL']}/api/resumes/default',
-                '${process.env['API_SERVER_URL']}/api/job-applications'
+                '${process.env['AUTH0_AUDIENCE']}/api/profiles',
+                '${process.env['AUTH0_AUDIENCE']}/api/resumes',
+                '${process.env['AUTH0_AUDIENCE']}/api/resumes/default',
+                '${process.env['AUTH0_AUDIENCE']}/api/job-applications'
             ]
         }
     },
     api: {
-        serverUrl: '${process.env['API_SERVER_URL']}',
+        serverUrl: '${process.env['AUTH0_AUDIENCE']}',
     },
 };
 `;
