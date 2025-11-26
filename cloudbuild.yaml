@@ -1,5 +1,5 @@
 steps:
-    - id: "Build Docker Image"
+    - id: Build
       name: gcr.io/cloud-builders/docker
       args:
           - build
@@ -10,15 +10,21 @@ steps:
           - .
           - "-f"
           - Dockerfile
+      env:
+          - "API_SERVER_URL=$_API_SERVER_URL"
+          - "AUTH0_CLIENT_ID=$_AUTH0_CLIENT_ID"
+          - "AUTH0_DOMAIN=$_AUTH0_DOMAIN"
+          - "AUTH0_AUDIENCE=$_AUTH0_AUDIENCE"
+          - "AUTH0_CALLBACK_URL=$_AUTH0_CALLBACK_URL"
 
-    - id: "Publish Image to Artifact Registry"
+    - id: Push
       name: gcr.io/cloud-builders/docker
       args:
           - push
           - >-
               $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
 
-    - id: "Deploy Image to Cloud Run"
+    - id: Deploy
       name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
       args:
           - run
