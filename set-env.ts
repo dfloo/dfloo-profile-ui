@@ -3,16 +3,14 @@ import { promisify } from 'util';
 import path from 'path';
 import dotenv from 'dotenv';
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-dotenv.config({ path: isProduction ? '.env' : '.env.dev' });
+dotenv.config();
 
 const writeFilePromisified = promisify(writeFile);
 
 const targetPath = './src/environments/environment.ts';
 
 const envConfigFile = `export const environment = {
-    production: ${isProduction},
+    production: false,
     auth0: {
         domain: '${process.env['AUTH0_DOMAIN']}',
         clientId: '${process.env['AUTH0_CLIENT_ID']}',
@@ -38,7 +36,6 @@ const envConfigFile = `export const environment = {
 
 (async () => {
     try {
-        console.log(`Setting up ${isProduction ? 'prod' : 'dev'} environment`);
         await ensureDirectoryExistence(targetPath);
         await writeFilePromisified(targetPath, envConfigFile);
     } catch (err) {
