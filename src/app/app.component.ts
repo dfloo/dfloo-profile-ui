@@ -4,7 +4,7 @@ import {
     OnInit
 } from '@angular/core';
 import { ActivationEnd, Route, Router, RouterOutlet } from '@angular/router';
-import { MatButton } from '@angular/material/button';
+import { MatListItem, MatNavList } from '@angular/material/list';
 import {
     MatSidenav,
     MatSidenavContainer,
@@ -13,13 +13,16 @@ import {
 import { filter } from 'rxjs';
 
 import { HeaderComponent } from '@components/app-header';
+import { ThemeService } from '@core/services';
+
 import { sidenavRoutes } from './app.routes';
 
 @Component({
     selector: 'app-root',
     imports: [
         RouterOutlet,
-        MatButton,
+        MatNavList,
+        MatListItem,
         MatSidenav,
         MatSidenavContainer,
         MatSidenavContent,
@@ -34,12 +37,14 @@ export class App implements OnInit {
     sidenavRoutes: Route[];
 
     private router = inject(Router);
+    private themeService = inject(ThemeService)
 
     constructor() {
         this.sidenavRoutes = sidenavRoutes;
     }
 
     ngOnInit(): void {
+        this.themeService.loadAndApplyTheme();
         this.router.events.pipe(
             filter((e): e is ActivationEnd => e instanceof ActivationEnd)
         ).subscribe(({ snapshot }) => {

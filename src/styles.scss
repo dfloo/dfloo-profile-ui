@@ -1,53 +1,13 @@
 @use '@angular/material' as mat;
 
 @use './app/styles/variables.scss' as *;
-@use './app/styles/colors.scss' as *;
 @use './app/styles/helpers.scss';
 
 :root {
     @include mat.sidenav-overrides((
         container-width: $app-sidenav-width,
-        container-divider-color: $frame-color-light
+        container-divider-color: var(--mat-sys-outline-variant),
     ));
-    @include mat.menu-overrides((
-        container-color: $app-background-color
-    ));
-    @include mat.select-overrides((
-        panel-background-color: $app-background-color
-    ));
-    @include mat.icon-button-overrides((
-        disabled-icon-color: $frame-color-light
-    ));
-    @include mat.expansion-overrides((
-        container-background-color: $app-background-color,
-    ));
-    @include mat.tooltip-overrides((
-        container-color: $app-background-color
-    ));
-}
-
-.mdc-tooltip {
-    border: 1px solid $frame-color-dark;
-}
-
-.mat-mdc-snack-bar-container {
-    &.success {
-        .mat-mdc-snackbar-surface {
-            background-color: $success-color;
-        }
-    }
-    
-    &.warning {
-        .mat-mdc-snackbar-surface {
-            background-color: $warning-color;
-        }
-    }
-    
-    &.error {
-        .mat-mdc-snackbar-surface {
-            background-color: $error-color;
-        }
-    }
 }
 
 body {

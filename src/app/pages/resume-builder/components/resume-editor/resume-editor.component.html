@@ -5,15 +5,29 @@
                 <mat-icon>arrow_back</mat-icon>
             </button>
             @if (resume()?.isNew || resumeHasChanged) {
-                <button matButton (click)="saveResume.emit(resume()!)">
+                <button
+                    matButton="filled"
+                    color="primary"
+                    (click)="saveResume.emit(resume()!)"
+                >
                     Save
                 </button>
             }
             @if (resumeHasChanged) {
-                <button matButton (click)="cancelChanges()">Cancel</button>
+                <button
+                    matButton="outlined"
+                    color="primary"
+                    (click)="cancelChanges()"
+                >
+                    Cancel
+                </button>
             }
             @if (showAddSection) {
-                <button matButton [matMenuTriggerFor]="sectionsMenu">
+                <button
+                    matButton="outlined"
+                    color="primary"
+                    [matMenuTriggerFor]="sectionsMenu"
+                >
                     Add Section
                 </button>
                 <mat-menu #sectionsMenu="matMenu">

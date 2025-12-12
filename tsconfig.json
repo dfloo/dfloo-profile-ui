@@ -18,7 +18,6 @@
             "@pages/*": ["./src/app/pages/*"],
             "@components/*": ["./src/app/components/*"],
             "@variables": ["./src/app/styles/variables.scss"],
-            "@colors": ["./src/app/styles/colors.scss"],
             "@models/*": ["./src/app/models/*"],
             "@api/*": ["./src/app/api/*"],
             "@core/*": ["./src/app/core/*"]

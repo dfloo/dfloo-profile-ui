@@ -54,6 +54,10 @@ export class RepeatSectionComponent extends FieldArrayType {
         return `Move ${this.sectionName}`;
     }
 
+    get disableExpansion(): boolean {
+        return this.field?.fieldGroup?.length === 0;
+    }
+
     getSubsectionLabel(index: number): string {
         const key = this.props['subsectionKey'];
         const model = this.field.model[index];
@@ -94,6 +98,13 @@ export class RepeatSectionComponent extends FieldArrayType {
             setTimeout(() => {
                 this.expansionPanels.last.expanded = true;
             });
+        }
+    }
+
+    override remove(index: number): void {
+        super.remove(index);
+        if (this.field?.fieldGroup?.length === 0) {
+            this.expansionPanels.last.expanded = false;
         }
     }
 }

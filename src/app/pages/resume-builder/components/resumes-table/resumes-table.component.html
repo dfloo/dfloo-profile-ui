@@ -1,7 +1,11 @@
 <div class="resumes-table-container">
     <div class="resumes-table-toolbar">
         <div>
-            <button matButton="filled" (click)="newResume.emit()">
+            <button
+                matButton="filled"
+                color="primary"
+                (click)="newResume.emit()"
+            >
                 New Resume
             </button>
         </div>
@@ -88,7 +92,7 @@
                     <td mat-cell *matCellDef="let resume">
                         @if (resume.default) {
                             <button matIconButton>
-                                <mat-icon>star</mat-icon>
+                                <mat-icon color="accent">star</mat-icon>
                             </button>
                         } @else {
                             <button

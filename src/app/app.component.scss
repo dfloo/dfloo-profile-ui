@@ -16,3 +16,7 @@
 .mat-sidenav-content {
     overflow: hidden;
 }
+
+mat-nav-list a[mat-list-item] {
+    text-align: center;
+}

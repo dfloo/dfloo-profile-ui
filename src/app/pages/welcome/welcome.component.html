@@ -24,9 +24,27 @@
     <div class="contact-section">
         <div class="profile-picture"></div>
         <div class="contact-buttons">
-            <button matButton (click)="viewResume()">View Resume</button>
-            <button matButton (click)="viewSocial('github')">Github</button>
-            <button matButton (click)="viewSocial('linkedin')">LinkedIn</button>
+            <button
+                matButton="outlined"
+                color="primary"
+                (click)="viewSocial('github')"
+            >
+                Github
+            </button>
+            <button
+                matButton="outlined"
+                color="primary"
+                (click)="viewSocial('linkedin')"
+            >
+                LinkedIn
+            </button>
+            <button
+                matButton="filled"
+                color="primary"
+                (click)="viewResume()"
+            >
+                View Resume
+            </button>
         </div>
     </div>
 }

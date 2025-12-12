@@ -1,4 +1,4 @@
-<div class="app-header-container">
+<mat-toolbar class="app-header-container">
     <button matIconButton (click)="toggleSidenav.emit()">
         <mat-icon>menu</mat-icon>
     </button>
@@ -23,9 +23,15 @@
                 </button>
                 <button mat-menu-item (click)="logout()">Log Out</button>
             } @else {
+                <button
+                    mat-menu-item
+                    (click)="openUserModal(UserModalView.Settings, false)"
+                >
+                    Settings
+                </button>
                 <button mat-menu-item (click)="signup()">Sign Up</button>
                 <button mat-menu-item (click)="login()">Log In</button>
             }
         </div>
     </mat-menu>
-</div>
+</mat-toolbar>
