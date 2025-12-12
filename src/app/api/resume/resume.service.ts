@@ -4,7 +4,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import { map, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { SessionStorageService } from '@core/services';
+import { LocalStorageService } from '@core/services';
 import { Resume, ResumeDTO } from '@models/resume';
 
 import { ApiService } from '../api.service';
@@ -15,14 +15,14 @@ import { ApiService } from '../api.service';
 export class ResumeService {
     private apiService = inject(ApiService);
     private auth = inject(AuthService);
-    private storage = inject(SessionStorageService);
-    private path = 'resumes';
+    private storage = inject(LocalStorageService);
+    private readonly path = 'resumes';
     
     getResumes(): Observable<Resume[]> {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
                 if (!isAuthenticated) {
-                    return of(this.getSessionResumes());
+                    return of(this.getLocalResumes());
                 }
 
                 return this.apiService.get<ResumeDTO[]>(this.path).pipe(
@@ -52,7 +52,7 @@ export class ResumeService {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
                 if (!isAuthenticated) {
-                    return this.deleteSessionResumes(resumeIds);
+                    return this.deleteLocalResumes(resumeIds);
                 }
 
                 return this.apiService.delete<string[]>(this.path, resumeIds);
@@ -64,7 +64,7 @@ export class ResumeService {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
                 if (!isAuthenticated) {
-                    return this.createSessionResume(resume);
+                    return this.createLocalResume(resume);
                 }
 
                 return this.apiService
@@ -78,7 +78,7 @@ export class ResumeService {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
                 if (!isAuthenticated) {
-                    return this.updateSessionResume(resume);
+                    return this.updateLocalResume(resume);
                 }
 
                 return this.apiService
@@ -99,14 +99,14 @@ export class ResumeService {
         return this.apiService.download<Blob>('download/resume/default');
     }
 
-    private getSessionResumes(): Resume[] {
+    private getLocalResumes(): Resume[] {
         const { resumes } = this.storage.getData();
         
         return resumes ?? [];
     }
 
-    private deleteSessionResumes(resumeIds: string[]): Observable<string[]> {
-        const resumes = this.getSessionResumes();
+    private deleteLocalResumes(resumeIds: string[]): Observable<string[]> {
+        const resumes = this.getLocalResumes();
         this.storage.setData({
             resumes: resumes.filter(resume => {
                 return resume.id && !resumeIds.includes(resume.id);
@@ -116,8 +116,8 @@ export class ResumeService {
         return of(resumeIds);
     }
 
-    private createSessionResume(resume: Resume): Observable<Resume> {
-        const resumes = this.getSessionResumes();
+    private createLocalResume(resume: Resume): Observable<Resume> {
+        const resumes = this.getLocalResumes();
         resume.id = String(resumes.length + 1);
         resume.isNew = false;
         const date = new Date().toLocaleString();
@@ -128,8 +128,8 @@ export class ResumeService {
         return of(cloneDeep(resume));
     }
 
-    private updateSessionResume(resume: Resume): Observable<Resume> {
-        const resumes = this.getSessionResumes();
+    private updateLocalResume(resume: Resume): Observable<Resume> {
+        const resumes = this.getLocalResumes();
         resume.updated = new Date().toLocaleString();
         this.storage.setData({
             resumes: resumes.map(r => (r.id === resume.id ? resume : r))

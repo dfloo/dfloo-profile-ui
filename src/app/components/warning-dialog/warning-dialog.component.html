@@ -3,16 +3,16 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     @if (cancelLabel) {
-        <button matButton (click)="close(Result.Cancel)">
+        <button matButton="outlined" (click)="close(Result.Cancel)">
             {{ cancelLabel }}
         </button>
     }
     @if (alternateLabel) {
-        <button matButton (click)="close(Result.Alternate)">
+        <button matButton="outlined" (click)="close(Result.Alternate)">
             {{ alternateLabel }}
         </button>
     }
-    <button matButton (click)="close(Result.Confirm)">
+    <button matButton="filled" color="primary" (click)="close(Result.Confirm)">
         {{ confirmLabel }}
     </button>
 </mat-dialog-actions>

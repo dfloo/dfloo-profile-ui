@@ -4,13 +4,13 @@
 ></app-header>
 <mat-sidenav-container>
     <mat-sidenav mode="side" [opened]="sidenavOpen">
-        <div class="nav-container">
+        <mat-nav-list>
             @for (route of sidenavRoutes; track route.path) {
-                <button matButton (click)="onNavClick(route)">
+                <a mat-list-item (click)="onNavClick(route)">
                     {{ route.title }}
-                </button>
+                </a>
             }
-        </div>
+        </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
         <div class="content-container">

@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
-import { SessionStorageService } from '@core/services';
+import { LocalStorageService } from '@core/services';
 import { Resume } from '@models/resume';
 
 import { ApiService } from '../api.service';
@@ -12,7 +12,7 @@ import { ResumeService } from './resume.service';
 describe('ResumeService', () => {
     let service: ResumeService;
     let mockApiService: jasmine.SpyObj<ApiService>;
-    let mockSessionStorage: jasmine.SpyObj<SessionStorageService>;
+    let mockLocalStorage: jasmine.SpyObj<LocalStorageService>;
     const AUTH0_CLIENT = new InjectionToken('auth0.client');
 
     const setup = (isAuthenticated = true) => {
@@ -20,8 +20,8 @@ describe('ResumeService', () => {
             'ApiService',
             ['get', 'put', 'post', 'delete', 'download']
         );
-        mockSessionStorage = jasmine.createSpyObj(
-            'SessionStorageService',
+        mockLocalStorage = jasmine.createSpyObj(
+            'LocalStorageService',
             ['getData', 'setData']
         );
         TestBed.configureTestingModule({
@@ -32,7 +32,7 @@ describe('ResumeService', () => {
                     useValue: { isAuthenticated$: of(isAuthenticated) }
                 },
                 { provide: ApiService, useValue: mockApiService },
-                { provide: SessionStorageService, useValue: mockSessionStorage }
+                { provide: LocalStorageService, useValue: mockLocalStorage }
             ]
         });
         service = TestBed.inject(ResumeService);
@@ -56,13 +56,13 @@ describe('ResumeService', () => {
         it('should get from session storage for unauthenticated user', done => {
             setup(false);
             const mockResumes = [Resume.normalize(Resume.getMockDTO())];
-            mockSessionStorage.getData.and.returnValue(
+            mockLocalStorage.getData.and.returnValue(
                 { resumes: mockResumes }
             );
 
             service.getResumes().subscribe(resumes => {
                 expect(mockApiService.get).not.toHaveBeenCalled();
-                expect(mockSessionStorage.getData).toHaveBeenCalled();
+                expect(mockLocalStorage.getData).toHaveBeenCalled();
                 expect(resumes).toEqual(mockResumes);
                 done();
             });
@@ -87,13 +87,13 @@ describe('ResumeService', () => {
 
         it("should delete from session storage for unauth'd user", done => {
             setup(false);
-            mockSessionStorage.getData.and.returnValue(
+            mockLocalStorage.getData.and.returnValue(
                 { resumes: [Resume.normalize(Resume.getMockDTO())] }
             );
             service.deleteResumes(['id']).subscribe(result => {
                 expect(result).toEqual(true);
                 expect(mockApiService.delete).not.toHaveBeenCalled();
-                expect(mockSessionStorage.setData).toHaveBeenCalledWith({
+                expect(mockLocalStorage.setData).toHaveBeenCalledWith({
                     resumes: []
                 });
                 done();
@@ -123,13 +123,13 @@ describe('ResumeService', () => {
 
         it('should add to session storage for unauthenticated user', done => {
             setup(false);
-            mockSessionStorage.getData.and.returnValue({ resumes: [] });
+            mockLocalStorage.getData.and.returnValue({ resumes: [] });
             const resume = new Resume({});
 
             service.createResume(resume).subscribe(created => {
                 expect(created).toEqual(resume);
                 expect(mockApiService.post).not.toHaveBeenCalled();
-                expect(mockSessionStorage.setData).toHaveBeenCalledWith({
+                expect(mockLocalStorage.setData).toHaveBeenCalledWith({
                     resumes: [resume]
                 });
                 done();
@@ -159,13 +159,13 @@ describe('ResumeService', () => {
         it("should edit session storage for unauth'd users", done => {
             setup(false);
             const existing = Resume.normalize(Resume.getMockDTO());
-            mockSessionStorage.getData.and.returnValue({ resumes: [existing] });
+            mockLocalStorage.getData.and.returnValue({ resumes: [existing] });
             const updated = new Resume({ ...existing, summary: 'updated' });
 
             service.updateResume(updated).subscribe(result => {
                 expect(result).toEqual(updated);
                 expect(mockApiService.put).not.toHaveBeenCalled();
-                expect(mockSessionStorage.setData).toHaveBeenCalledWith({
+                expect(mockLocalStorage.setData).toHaveBeenCalledWith({
                     resumes: [updated]
                 });
                 done();

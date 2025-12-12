@@ -1,6 +1,6 @@
 <div class="field-container">
     @if (props['expand'] === 'all') {
-        <mat-expansion-panel>
+        <mat-expansion-panel [disabled]="disableExpansion">
             <mat-expansion-panel-header>
                 <div class="label-container" (click)="$event.stopPropagation()">
                     @if (props.label) {

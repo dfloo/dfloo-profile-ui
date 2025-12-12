@@ -1,22 +1,31 @@
+@if (!showTabs) {
+    <mat-toolbar><h2>Settings</h2></mat-toolbar>
+}
 <mat-dialog-content>
-    <mat-tab-group [selectedIndex]="selectedTab()">
-        <mat-tab label="Profile">
-            <profile-form
-                [profile]="profile()"
-            ></profile-form>
-        </mat-tab>
-        <mat-tab label="Settings">
-            <!-- Settings Content -->
-        </mat-tab>
-    </mat-tab-group>
+    @if (showTabs) {
+        <mat-tab-group [selectedIndex]="selectedTab()">
+            <mat-tab label="Profile">
+                <profile-form [profile]="profile()"></profile-form>
+            </mat-tab>
+            <mat-tab label="Settings">
+                <settings-form [settings]="settings()"></settings-form>
+            </mat-tab>
+        </mat-tab-group>
+    } @else {
+        <settings-form [settings]="settings()"></settings-form>
+    }
 </mat-dialog-content>
-<mat-dialog-actions>
-    @if (profileHasChanges) {
-        <button matButton (click)="revertProfileChanges()">
+@if (showSubmit) {
+    <mat-dialog-actions>
+        <button matButton="outlined" (click)="cancel(this.selectedTab())">
             Cancel
         </button>
-        <button matButton (click)="submitProfile()">
+        <button
+            matButton="filled"
+            color="primary"
+            (click)="submit(this.selectedTab())"
+        >
             Save
         </button>
-    }
-</mat-dialog-actions>
+    </mat-dialog-actions>
+}

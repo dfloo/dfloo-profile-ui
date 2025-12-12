@@ -6,6 +6,7 @@ import { JobApplication } from '@models/job-application';
 @Component({
     selector: 'job-application-card',
     templateUrl: './job-application-card.component.html',
+    styleUrl: './job-application-card.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatCard, MatCardContent]
 })

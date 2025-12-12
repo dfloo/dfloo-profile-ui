@@ -1,5 +1,4 @@
 @use '@variables' as *;
-@use '@colors' as *;
 
 .welcome-container {
     height: calc(100vh - $app-header-height);
@@ -34,7 +33,7 @@
     pointer-events: none;
 
     .profile-picture {
-        background-color: $frame-color-dark;
+        background-color: gray;
         width: 350px;
         height: 350px;
     }
@@ -88,5 +87,4 @@ $scroll-height: 500vh;
 
 .background-3 {
     height: 100vh;
-    background-color: white;
 }

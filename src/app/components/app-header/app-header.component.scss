@@ -1,5 +1,4 @@
 @use '@variables' as *;
-@use '@colors' as *;
 
 .app-header-container {
     max-width: 100%;
@@ -8,5 +7,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
-    border-bottom: 1px solid $frame-color-light;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.page-title {
+    font: var(--mat-sys-headline-medium);
 }
