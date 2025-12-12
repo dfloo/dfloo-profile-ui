@@ -113,7 +113,7 @@ export class UserModalComponent implements OnInit {
         }
     }
 
-    private submitSettings():void {
+    private submitSettings(): void {
         const { materialTheme } = this.settings();
 
         this.themeService.applyTheme(materialTheme);

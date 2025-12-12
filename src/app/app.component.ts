@@ -37,7 +37,7 @@ export class App implements OnInit {
     sidenavRoutes: Route[];
 
     private router = inject(Router);
-    private themeService = inject(ThemeService)
+    private themeService = inject(ThemeService);
 
     constructor() {
         this.sidenavRoutes = sidenavRoutes;

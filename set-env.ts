@@ -7,7 +7,7 @@ dotenv.config();
 
 const writeFilePromisified = promisify(writeFile);
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production';
 const targetPath = './src/environments/environment.ts';
 const envConfigFile = `export const environment = {
     production: ${isProduction},

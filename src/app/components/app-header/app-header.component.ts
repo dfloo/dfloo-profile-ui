@@ -11,7 +11,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { MatToolbar } from '@angular/material/toolbar'
+import { MatToolbar } from '@angular/material/toolbar';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
 

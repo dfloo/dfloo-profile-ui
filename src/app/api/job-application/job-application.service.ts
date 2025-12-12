@@ -23,7 +23,7 @@ export class JobApplicationService {
         return this.auth.isAuthenticated$.pipe(
             switchMap(isAuthenticated => {
                 if (!isAuthenticated) {
-                    return of(this.getLocalJobApplications())
+                    return of(this.getLocalJobApplications());
                 }
 
                 return this.apiService.get<JobApplicationDTO[]>(this.path)
@@ -60,7 +60,7 @@ export class JobApplicationService {
                 return this.apiService.put<JobApplicationDTO[]>(
                     this.path,
                     apps.map(JobApplication.serialize)
-                ).pipe(map(updated => updated.map(JobApplication.normalize))); 
+                ).pipe(map(updated => updated.map(JobApplication.normalize)));
             })
         );
     }

@@ -6,8 +6,14 @@
 :root {
     @include mat.sidenav-overrides((
         container-width: $app-sidenav-width,
+        container-shape: 0,
         container-divider-color: var(--mat-sys-outline-variant),
+        container-background-color: var(--mat-sys-primary-container),
+        content-background-color: var(--mat-sys-surface-bright),
     ));
+    @include mat.toolbar-overrides((
+        container-background-color: var(--mat-sys-primary-container),
+    ))
 }
 
 body {
