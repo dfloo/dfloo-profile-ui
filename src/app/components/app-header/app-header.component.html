@@ -4,7 +4,15 @@
     </button>
     <span class="page-title">{{ title() }}</span>
     <button matIconButton [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
+        @if (profilePictureUrl) {
+            <img
+                [src]="profilePictureUrl"
+                alt="Profile Picture"
+                class="profile-picture"
+            />
+        } @else {
+            <mat-icon>account_circle</mat-icon>
+        }
     </button>
     <mat-menu #userMenu="matMenu">
         <div class="user-menu-container">

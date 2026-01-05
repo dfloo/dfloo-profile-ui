@@ -39,13 +39,16 @@ export class HeaderComponent implements OnInit {
 
     isAuthenticated$?: Observable<boolean>;
     UserModalView = UserModalView;
-
+    profilePictureUrl?: string;
+    auth = inject(AuthService);
     private dialog = inject(MatDialog);
-    private auth = inject(AuthService);
     private doc = inject(DOCUMENT);
 
     ngOnInit(): void {
         this.isAuthenticated$ = this.auth.isAuthenticated$
+        this.auth.user$.subscribe(user => {
+            this.profilePictureUrl = user?.picture
+        });
     }
 
     login(): void {

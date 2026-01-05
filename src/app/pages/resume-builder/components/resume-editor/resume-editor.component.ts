@@ -106,21 +106,34 @@ export class ResumeEditorComponent implements OnInit {
     constructor() {
         effect(() => {
             this.resumeSnapshot = cloneDeep(this.resume());
+            this.setFormFields();
             if (this.expandLastPanel) {
                 setTimeout(() => {
                     this.expansionPanels.last.expanded = true;
                     this.expandLastPanel = false;
-                })
+                });
             }
         });
     }
 
     ngOnInit(): void {
+        this.setFormFields();
+    }
+
+    setFormFields(): void {
         this.settingsFields = this.formFieldsService.getSettingsFields();
         this.summaryFields = this.formFieldsService.getSummaryFields();
         this.skillsFields = this.formFieldsService.getSkillsFields();
         this.experienceFields = this.formFieldsService.getExperienceFields();
         this.educationFields = this.formFieldsService.getEducationFields();
+    }
+
+    saveChanges(): void {
+        const resume = this.resume();
+
+        if (resume) {
+            this.saveResume.emit(resume);
+        }
     }
 
     onDeleteResume(): void {
@@ -166,10 +179,7 @@ export class ResumeEditorComponent implements OnInit {
                         this.cancelChanges();
                         this.back.emit();
                     } else if (result === WarningDialogResult.Alternate) {
-                        const resume = this.resume()
-                        if (resume) {
-                            this.saveResume.emit(resume)
-                        }
+                        this.saveChanges();
                         this.back.emit();
                     }
                 })

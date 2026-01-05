@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 import { authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 import { provideFormlyCore } from '@ngx-formly/core';
 import { withFormlyMaterial } from '@ngx-formly/material';
+import { FormlyFieldToggle } from '@ngx-formly/material/toggle';
 
 import { RepeatSectionComponent } from '@core/form-fields';
 import { errorInterceptorFn } from '@core/interceptors';
@@ -30,6 +31,8 @@ export const appConfig: ApplicationConfig = {
             {
                 types: [{
                     name: 'repeat-section', component: RepeatSectionComponent
+                }, {
+                    name: 'toggle', component: FormlyFieldToggle
                 }]
             }
         ])
