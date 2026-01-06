@@ -8,7 +8,7 @@ import {
     QueryList,
     signal,
     ViewChild,
-    ViewChildren
+    ViewChildren,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 
@@ -20,25 +20,25 @@ import { textSnippets } from './welcome';
     templateUrl: './welcome.component.html',
     styleUrl: './welcome.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatButton]
+    imports: [MatButton],
 })
 export class WelcomeComponent implements AfterViewInit {
     @ViewChild('container') container!: ElementRef;
     @ViewChildren('scrollMarker') scrollMarkers!: QueryList<ElementRef>;
 
     private resumeService = inject(ResumeService);
-    private observer?: IntersectionObserver
+    private observer?: IntersectionObserver;
 
     scrollMarkerIds = Array.from(
         { length: textSnippets.length + 1 },
-        (_, i) => i
+        (_, i) => i,
     );
     activeIndex = signal(0);
-    showSnippets = computed(() => (this.activeIndex() < textSnippets.length));
+    showSnippets = computed(() => this.activeIndex() < textSnippets.length);
     currentSnippet = computed(() => {
         const index = this.activeIndex();
 
-        return index < textSnippets.length ? textSnippets[index]: '';
+        return index < textSnippets.length ? textSnippets[index] : '';
     });
 
     ngAfterViewInit(): void {
@@ -46,8 +46,9 @@ export class WelcomeComponent implements AfterViewInit {
     }
 
     viewResume(): void {
-        this.resumeService.downloadDefaultResume()
-            .subscribe(pdf => window.open(URL.createObjectURL(pdf)));
+        this.resumeService
+            .downloadDefaultResume()
+            .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
     }
 
     viewSocial(account: 'github' | 'linkedin'): void {
@@ -62,11 +63,11 @@ export class WelcomeComponent implements AfterViewInit {
         const options = {
             root: this.container.nativeElement,
             rootMargin: '-20% 0px -20% 0px',
-            threshold: 0.5
+            threshold: 0.5,
         };
         this.observer = new IntersectionObserver(
             this.observerCallback.bind(this),
-            options
+            options,
         );
 
         this.scrollMarkers.forEach(({ nativeElement }) => {
@@ -87,7 +88,7 @@ export class WelcomeComponent implements AfterViewInit {
             const index = parseInt(dataId, 10);
 
             if (intersectionRatio > mostVisible.ratio) {
-                mostVisible = { ratio: intersectionRatio, index }
+                mostVisible = { ratio: intersectionRatio, index };
             }
         });
 

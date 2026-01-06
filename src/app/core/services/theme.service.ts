@@ -3,14 +3,14 @@ import { inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import {
     argbFromHex,
     hexFromArgb,
-    themeFromSourceColor
+    themeFromSourceColor,
 } from '@material/material-color-utilities';
 
 import { CustomThemeConfig, FontFamily, SettingsService } from '@api/settings';
 import { MaterialTheme, PremadeMaterialTheme } from '@core/models';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ThemeService {
     private settingsService = inject(SettingsService);
@@ -24,7 +24,7 @@ export class ThemeService {
     }
 
     loadAndApplyTheme(): void {
-        this.settingsService.getSettings().subscribe(settings => {
+        this.settingsService.getSettings().subscribe((settings) => {
             const { materialTheme, customThemeConfig } = settings;
             this.applyTheme(materialTheme, customThemeConfig);
         });
@@ -32,7 +32,7 @@ export class ThemeService {
 
     applyTheme(
         materialTheme: MaterialTheme,
-        customThemeConfig?: CustomThemeConfig
+        customThemeConfig?: CustomThemeConfig,
     ): void {
         if (materialTheme === MaterialTheme.Custom) {
             this.applyCustomTheme(customThemeConfig);
@@ -60,14 +60,13 @@ export class ThemeService {
     applyCustomTheme(config?: CustomThemeConfig): void {
         const primaryColor = config?.primary ?? '#005cbb';
         const accentColor = config?.accent ?? '#FFEB3B';
-        const theme = themeFromSourceColor(
-            argbFromHex(primaryColor),
-            [{
+        const theme = themeFromSourceColor(argbFromHex(primaryColor), [
+            {
                 name: 'accent',
                 value: argbFromHex(accentColor),
-                blend: true
-            }]
-        );
+                blend: true,
+            },
+        ]);
         const scheme = config?.dark ? theme.schemes.dark : theme.schemes.light;
         const [accent] = theme.customColors;
         const accentScheme = config?.dark ? accent.dark : accent.light;
@@ -77,60 +76,96 @@ export class ThemeService {
             '--mat-sys-background': hexFromArgb(scheme.background),
             '--mat-sys-error': hexFromArgb(scheme.error),
             '--mat-sys-error-container': hexFromArgb(scheme.errorContainer),
-            '--mat-sys-inverse-on-surface': hexFromArgb(scheme.inverseOnSurface),
+            '--mat-sys-inverse-on-surface': hexFromArgb(
+                scheme.inverseOnSurface,
+            ),
             '--mat-sys-inverse-primary': hexFromArgb(scheme.inversePrimary),
             '--mat-sys-inverse-surface': hexFromArgb(scheme.inverseSurface),
             '--mat-sys-on-background': hexFromArgb(scheme.onBackground),
             '--mat-sys-on-error': hexFromArgb(scheme.onError),
-            '--mat-sys-on-error-container': hexFromArgb(scheme.onErrorContainer),
+            '--mat-sys-on-error-container': hexFromArgb(
+                scheme.onErrorContainer,
+            ),
             '--mat-sys-on-primary': hexFromArgb(scheme.onPrimary),
-            '--mat-sys-on-primary-container': hexFromArgb(scheme.onPrimaryContainer),
-            '--mat-sys-on-primary-fixed': hexFromArgb(scheme.onPrimaryContainer),//
-            '--mat-sys-on-primary-fixed-variant': hexFromArgb(scheme.onPrimary),//
+            '--mat-sys-on-primary-container': hexFromArgb(
+                scheme.onPrimaryContainer,
+            ),
+            '--mat-sys-on-primary-fixed': hexFromArgb(
+                scheme.onPrimaryContainer,
+            ), //
+            '--mat-sys-on-primary-fixed-variant': hexFromArgb(scheme.onPrimary), //
             '--mat-sys-on-secondary': hexFromArgb(scheme.onSecondary),
-            '--mat-sys-on-secondary-container': hexFromArgb(scheme.onSecondaryContainer),
-            '--mat-sys-on-secondary-fixed': hexFromArgb(scheme.onSecondaryContainer),//
-            '--mat-sys-on-secondary-fixed-variant': hexFromArgb(scheme.onSecondary),//
+            '--mat-sys-on-secondary-container': hexFromArgb(
+                scheme.onSecondaryContainer,
+            ),
+            '--mat-sys-on-secondary-fixed': hexFromArgb(
+                scheme.onSecondaryContainer,
+            ), //
+            '--mat-sys-on-secondary-fixed-variant': hexFromArgb(
+                scheme.onSecondary,
+            ), //
             '--mat-sys-on-surface': hexFromArgb(scheme.onSurface),
-            '--mat-sys-on-surface-variant': hexFromArgb(scheme.onSurfaceVariant),
+            '--mat-sys-on-surface-variant': hexFromArgb(
+                scheme.onSurfaceVariant,
+            ),
             '--mat-sys-on-tertiary': hexFromArgb(accentScheme.onColor),
-            '--mat-sys-on-tertiary-container': hexFromArgb(accentScheme.onColorContainer),
-            '--mat-sys-on-tertiary-fixed': hexFromArgb(accentScheme.onColorContainer),//
-            '--mat-sys-on-tertiary-fixed-variant': hexFromArgb(accentScheme.onColor),//
+            '--mat-sys-on-tertiary-container': hexFromArgb(
+                accentScheme.onColorContainer,
+            ),
+            '--mat-sys-on-tertiary-fixed': hexFromArgb(
+                accentScheme.onColorContainer,
+            ), //
+            '--mat-sys-on-tertiary-fixed-variant': hexFromArgb(
+                accentScheme.onColor,
+            ), //
             '--mat-sys-outline': hexFromArgb(scheme.outline),
             '--mat-sys-outline-variant': hexFromArgb(scheme.outlineVariant),
             '--mat-sys-primary': hexFromArgb(scheme.primary),
             '--mat-sys-primary-container': hexFromArgb(scheme.primaryContainer),
-            '--mat-sys-primary-fixed': hexFromArgb(scheme.primaryContainer),//
-            '--mat-sys-primary-fixed-dim': hexFromArgb(scheme.primary),//
+            '--mat-sys-primary-fixed': hexFromArgb(scheme.primaryContainer), //
+            '--mat-sys-primary-fixed-dim': hexFromArgb(scheme.primary), //
             '--mat-sys-scrim': hexFromArgb(scheme.scrim),
             '--mat-sys-secondary': hexFromArgb(scheme.secondary),
-            '--mat-sys-secondary-container': hexFromArgb(scheme.secondaryContainer),
-            '--mat-sys-secondary-fixed': hexFromArgb(scheme.secondaryContainer),//
-            '--mat-sys-secondary-fixed-dim': hexFromArgb(scheme.secondary),//
+            '--mat-sys-secondary-container': hexFromArgb(
+                scheme.secondaryContainer,
+            ),
+            '--mat-sys-secondary-fixed': hexFromArgb(scheme.secondaryContainer), //
+            '--mat-sys-secondary-fixed-dim': hexFromArgb(scheme.secondary), //
             '--mat-sys-shadow': hexFromArgb(scheme.shadow),
             '--mat-sys-surface': hexFromArgb(scheme.surface),
-            '--mat-sys-surface-bright': hexFromArgb(scheme.background),//
-            '--mat-sys-surface-container': hexFromArgb(scheme.surfaceVariant),//
-            '--mat-sys-surface-container-high': hexFromArgb(scheme.surface),//
-            '--mat-sys-surface-container-highest': hexFromArgb(scheme.surface),//
-            '--mat-sys-surface-container-low': hexFromArgb(scheme.surface),//
-            '--mat-sys-surface-container-lowest': hexFromArgb(scheme.background),//
-            '--mat-sys-surface-dim': hexFromArgb(scheme.surfaceVariant),//
-            '--mat-sys-surface-tint': hexFromArgb(scheme.primary),//
+            '--mat-sys-surface-bright': hexFromArgb(scheme.background), //
+            '--mat-sys-surface-container': hexFromArgb(scheme.surfaceVariant), //
+            '--mat-sys-surface-container-high': hexFromArgb(scheme.surface), //
+            '--mat-sys-surface-container-highest': hexFromArgb(scheme.surface), //
+            '--mat-sys-surface-container-low': hexFromArgb(scheme.surface), //
+            '--mat-sys-surface-container-lowest': hexFromArgb(
+                scheme.background,
+            ), //
+            '--mat-sys-surface-dim': hexFromArgb(scheme.surfaceVariant), //
+            '--mat-sys-surface-tint': hexFromArgb(scheme.primary), //
             '--mat-sys-surface-variant': hexFromArgb(scheme.surfaceVariant),
             '--mat-sys-tertiary': accentColor,
-            '--mat-sys-tertiary-container': hexFromArgb(accentScheme.colorContainer),//
-            '--mat-sys-tertiary-fixed': hexFromArgb(accentScheme.colorContainer),//
-            '--mat-sys-tertiary-fixed-dim': hexFromArgb(accentScheme.color),//
+            '--mat-sys-tertiary-container': hexFromArgb(
+                accentScheme.colorContainer,
+            ), //
+            '--mat-sys-tertiary-fixed': hexFromArgb(
+                accentScheme.colorContainer,
+            ), //
+            '--mat-sys-tertiary-fixed-dim': hexFromArgb(accentScheme.color), //
             '--mat-sys-neutral-variant20': hexFromArgb(scheme.surfaceVariant), // or scheme.outlineVariant
-            '--mat-sys-neutral10': hexFromArgb(scheme.background),// or scheme.surface
-            '--mat-sys-level0': '0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12)',
-            '--mat-sys-level1': '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)',
-            '--mat-sys-level2': '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)',
-            '--mat-sys-level3': '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)',
-            '--mat-sys-level4': '0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)',
-            '--mat-sys-level5': '0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12)',
+            '--mat-sys-neutral10': hexFromArgb(scheme.background), // or scheme.surface
+            '--mat-sys-level0':
+                '0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12)',
+            '--mat-sys-level1':
+                '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)',
+            '--mat-sys-level2':
+                '0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)',
+            '--mat-sys-level3':
+                '0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12)',
+            '--mat-sys-level4':
+                '0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)',
+            '--mat-sys-level5':
+                '0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12)',
             '--mat-sys-body-large': `400 1rem / 1.5rem ${fontFamily}`,
             '--mat-sys-body-large-font': `${fontFamily}`,
             '--mat-sys-body-large-line-height': '1.5rem',
@@ -238,12 +273,12 @@ export class ThemeService {
             '--mat-sys-dragged-state-layer-opacity': '0.16',
             '--mat-sys-focus-state-layer-opacity': '0.12',
             '--mat-sys-hover-state-layer-opacity': '0.08',
-            '--mat-sys-pressed-state-layer-opacity': '0.12'
-        }
+            '--mat-sys-pressed-state-layer-opacity': '0.12',
+        };
 
-        const cssText = `:root {\n${Object.entries(vars).map(
-            ([k, v]) => `  ${k}: ${v};`
-        ).join('\n')}\n}`;
+        const cssText = `:root {\n${Object.entries(vars)
+            .map(([k, v]) => `  ${k}: ${v};`)
+            .join('\n')}\n}`;
         const blob = new Blob([cssText], { type: 'text/css' });
         const url = URL.createObjectURL(blob);
         const newLink = this.renderer.createElement('link');

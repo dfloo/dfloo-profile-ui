@@ -7,13 +7,13 @@ import {
     inject,
     input,
     output,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import { MatPaginator,  PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
     MatCell,
@@ -26,14 +26,14 @@ import {
     MatRow,
     MatRowDef,
     MatTable,
-    MatTableDataSource
+    MatTableDataSource,
 } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import {
     WarningDialogComponent,
-    WarningDialogResult
+    WarningDialogResult,
 } from '@components/warning-dialog';
 import { Resume } from '@models/resume';
 
@@ -60,7 +60,7 @@ import { Resume } from '@models/resume';
         MatSort,
         MatTable,
         MatTooltip,
-    ]
+    ],
 })
 export class ResumesTableComponent implements AfterViewInit {
     private dialog = inject(MatDialog);
@@ -121,10 +121,10 @@ export class ResumesTableComponent implements AfterViewInit {
             this.columns = [
                 'select',
                 ...(this.isSuperUser() ? ['default'] : []),
-                'fileName', 
+                'fileName',
                 'description',
                 'created',
-                'updated'
+                'updated',
             ];
         });
     }
@@ -169,14 +169,16 @@ export class ResumesTableComponent implements AfterViewInit {
     onDeleteResumes(resumes: Resume[]): void {
         const config = {
             data: {
-                message: 'Are you sure you want to delete the selected resumes?',
+                message:
+                    'Are you sure you want to delete the selected resumes?',
                 confirmLabel: 'Yes',
-                cancelLabel: 'No'
-            }
-        }
-        this.dialog.open(WarningDialogComponent, config)
+                cancelLabel: 'No',
+            },
+        };
+        this.dialog
+            .open(WarningDialogComponent, config)
             .afterClosed()
-            .subscribe(result => {
+            .subscribe((result) => {
                 if (result === WarningDialogResult.Confirm) {
                     this.deleteResumes.emit(this.getIDs(resumes));
                     this.selectionModel.clear();
@@ -199,7 +201,7 @@ export class ResumesTableComponent implements AfterViewInit {
     private getIDs(resumes: Resume[]): string[] {
         return resumes.reduce((IDs: string[], resume: Resume) => {
             if (resume.id) {
-                IDs.push(resume.id)
+                IDs.push(resume.id);
             }
 
             return IDs;

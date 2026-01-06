@@ -4,11 +4,11 @@ export enum FontFamily {
     Roboto = 'Roboto',
     Lexend = 'Lexend',
     ComicRelief = 'Comic Relief',
-    Courgette = 'Courgette'
+    Courgette = 'Courgette',
 }
 
 export interface CustomThemeConfig {
-    fontFamily?: FontFamily
+    fontFamily?: FontFamily;
     primary?: string;
     accent?: string;
     dark?: boolean;
@@ -16,11 +16,11 @@ export interface CustomThemeConfig {
 
 export interface Settings {
     materialTheme: MaterialTheme;
-    customThemeConfig?: CustomThemeConfig
+    customThemeConfig?: CustomThemeConfig;
 }
 
 export const defaultSettings: Settings = {
-    materialTheme: MaterialTheme.AzureBlue
+    materialTheme: MaterialTheme.AzureBlue,
 };
 
 export const fontFamilyOptions = [
@@ -28,4 +28,4 @@ export const fontFamilyOptions = [
     FontFamily.ComicRelief,
     FontFamily.Lexend,
     FontFamily.Courgette,
-].map(f => ({ label: f, value: f }));
+].map((f) => ({ label: f, value: f }));

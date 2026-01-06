@@ -13,28 +13,28 @@ describe('ResumeBuilderComponent', () => {
     let mockProfileService: jasmine.SpyObj<ProfileService>;
 
     beforeEach(async () => {
-        mockResumeService = jasmine.createSpyObj(
-            'ResumeService',
-            ['getResumes', 'deleteResumes']
-        );
+        mockResumeService = jasmine.createSpyObj('ResumeService', [
+            'getResumes',
+            'deleteResumes',
+        ]);
         mockResumeService.getResumes.and.returnValue(of([]));
         mockResumeService.deleteResumes.and.returnValue(of());
-        mockProfileService = jasmine.createSpyObj(
-            'ProfileService',
-            ['getUserProfile']
-        );
+        mockProfileService = jasmine.createSpyObj('ProfileService', [
+            'getUserProfile',
+        ]);
         mockProfileService.getUserProfile.and.returnValue(of(new Profile({})));
         await TestBed.configureTestingModule({
             imports: [ResumeBuilderComponent],
             providers: [
                 {
                     provide: ResumeService,
-                    useValue: mockResumeService
-                }, {
+                    useValue: mockResumeService,
+                },
+                {
                     provide: ProfileService,
-                    useValue: mockProfileService
-                }
-            ]
+                    useValue: mockProfileService,
+                },
+            ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(ResumeBuilderComponent);

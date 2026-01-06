@@ -3,7 +3,7 @@ import {
     CdkDragDrop,
     CdkDragHandle,
     CdkDropList,
-    moveItemInArray
+    moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import {
     Component,
@@ -13,14 +13,14 @@ import {
     OnInit,
     output,
     QueryList,
-    ViewChildren
+    ViewChildren,
 } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import {
     MatAccordion,
     MatExpansionPanel,
-    MatExpansionPanelHeader
+    MatExpansionPanelHeader,
 } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -32,7 +32,7 @@ import isEqual from 'lodash-es/isEqual';
 import { ProfileFormComponent } from '@components/profile-form';
 import {
     WarningDialogComponent,
-    WarningDialogResult
+    WarningDialogResult,
 } from '@components/warning-dialog';
 import { defaultSections, Resume, Section, SectionType } from '@models/resume';
 
@@ -59,8 +59,8 @@ import { ResumeSectionFormComponent } from '../resume-section-form';
         MatMenuTrigger,
         MatTooltip,
         ProfileFormComponent,
-        ResumeSectionFormComponent
-    ]
+        ResumeSectionFormComponent,
+    ],
 })
 export class ResumeEditorComponent implements OnInit {
     private formFieldsService = inject(ResumeFormFieldsService);
@@ -82,7 +82,7 @@ export class ResumeEditorComponent implements OnInit {
     expandLastPanel?: boolean;
 
     @ViewChildren(MatExpansionPanel)
-        expansionPanels!: QueryList<MatExpansionPanel>;
+    expansionPanels!: QueryList<MatExpansionPanel>;
 
     get resumeHasChanged(): boolean {
         return !isEqual(this.resume(), this.resumeSnapshot);
@@ -98,8 +98,8 @@ export class ResumeEditorComponent implements OnInit {
     }
 
     get unusedSections(): SectionType[] {
-        return [...defaultSections].filter(section => {
-            return !this.resume()?.sections?.includes(section)
+        return [...defaultSections].filter((section) => {
+            return !this.resume()?.sections?.includes(section);
         });
     }
 
@@ -141,13 +141,13 @@ export class ResumeEditorComponent implements OnInit {
             data: {
                 message: 'Are you sure you want to delete this resume?',
                 confirmLabel: 'Yes',
-                cancelLabel: 'No'
+                cancelLabel: 'No',
             },
-
-        }
-        this.dialog.open(WarningDialogComponent, config)
+        };
+        this.dialog
+            .open(WarningDialogComponent, config)
             .afterClosed()
-            .subscribe(result => {
+            .subscribe((result) => {
                 if (result === WarningDialogResult.Confirm) {
                     const resume = this.resume();
                     if (resume?.id) {
@@ -168,13 +168,13 @@ export class ResumeEditorComponent implements OnInit {
                     `,
                     confirmLabel: 'Exit without Saving',
                     cancelLabel: 'Continue Editing',
-                    alternateLabel: 'Save and Exit'
+                    alternateLabel: 'Save and Exit',
                 },
-    
-            }
-            this.dialog.open(WarningDialogComponent, config)
+            };
+            this.dialog
+                .open(WarningDialogComponent, config)
                 .afterClosed()
-                .subscribe(result => {
+                .subscribe((result) => {
                     if (result === WarningDialogResult.Confirm) {
                         this.cancelChanges();
                         this.back.emit();
@@ -182,7 +182,7 @@ export class ResumeEditorComponent implements OnInit {
                         this.saveChanges();
                         this.back.emit();
                     }
-                })
+                });
         } else {
             this.back.emit();
         }
@@ -196,10 +196,12 @@ export class ResumeEditorComponent implements OnInit {
         const resume = this.resume();
 
         if (resume) {
-            this.resume.set(new Resume({
-                ...resume,
-                sections: [...(resume.sections ?? []), section]
-            }));
+            this.resume.set(
+                new Resume({
+                    ...resume,
+                    sections: [...(resume.sections ?? []), section],
+                }),
+            );
             this.expandLastPanel = true;
         }
     }
@@ -208,23 +210,23 @@ export class ResumeEditorComponent implements OnInit {
         const resume = this.resume();
 
         if (resume) {
-            this.resume.set(new Resume({
-                ...resume,
-                sections: [...(resume.sections ?? []).filter(s => {
-                    return s !== section
-                })]
-            }));
+            this.resume.set(
+                new Resume({
+                    ...resume,
+                    sections: [
+                        ...(resume.sections ?? []).filter((s) => {
+                            return s !== section;
+                        }),
+                    ],
+                }),
+            );
         }
     }
 
     moveSection({ currentIndex, previousIndex }: CdkDragDrop<Section[]>): void {
         const { sections } = this.resume() ?? {};
         if (sections) {
-            moveItemInArray(
-                sections,
-                previousIndex,
-                currentIndex
-            );
+            moveItemInArray(sections, previousIndex, currentIndex);
         }
     }
 }

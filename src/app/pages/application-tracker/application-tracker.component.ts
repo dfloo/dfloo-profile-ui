@@ -10,7 +10,7 @@ import {
     CdkDrag,
     CdkDragDrop,
     CdkDropList,
-    CdkDropListGroup
+    CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,13 +21,13 @@ import { ResumeService } from '@api/resume';
 import {
     ActiveStatuses,
     JobApplication,
-    JobApplicationStatus
+    JobApplicationStatus,
 } from '@models/job-application';
 import { Resume } from '@models/resume';
 
 import {
     JobApplicationCardComponent,
-    JobApplicationModalComponent
+    JobApplicationModalComponent,
 } from './components';
 
 @Component({
@@ -39,50 +39,55 @@ import {
         CdkDrag,
         CdkDropList,
         CdkDropListGroup,
-        MatButton
-    ]
+        MatButton,
+    ],
 })
 export class ApplicationTrackerComponent implements OnInit {
     private jobApplicationService = inject(JobApplicationService);
     private resumeService = inject(ResumeService);
     private dialog = inject(MatDialog);
     private appSnapshotMap = new Map<string, JobApplication>();
-    
+
     JobApplicationStatus = JobApplicationStatus;
     ActiveStatuses = ActiveStatuses;
     jobApplications = signal<JobApplication[]>([]);
     appsByStatus = computed(() => {
         const apps = this.jobApplications();
-        return ActiveStatuses.reduce((acc, status) => {
-            acc[status] = apps?.filter(app => app.status === status);
+        return ActiveStatuses.reduce(
+            (acc, status) => {
+                acc[status] = apps?.filter((app) => app.status === status);
 
-            return acc
-        }, {} as Record<JobApplicationStatus, JobApplication[]>);
+                return acc;
+            },
+            {} as Record<JobApplicationStatus, JobApplication[]>,
+        );
     });
     resumes: Resume[] = [];
 
     ngOnInit(): void {
-        this.jobApplicationService.getJobApplications().subscribe(apps => {
+        this.jobApplicationService.getJobApplications().subscribe((apps) => {
             this.jobApplications.set(apps);
             apps.forEach(this.updateSnapshot.bind(this));
         });
-        this.resumeService.getResumes().subscribe(resumes => {
+        this.resumeService.getResumes().subscribe((resumes) => {
             this.resumes = resumes;
         });
     }
 
     openJobApplicationModal(app?: JobApplication): void {
         const isNew = !app;
-        this.dialog.open(JobApplicationModalComponent, {
-            minHeight: '50vh',
-            minWidth: '60vw',
-            data: {
-                isNew,
-                resumes: this.resumes,
-                jobApplication: app ? { ...app } : null
-            }
-        }).afterClosed()
-            .subscribe(result => {
+        this.dialog
+            .open(JobApplicationModalComponent, {
+                minHeight: '50vh',
+                minWidth: '60vw',
+                data: {
+                    isNew,
+                    resumes: this.resumes,
+                    jobApplication: app ? { ...app } : null,
+                },
+            })
+            .afterClosed()
+            .subscribe((result) => {
                 if (!result) {
                     return;
                 }
@@ -103,9 +108,9 @@ export class ApplicationTrackerComponent implements OnInit {
         }
 
         this.jobApplications.set(apps);
-        
+
         const appsToUpdate: JobApplication[] = [];
-        apps.forEach(app => {
+        apps.forEach((app) => {
             if (!app.id) {
                 return;
             }
@@ -114,72 +119,69 @@ export class ApplicationTrackerComponent implements OnInit {
                 appsToUpdate.push(app);
             }
         });
-    
+
         if (appsToUpdate.length) {
-            this.jobApplicationService.updateApplications(appsToUpdate)
-                .subscribe(updated => {
+            this.jobApplicationService
+                .updateApplications(appsToUpdate)
+                .subscribe((updated) => {
                     const updatedAppsMap = new Map();
-                    updated.forEach(app => {
+                    updated.forEach((app) => {
                         if (app.id) {
                             updatedAppsMap.set(app.id, app);
                             this.updateSnapshot(app);
                         }
                     });
-                    this.jobApplications.set(apps.map(app => {
-                        return updatedAppsMap.has(app.id)
-                            ? updatedAppsMap.get(app.id)
-                            : app
-                    }));
+                    this.jobApplications.set(
+                        apps.map((app) => {
+                            return updatedAppsMap.has(app.id)
+                                ? updatedAppsMap.get(app.id)
+                                : app;
+                        }),
+                    );
                 });
         }
     }
 
     private reorderWithinStatus(
-        event: CdkDragDrop<JobApplication[]>
+        event: CdkDragDrop<JobApplication[]>,
     ): JobApplication[] {
         const apps = this.jobApplications();
         const { container, currentIndex, previousIndex } = event;
         const currentStatus = container.id as JobApplicationStatus;
         const currentStatusApps = apps.filter(
-            a => (a.status === currentStatus)
+            (a) => a.status === currentStatus,
         );
-        const remainingApps = apps.filter(
-            a => (a.status !== currentStatus)
-        );
+        const remainingApps = apps.filter((a) => a.status !== currentStatus);
         const moved = currentStatusApps[previousIndex];
         currentStatusApps.splice(previousIndex, 1);
         currentStatusApps.splice(currentIndex, 0, moved);
 
         return [
             ...currentStatusApps.map(this.updateSortIndex),
-            ...remainingApps
+            ...remainingApps,
         ];
     }
 
     private updateStatusAndReorder(
-        event: CdkDragDrop<JobApplication[]>
+        event: CdkDragDrop<JobApplication[]>,
     ): JobApplication[] {
         const apps = this.jobApplications();
-        const {
-            container,
-            currentIndex,
-            previousContainer,
-            previousIndex
-        } = event;
+        const { container, currentIndex, previousContainer, previousIndex } =
+            event;
         const currentStatus = container.id as JobApplicationStatus;
         const previousStatus = previousContainer.id as JobApplicationStatus;
         const currentStatusApps = apps.filter(
-            a => (a.status === currentStatus)
+            (a) => a.status === currentStatus,
         );
         const previousStatusApps = apps.filter(
-            a => (a.status === previousStatus)
+            (a) => a.status === previousStatus,
         );
         const remainingApps = apps.filter(
-            a => ![currentStatus, previousStatus].includes(a.status) 
+            (a) => ![currentStatus, previousStatus].includes(a.status),
         );
         const moved = {
             ...previousStatusApps[previousIndex],
-            status: currentStatus
+            status: currentStatus,
         };
         previousStatusApps.splice(previousIndex, 1);
         currentStatusApps.splice(currentIndex, 0, moved);
@@ -187,7 +189,7 @@ export class ApplicationTrackerComponent implements OnInit {
         return [
             ...currentStatusApps.map(this.updateSortIndex),
             ...previousStatusApps.map(this.updateSortIndex),
-            ...remainingApps
+            ...remainingApps,
         ];
     }
 
@@ -202,19 +204,22 @@ export class ApplicationTrackerComponent implements OnInit {
     }
 
     private createJobApplication(app: JobApplication): void {
-        this.jobApplicationService.createJobApplication(app)
-            .subscribe(created => {
+        this.jobApplicationService
+            .createJobApplication(app)
+            .subscribe((created) => {
                 this.updateSnapshot(created);
-                this.jobApplications.update(apps => ([...apps, created]));
+                this.jobApplications.update((apps) => [...apps, created]);
             });
     }
 
     private updateJobApplication(app: JobApplication): void {
-        this.jobApplicationService.updateApplications([app])
+        this.jobApplicationService
+            .updateApplications([app])
             .subscribe(([edited]) => {
                 this.updateSnapshot(edited);
-                this.jobApplications.update(apps =>
-                    (apps.map(app => app.id === edited.id ? edited : app)));
+                this.jobApplications.update((apps) =>
+                    apps.map((app) => (app.id === edited.id ? edited : app)),
+                );
             });
     }
 }

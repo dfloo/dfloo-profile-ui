@@ -14,7 +14,7 @@ export class JobApplication extends BaseModel {
         Object.assign(this, {
             ...props,
             created: this.created,
-            updated: this.updated
+            updated: this.updated,
         });
     }
 
@@ -29,7 +29,7 @@ export class JobApplication extends BaseModel {
             notes: record.notes,
             resumeId: record.resumeId,
             created: record.created,
-            updated: record.updated
+            updated: record.updated,
         });
     }
 
@@ -42,8 +42,8 @@ export class JobApplication extends BaseModel {
             description: app.description,
             status: app.status,
             notes: app.notes,
-            resumeId: app.resumeId
-        }
+            resumeId: app.resumeId,
+        };
     }
 }
 
@@ -74,5 +74,5 @@ export const ActiveStatuses = [
     JobApplicationStatus.Unsubmitted,
     JobApplicationStatus.Submitted,
     JobApplicationStatus.Interviewing,
-    JobApplicationStatus.OfferPending
+    JobApplicationStatus.OfferPending,
 ];

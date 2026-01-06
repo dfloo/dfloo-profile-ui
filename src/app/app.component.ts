@@ -1,14 +1,10 @@
-import {
-    Component,
-    inject,
-    OnInit
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivationEnd, Route, Router, RouterOutlet } from '@angular/router';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import {
     MatSidenav,
     MatSidenavContainer,
-    MatSidenavContent
+    MatSidenavContent,
 } from '@angular/material/sidenav';
 import { filter } from 'rxjs';
 
@@ -26,10 +22,10 @@ import { sidenavRoutes } from './app.routes';
         MatSidenav,
         MatSidenavContainer,
         MatSidenavContent,
-        HeaderComponent
+        HeaderComponent,
     ],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+    styleUrl: './app.component.scss',
 })
 export class App implements OnInit {
     sidenavOpen = false;
@@ -45,12 +41,12 @@ export class App implements OnInit {
 
     ngOnInit(): void {
         this.themeService.loadAndApplyTheme();
-        this.router.events.pipe(
-            filter((e): e is ActivationEnd => e instanceof ActivationEnd)
-        ).subscribe(({ snapshot }) => {
-            const title = snapshot.routeConfig?.title ?? '';
-            this.title = title as string;
-        });
+        this.router.events
+            .pipe(filter((e): e is ActivationEnd => e instanceof ActivationEnd))
+            .subscribe(({ snapshot }) => {
+                const title = snapshot.routeConfig?.title ?? '';
+                this.title = title as string;
+            });
     }
 
     onNavClick({ path }: Route): void {

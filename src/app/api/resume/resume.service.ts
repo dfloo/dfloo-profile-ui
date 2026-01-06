@@ -10,59 +10,62 @@ import { Resume, ResumeDTO } from '@models/resume';
 import { ApiService } from '../api.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ResumeService {
     private apiService = inject(ApiService);
     private auth = inject(AuthService);
     private storage = inject(LocalStorageService);
     private readonly path = 'resumes';
-    
+
     getResumes(): Observable<Resume[]> {
         return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenticated => {
+            switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return of(this.getLocalResumes());
                 }
 
-                return this.apiService.get<ResumeDTO[]>(this.path).pipe(
-                    map(resumes => (resumes?.map(Resume.normalize) ?? []))
-                );
-            })
+                return this.apiService
+                    .get<ResumeDTO[]>(this.path)
+                    .pipe(
+                        map((resumes) => resumes?.map(Resume.normalize) ?? []),
+                    );
+            }),
         );
     }
 
     setDefaultResume(resumeId: string): Observable<Map<string, Resume>> {
-        return this.apiService.put<ResumeDTO[]>(
-            `${this.path}/default`,
-            { resumeId }
-        ).pipe(map(resumes => {
-            const updatedMap = new Map<string, Resume>();
-            resumes?.map(Resume.normalize)?.forEach(resume => {
-                if (!resume.id) return;
+        return this.apiService
+            .put<ResumeDTO[]>(`${this.path}/default`, { resumeId })
+            .pipe(
+                map((resumes) => {
+                    const updatedMap = new Map<string, Resume>();
+                    resumes?.map(Resume.normalize)?.forEach((resume) => {
+                        if (!resume.id) return;
 
-                updatedMap.set(resume.id, resume);
-            });
+                        updatedMap.set(resume.id, resume);
+                    });
 
-            return updatedMap;
-        }));
+                    return updatedMap;
+                }),
+            );
     }
 
     deleteResumes(resumeIds: string[]): Observable<string[]> {
         return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenticated => {
+            switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.deleteLocalResumes(resumeIds);
                 }
 
                 return this.apiService.delete<string[]>(this.path, resumeIds);
-            })
+            }),
         );
     }
 
     createResume(resume: Resume): Observable<Resume> {
         return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenticated => {
+            switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.createLocalResume(resume);
                 }
@@ -70,13 +73,13 @@ export class ResumeService {
                 return this.apiService
                     .post<ResumeDTO>(this.path, Resume.serialize(resume))
                     .pipe(map(Resume.normalize));
-            })
+            }),
         );
     }
 
     updateResume(resume: Resume): Observable<Resume> {
         return this.auth.isAuthenticated$.pipe(
-            switchMap(isAuthenticated => {
+            switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.updateLocalResume(resume);
                 }
@@ -84,14 +87,14 @@ export class ResumeService {
                 return this.apiService
                     .put<ResumeDTO>(this.path, Resume.serialize(resume))
                     .pipe(map(Resume.normalize));
-            })
+            }),
         );
     }
 
     downloadResume(resume: Resume): Observable<Blob> {
         return this.apiService.download<Blob>(
             'download/resume',
-            Resume.serialize(resume)
+            Resume.serialize(resume),
         );
     }
 
@@ -101,18 +104,18 @@ export class ResumeService {
 
     private getLocalResumes(): Resume[] {
         const { resumes } = this.storage.getData();
-        
+
         return resumes ?? [];
     }
 
     private deleteLocalResumes(resumeIds: string[]): Observable<string[]> {
         const resumes = this.getLocalResumes();
         this.storage.setData({
-            resumes: resumes.filter(resume => {
+            resumes: resumes.filter((resume) => {
                 return resume.id && !resumeIds.includes(resume.id);
-            })
-        })
-        
+            }),
+        });
+
         return of(resumeIds);
     }
 
@@ -132,7 +135,7 @@ export class ResumeService {
         const resumes = this.getLocalResumes();
         resume.updated = new Date().toLocaleString();
         this.storage.setData({
-            resumes: resumes.map(r => (r.id === resume.id ? resume : r))
+            resumes: resumes.map((r) => (r.id === resume.id ? resume : r)),
         });
 
         return of(cloneDeep(resume));

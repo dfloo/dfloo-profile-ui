@@ -7,7 +7,7 @@ describe('ProfileFormFieldsService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ProfileFormFieldsService]
+            providers: [ProfileFormFieldsService],
         });
         service = TestBed.inject(ProfileFormFieldsService);
     });
@@ -18,5 +18,5 @@ describe('ProfileFormFieldsService', () => {
 
     it('#getFields should return the field configs', () => {
         expect(service.getFields()).toBeTruthy();
-    })
+    });
 });

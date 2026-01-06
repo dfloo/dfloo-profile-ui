@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ApiService {
     private host = environment.api.serverUrl;
@@ -16,11 +16,9 @@ export class ApiService {
     }
 
     download<Blob>(path: string, body?: unknown): Observable<Blob> {
-        return this.http.post<Blob>(
-            this.getURL(path),
-            body,
-            { responseType: 'blob' as 'json' }
-        )
+        return this.http.post<Blob>(this.getURL(path), body, {
+            responseType: 'blob' as 'json',
+        });
     }
 
     post<T>(path: string, body: unknown): Observable<T> {

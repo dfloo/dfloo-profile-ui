@@ -3,7 +3,7 @@ import {
     Component,
     computed,
     inject,
-    signal
+    signal,
 } from '@angular/core';
 
 import { ResumeService } from '@api/resume';
@@ -13,7 +13,7 @@ import { Resume } from '@models/resume';
     selector: 'flip-book',
     templateUrl: './flip-book.component.html',
     styleUrl: './flip-book.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlipBookComponent {
     open = false;
@@ -24,56 +24,60 @@ export class FlipBookComponent {
         {
             id: 0,
             front: 'assets/page_1_front.png',
-            back: 'assets/page_1_back.png'
-        }, {
+            back: 'assets/page_1_back.png',
+        },
+        {
             id: 1,
             front: 'assets/page_2_front.png',
-            back: 'assets/page_2_back.png'
-        }, {
+            back: 'assets/page_2_back.png',
+        },
+        {
             id: 2,
             front: 'assets/page_3_front.png',
-            back: 'assets/page_3_back.png'
-        }, {
+            back: 'assets/page_3_back.png',
+        },
+        {
             id: 3,
             front: 'assets/page_4_front.png',
-            back: 'assets/page_4_back.png'
-        }
+            back: 'assets/page_4_back.png',
+        },
     ];
     pages = signal<Page[]>(this.initialPages);
-    reversePages = computed(() => ([...this.pages()].reverse()));
+    reversePages = computed(() => [...this.pages()].reverse());
 
     close(): void {
         this.open = false;
-        this.pages.update(pages => 
-            pages.map(p => ({ ...p, flipped: false, reverseFlip: false }))
+        this.pages.update((pages) =>
+            pages.map((p) => ({ ...p, flipped: false, reverseFlip: false })),
         );
     }
-    
+
     flipPage({ id }: Page): void {
-        this.pages.update(pages => 
-            pages.map(p => (p.id === id ? { ...p, flipped: true } : p))
+        this.pages.update((pages) =>
+            pages.map((p) => (p.id === id ? { ...p, flipped: true } : p)),
         );
     }
 
     reverseFlipPage({ id }: Page): void {
-        this.pages.update(pages =>
-            pages.map(p => (p.id === id ? { ...p, reverseFlip: true } : p))
+        this.pages.update((pages) =>
+            pages.map((p) => (p.id === id ? { ...p, reverseFlip: true } : p)),
         );
 
         setTimeout(() => {
-            this.pages.update(pages =>
-                pages.map(p => 
+            this.pages.update((pages) =>
+                pages.map((p) =>
                     p.id === id
                         ? { ...p, flipped: false, reverseFlip: false }
-                        : p
-                )
+                        : p,
+                ),
             );
         }, 1000);
     }
 
     viewResume(): void {
-        this.resumeService.downloadResume(this.resume)
-            .subscribe(pdf => window.open(URL.createObjectURL(pdf)));
+        this.resumeService
+            .downloadResume(this.resume)
+            .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
     }
 }
 

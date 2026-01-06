@@ -3,21 +3,21 @@ import {
     CdkDragDrop,
     CdkDragHandle,
     CdkDropList,
-    moveItemInArray
+    moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Component, QueryList, ViewChildren } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
     MatExpansionPanel,
-    MatExpansionPanelHeader
+    MatExpansionPanelHeader,
 } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import {
     FieldArrayType,
     FormlyField,
-    FormlyFieldConfig
+    FormlyFieldConfig,
 } from '@ngx-formly/core';
 
 @Component({
@@ -33,12 +33,12 @@ import {
         MatExpansionPanelHeader,
         CdkDrag,
         CdkDragHandle,
-        CdkDropList
-    ]
+        CdkDropList,
+    ],
 })
 export class RepeatSectionComponent extends FieldArrayType {
     @ViewChildren(MatExpansionPanel)
-        expansionPanels!: QueryList<MatExpansionPanel>;
+    expansionPanels!: QueryList<MatExpansionPanel>;
 
     get sectionName(): string {
         return this.props['sectionName'] ?? '';
@@ -65,10 +65,10 @@ export class RepeatSectionComponent extends FieldArrayType {
         const model = this.field.model[index];
 
         if (model && model[key]) {
-            return model[key]
+            return model[key];
         }
 
-        return this.props['subsectionLabel']
+        return this.props['subsectionLabel'];
     }
 
     moveField(event: CdkDragDrop<FormlyFieldConfig[]>): void {

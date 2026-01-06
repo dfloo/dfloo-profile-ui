@@ -6,7 +6,7 @@ import { FlipBookComponent } from './components';
     templateUrl: './bandits-story.component.html',
     styleUrl: './bandits-story.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FlipBookComponent]
+    imports: [FlipBookComponent],
 })
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class BanditsStoryComponent {}

@@ -31,7 +31,7 @@
         "strictTemplates": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
-        "allowUnreachableCode": false,
+        "allowUnreachableCode": false
     },
     "files": [],
     "references": [

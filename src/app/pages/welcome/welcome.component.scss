@@ -70,7 +70,9 @@ $scroll-height: 500vh;
     z-index: -1;
 }
 
-.background-1, .background-2, .background-3 {
+.background-1,
+.background-2,
+.background-3 {
     background-size: cover;
     background-position: center;
     position: sticky;
@@ -80,13 +82,13 @@ $scroll-height: 500vh;
 .background-1 {
     height: 100vh;
     margin-bottom: 100vh;
-    background-image: url("/assets/refinery.jpg");
+    background-image: url('/assets/refinery.jpg');
 }
 
 .background-2 {
     height: 100vh;
     margin-bottom: 100vh;
-    background-image: url("/assets/golden-gate.jpg");
+    background-image: url('/assets/golden-gate.jpg');
 }
 
 .background-3 {

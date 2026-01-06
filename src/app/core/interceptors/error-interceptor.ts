@@ -31,14 +31,15 @@ export const errorInterceptorFn: HttpInterceptorFn = (req, next) => {
                         errorMessage = 'Internal server error';
                         break;
                     default:
-                        errorMessage = error.error?.message
-                            || `${error.status}: ${error.statusText}`;
+                        errorMessage =
+                            error.error?.message ||
+                            `${error.status}: ${error.statusText}`;
                 }
             }
 
             snackBar.open(errorMessage, 'error');
 
             return throwError(() => error);
-        })
+        }),
     );
-}
+};
