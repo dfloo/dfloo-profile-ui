@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { LocalStorageService } from '@core/services';
-import { MaterialTheme } from '@core/models';
+import { defaultSettings, Settings } from './settings';
 
 
 @Injectable({
@@ -17,7 +17,7 @@ export class SettingsService {
         return of({
             ...defaultSettings,
             ...(materialTheme ? { materialTheme } : {}),
-            customThemeConfig
+            ...(customThemeConfig ? { customThemeConfig } : {})
         });
     }
 
@@ -26,19 +26,4 @@ export class SettingsService {
 
         return of({ ...settings });
     }
-}
-
-export const defaultSettings: Settings = {
-    materialTheme: MaterialTheme.AzureBlue
-};
-
-export interface Settings {
-    materialTheme: MaterialTheme;
-    customThemeConfig?: CustomThemeConfig
-}
-
-export interface CustomThemeConfig {
-    primary?: string;
-    accent?: string;
-    mode: 'light' | 'dark'
 }

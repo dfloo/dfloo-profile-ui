@@ -13,3 +13,8 @@
 .page-title {
     font: var(--mat-sys-headline-medium);
 }
+
+.profile-picture {
+    border-radius: 50%;
+    border: 1px solid var(--mat-sys-outline);
+}

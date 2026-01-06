@@ -114,9 +114,9 @@ export class UserModalComponent implements OnInit {
     }
 
     private submitSettings(): void {
-        const { materialTheme } = this.settings();
+        const { materialTheme, customThemeConfig } = this.settings();
 
-        this.themeService.applyTheme(materialTheme);
+        this.themeService.applyTheme(materialTheme, customThemeConfig);
 
         this.settingsService.saveSettings(this.settings())
             .subscribe(savedSettings => {

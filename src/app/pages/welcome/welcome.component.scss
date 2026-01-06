@@ -8,15 +8,19 @@
 }
 
 .text-overlay {
+    pointer-events: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
-    font-size: 48px;
+    border-radius: 20px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    pointer-events: none;
+    font: var(--mat-sys-headline-large);
+    font-size: 48px;
+    line-height: calc(1.25 * 48px);
 }
 
 .contact-section {

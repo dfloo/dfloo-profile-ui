@@ -1,6 +1,7 @@
 import {
     CdkDrag,
     CdkDragDrop,
+    CdkDragHandle,
     CdkDropList,
     moveItemInArray
 } from '@angular/cdk/drag-drop';
@@ -31,6 +32,7 @@ import {
         MatExpansionPanel,
         MatExpansionPanelHeader,
         CdkDrag,
+        CdkDragHandle,
         CdkDropList
     ]
 })

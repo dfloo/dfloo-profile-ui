@@ -1,11 +1,13 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    DestroyRef,
     inject,
     input,
     OnInit,
     output
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, DOCUMENT } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,13 +41,18 @@ export class HeaderComponent implements OnInit {
 
     isAuthenticated$?: Observable<boolean>;
     UserModalView = UserModalView;
-
+    profilePictureUrl?: string;
+    auth = inject(AuthService);
     private dialog = inject(MatDialog);
-    private auth = inject(AuthService);
     private doc = inject(DOCUMENT);
+    private destroyRef = inject(DestroyRef);
 
     ngOnInit(): void {
         this.isAuthenticated$ = this.auth.isAuthenticated$
+        this.auth.user$.pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(user => {
+                this.profilePictureUrl = user?.picture
+            });
     }
 
     login(): void {
