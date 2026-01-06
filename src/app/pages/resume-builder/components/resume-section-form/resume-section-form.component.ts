@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    input,
+    model,
+} from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
 
@@ -8,7 +13,7 @@ import { Resume } from '@models/resume';
     selector: 'resume-section-form',
     templateUrl: './resume-section-form.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FormlyForm, ReactiveFormsModule]
+    imports: [FormlyForm, ReactiveFormsModule],
 })
 export class ResumeSectionFormComponent {
     resume = model<Resume>();

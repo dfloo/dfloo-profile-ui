@@ -20,15 +20,15 @@ export class Resume extends BaseModel {
         Object.assign(this, {
             ...props,
             created: this.created,
-            updated: this.updated
+            updated: this.updated,
         });
     }
 
     static normalize(record: ResumeDTO): Resume {
         return new Resume({
             id: record.resumeId,
-            profile: record.profile ?
-                Profile.normalize(record.profile)
+            profile: record.profile
+                ? Profile.normalize(record.profile)
                 : undefined,
             sections: record.sections,
             summary: record.summary,
@@ -40,7 +40,7 @@ export class Resume extends BaseModel {
             description: record.description,
             default: record.default,
             created: record.created,
-            updated: record.updated
+            updated: record.updated,
         });
     }
 
@@ -58,7 +58,7 @@ export class Resume extends BaseModel {
             fileName: resume.fileName,
             templateSettings: resume.templateSettings,
             description: resume.description,
-            default: resume.default
+            default: resume.default,
         };
     }
 
@@ -87,17 +87,16 @@ export enum SectionType {
     Summary = 'Summary',
     Skills = 'Skills',
     Experience = 'Experience',
-    Education = 'Education'
+    Education = 'Education',
 }
 
-export const defaultSections: SectionType[] = (
-    () => Object.keys(SectionType) as SectionType[]
-)();
+export const defaultSections: SectionType[] = (() =>
+    Object.keys(SectionType) as SectionType[])();
 
 export interface Section {
-    type?: SectionType,
-    value?: Experience[] | Education [] | string[] | string
-};
+    type?: SectionType;
+    value?: Experience[] | Education[] | string[] | string;
+}
 
 interface Experience {
     employer?: string;
@@ -107,7 +106,7 @@ interface Experience {
     endDate?: string;
     description?: string;
     bulletPoints?: string[];
-};
+}
 
 interface Education {
     name?: string;
@@ -118,5 +117,5 @@ interface Education {
 
 interface TemplateSettings {
     templateName: 'default';
-    fontFamily: 'default'
+    fontFamily: 'default';
 }

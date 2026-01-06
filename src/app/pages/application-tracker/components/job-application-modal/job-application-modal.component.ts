@@ -4,7 +4,7 @@ import {
     effect,
     inject,
     OnInit,
-    signal
+    signal,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -12,7 +12,7 @@ import {
     MAT_DIALOG_DATA,
     MatDialogActions,
     MatDialogContent,
-    MatDialogRef
+    MatDialogRef,
 } from '@angular/material/dialog';
 import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
 import cloneDeep from 'lodash-es/cloneDeep';
@@ -32,8 +32,8 @@ import { JobApplicationFormFieldsService } from '../../services';
         ReactiveFormsModule,
         MatButton,
         MatDialogContent,
-        MatDialogActions
-    ]
+        MatDialogActions,
+    ],
 })
 export class JobApplicationModalComponent implements OnInit {
     private data = inject(MAT_DIALOG_DATA);
@@ -79,5 +79,5 @@ export class JobApplicationModalComponent implements OnInit {
 export interface JobApplicationModalData {
     isNew: boolean;
     resumes: Resume[];
-    jobApplication?: JobApplication
+    jobApplication?: JobApplication;
 }

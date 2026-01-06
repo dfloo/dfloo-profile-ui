@@ -3,33 +3,37 @@ export enum MaterialTheme {
     AzureBlue = 'azure-blue',
     CyanOrange = 'cyan-orange',
     MagentaViolet = 'magenta-violet',
-    RoseRed = 'rose-red'
+    RoseRed = 'rose-red',
 }
 
 export const materialThemeOptions = [
     {
         value: MaterialTheme.Custom,
-        label: 'Custom'
-    }, {
+        label: 'Custom',
+    },
+    {
         value: MaterialTheme.AzureBlue,
-        label: 'Azure Blue (Light)'
-    }, {
+        label: 'Azure Blue (Light)',
+    },
+    {
         value: MaterialTheme.RoseRed,
-        label: 'Rose Red (Light)'
-    }, {
+        label: 'Rose Red (Light)',
+    },
+    {
         value: MaterialTheme.CyanOrange,
-        label: 'Cyan Orange (Dark)'
-    }, {
+        label: 'Cyan Orange (Dark)',
+    },
+    {
         value: MaterialTheme.MagentaViolet,
-        label: 'Magenta Violet (Dark)'
-    }
+        label: 'Magenta Violet (Dark)',
+    },
 ];
 
 export type PremadeMaterialTheme =
-    MaterialTheme.AzureBlue |
-    MaterialTheme.RoseRed |
-    MaterialTheme.CyanOrange |
-    MaterialTheme.MagentaViolet;
+    | MaterialTheme.AzureBlue
+    | MaterialTheme.RoseRed
+    | MaterialTheme.CyanOrange
+    | MaterialTheme.MagentaViolet;
 
 export const materialColorOptions = [
     { label: 'Red', value: '#F44336' },

@@ -4,9 +4,8 @@ import { Observable, of } from 'rxjs';
 import { LocalStorageService } from '@core/services';
 import { defaultSettings, Settings } from './settings';
 
-
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class SettingsService {
     private storage = inject(LocalStorageService);
@@ -17,7 +16,7 @@ export class SettingsService {
         return of({
             ...defaultSettings,
             ...(materialTheme ? { materialTheme } : {}),
-            ...(customThemeConfig ? { customThemeConfig } : {})
+            ...(customThemeConfig ? { customThemeConfig } : {}),
         });
     }
 

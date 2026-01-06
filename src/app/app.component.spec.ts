@@ -21,9 +21,9 @@ describe('App', () => {
                         isAuthenticated$: of(false),
                         loginWithPopup: jasmine.createSpy('loginWithPopup'),
                         logout: jasmine.createSpy('logout'),
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         }).compileComponents();
         fixture = TestBed.createComponent(App);
         app = fixture.componentInstance;

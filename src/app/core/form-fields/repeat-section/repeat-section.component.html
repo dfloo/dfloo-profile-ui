@@ -16,10 +16,9 @@
                 @for (field of field.fieldGroup; track field.key) {
                     <div cdkDrag>
                         <div class="repeat-section-container">
-                            <mat-icon
-                                cdkDragHandle
-                                [matTooltip]="moveText"
-                            >drag_handle</mat-icon>
+                            <mat-icon cdkDragHandle [matTooltip]="moveText">
+                                drag_handle
+                            </mat-icon>
                             <button
                                 matButton
                                 [matTooltip]="removeText"
@@ -49,14 +48,10 @@
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <div class="label-container">
-                                <mat-icon
-                                    cdkDragHandle
-                                    [matTooltip]="moveText"
-                                >drag_handle</mat-icon>
-                                <button
-                                    matButton
-                                    (click)="remove($index)"
+                                <mat-icon cdkDragHandle [matTooltip]="moveText"
+                                    >drag_handle</mat-icon
                                 >
+                                <button matButton (click)="remove($index)">
                                     <mat-icon [matTooltip]="removeText">
                                         remove_circle_outline
                                     </mat-icon>
@@ -85,10 +80,9 @@
             @for (field of field.fieldGroup; track field.key) {
                 <div cdkDrag>
                     <div class="repeat-section-container">
-                        <mat-icon
-                            cdkDragHandle
-                            [matTooltip]="moveText"
-                        >drag_handle</mat-icon>
+                        <mat-icon cdkDragHandle [matTooltip]="moveText"
+                            >drag_handle</mat-icon
+                        >
                         <button
                             matButton
                             [matTooltip]="removeText"

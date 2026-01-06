@@ -5,9 +5,8 @@ import { CustomThemeConfig } from '@api/settings';
 import { Resume } from '@models/resume';
 import { MaterialTheme } from '@core/models';
 
-
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class LocalStorageService {
     private key = 'dflooData';
@@ -21,8 +20,8 @@ export class LocalStorageService {
     setData(data: LocalStorageData): void {
         localStorage.setItem(
             this.key,
-            JSON.stringify({ ...this.getData(), ...data })
-        )
+            JSON.stringify({ ...this.getData(), ...data }),
+        );
     }
 }
 

@@ -5,7 +5,7 @@ import {
     inject,
     OnInit,
     signal,
-    WritableSignal
+    WritableSignal,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
@@ -27,7 +27,7 @@ import { Profile } from '@models/profile';
 
 export enum UserModalView {
     Profile = 0,
-    Settings = 1
+    Settings = 1,
 }
 
 @Component({
@@ -42,8 +42,8 @@ export enum UserModalView {
         MatTabGroup,
         ProfileFormComponent,
         SettingsFormComponent,
-        MatToolbar
-    ]
+        MatToolbar,
+    ],
 })
 export class UserModalComponent implements OnInit {
     private data = inject(MAT_DIALOG_DATA);
@@ -89,12 +89,12 @@ export class UserModalComponent implements OnInit {
         this.showTabs = this.data.showTabs;
         this.selectedTab.set(this.data.view);
         this.profileService.getUserProfile().subscribe({
-            next: profile => (this.profile.set(profile)),
-            error: () => undefined
+            next: (profile) => this.profile.set(profile),
+            error: () => undefined,
         });
-        this.settingsService.getSettings().subscribe(settings => {
+        this.settingsService.getSettings().subscribe((settings) => {
             this.settings.set(settings);
-        })
+        });
     }
 
     submit(view: UserModalView): void {
@@ -118,8 +118,9 @@ export class UserModalComponent implements OnInit {
 
         this.themeService.applyTheme(materialTheme, customThemeConfig);
 
-        this.settingsService.saveSettings(this.settings())
-            .subscribe(savedSettings => {
+        this.settingsService
+            .saveSettings(this.settings())
+            .subscribe((savedSettings) => {
                 this.settings.set(savedSettings);
             });
     }
@@ -128,9 +129,9 @@ export class UserModalComponent implements OnInit {
         const submit = this.profile().isNew
             ? this.profileService.createUserProfile(this.profile())
             : this.profileService.updateUserProfile(this.profile());
-    
-        submit.subscribe(savedProfile => {
-            this.profile.set(savedProfile)
+
+        submit.subscribe((savedProfile) => {
+            this.profile.set(savedProfile);
         });
     }
 }

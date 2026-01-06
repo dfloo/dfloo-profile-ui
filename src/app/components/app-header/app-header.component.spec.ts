@@ -28,11 +28,11 @@ describe('HeaderComponent', () => {
                     useValue: {
                         isAuthenticated$: of(isAuthenticated),
                         loginWithPopup: jasmine.createSpy('loginWithPopup'),
-                        logout: jasmine.createSpy('logout')
-                    }
+                        logout: jasmine.createSpy('logout'),
+                    },
                 },
-                { provide: MatDialog, useValue: mockDialog }
-            ]
+                { provide: MatDialog, useValue: mockDialog },
+            ],
         }).compileComponents();
 
         fixture = TestBed.createComponent(WrapperComponent);
@@ -49,29 +49,29 @@ describe('HeaderComponent', () => {
         it('should create', () => {
             expect(component).toBeTruthy();
         });
-    
+
         it('should display the title', () => {
             const title = fixture.nativeElement.querySelector('h1');
             expect(title.textContent).toContain('My Title');
         });
-    
+
         it('should emit toggleSidenav signal', async () => {
-            spyOn(component.header.toggleSidenav, 'emit')
-            await clickButtonByText('menu')
-    
+            spyOn(component.header.toggleSidenav, 'emit');
+            await clickButtonByText('menu');
+
             expect(component.header.toggleSidenav.emit).toHaveBeenCalled();
         });
-    
+
         it('should open the user menu', async () => {
             await clickButtonByText('account_circle');
             const menu = await loader.getHarness(MatMenuHarness);
-    
+
             expect(await menu.isOpen()).toBeTrue();
         });
-    
+
         it('should show the unauthenticated user menu options', async () => {
             const options = await getUserMenuOptions();
-            
+
             expect(options).toEqual(['Sign Up', 'Log In']);
         });
     });
@@ -83,34 +83,29 @@ describe('HeaderComponent', () => {
 
         it('should show the authenticated user menu options', async () => {
             const options = await getUserMenuOptions();
-            
+
             expect(options).toEqual(['Profile', 'Settings', 'Log Out']);
         });
     });
 
     const clickButtonByText = async (text: string) => {
         (await loader.getHarness(MatButtonHarness.with({ text }))).click();
-    }
+    };
 
     const getUserMenuOptions = async (): Promise<string[]> => {
         await clickButtonByText('account_circle');
         const menu = await loader.getHarness(MatMenuHarness);
 
-        return Promise.all((await menu.getItems()).map(i => i.getText()));
+        return Promise.all((await menu.getItems()).map((i) => i.getText()));
     };
 });
 
-
 @Component({
     selector: 'wrapper',
-    template: `
-        <app-header
-            [title]="title"
-        ></app-header>
-    `,
-    imports: [HeaderComponent]
+    template: ` <app-header [title]="title"></app-header> `,
+    imports: [HeaderComponent],
 })
 class WrapperComponent {
     @ViewChild(HeaderComponent) header!: HeaderComponent;
-    title = 'My Title'
+    title = 'My Title';
 }

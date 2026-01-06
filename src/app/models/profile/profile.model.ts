@@ -19,7 +19,7 @@ export class Profile extends BaseModel {
         Object.assign(this, {
             ...props,
             created: this.created,
-            updated: this.updated
+            updated: this.updated,
         });
     }
 
@@ -39,16 +39,16 @@ export class Profile extends BaseModel {
             country: record.country,
             zipCode: record.zipCode,
             created: record.created,
-            updated: record.updated
+            updated: record.updated,
         });
     }
 
     static serialize(profile: Profile): ProfileDTO {
         const socialAccounts = profile.socialAccounts
             ? profile.socialAccounts.filter(
-                a => (a?.href !== '' && a?.label !== '')
-             )
-            : undefined
+                  (a) => a?.href !== '' && a?.label !== '',
+              )
+            : undefined;
         return {
             profileId: profile.id,
             firstName: profile.firstName,
@@ -62,33 +62,33 @@ export class Profile extends BaseModel {
             city: profile.city,
             state: profile.state,
             country: profile.country,
-            zipCode: profile.zipCode
-        }
+            zipCode: profile.zipCode,
+        };
     }
 
     static getMockDTO(profileId: string): ProfileDTO {
         return {
             profileId,
-            email: "devin.p.flood@gmail.com",
-            firstName: "Devin",
-            middleName: "P.",
-            lastName: "Flood",
-            address1: "",
-            address2: "",
-            city: "Bay Area",
-            state: "US-CA",
-            zipCode: "",
-            country: "",
+            email: 'devin.p.flood@gmail.com',
+            firstName: 'Devin',
+            middleName: 'P.',
+            lastName: 'Flood',
+            address1: '',
+            address2: '',
+            city: 'Bay Area',
+            state: 'US-CA',
+            zipCode: '',
+            country: '',
             socialAccounts: [
                 {
                     href: 'https://github.com/dfloo',
-                    label: 'github'
+                    label: 'github',
                 },
                 {
                     href: 'https://www.linkedin.com/in/dfloo/',
-                    label: 'linkedin'
-                }
-            ]
+                    label: 'linkedin',
+                },
+            ],
         };
     }
 }

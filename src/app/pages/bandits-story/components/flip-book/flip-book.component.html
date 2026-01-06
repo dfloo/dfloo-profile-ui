@@ -1,11 +1,7 @@
 <div class="flip-book-container">
     <div class="back-cover-container">
-        <div
-            class="back-cover"
-            [class.open]="open"
-            (click)="close()"
-        >
-            <img src="assets/inner_cover.png">
+        <div class="back-cover" [class.open]="open" (click)="close()">
+            <img src="assets/inner_cover.png" />
         </div>
     </div>
 
@@ -19,26 +15,22 @@
                 (click)="flipPage(page)"
             >
                 <div class="page--back-face">
-                    <img [src]="page.back">
+                    <img [src]="page.back" />
                 </div>
                 <div class="page--front-face">
-                    <img [src]="page.front">
+                    <img [src]="page.front" />
                 </div>
             </div>
         </div>
     }
 
     <div class="front-cover-container">
-        <div
-            class="front-cover"
-            [class.open]="open"
-            (click)="open = !open"
-        >
+        <div class="front-cover" [class.open]="open" (click)="open = !open">
             <div class="front-cover--inner-face">
-                <img src="assets/inner_cover.png">
+                <img src="assets/inner_cover.png" />
             </div>
             <div class="front-cover--outer-face">
-                <img src="assets/front_cover.png">
+                <img src="assets/front_cover.png" />
             </div>
         </div>
     </div>
@@ -54,10 +46,10 @@
                     (click)="reverseFlipPage(page)"
                 >
                     <div class="page--front-face">
-                        <img [src]="page.front">
+                        <img [src]="page.front" />
                     </div>
                     <div class="page--back-face">
-                        <img [src]="page.back">
+                        <img [src]="page.back" />
                     </div>
                 </div>
             </div>

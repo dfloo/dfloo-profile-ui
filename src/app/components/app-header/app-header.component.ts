@@ -5,7 +5,7 @@ import {
     inject,
     input,
     OnInit,
-    output
+    output,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, DOCUMENT } from '@angular/common';
@@ -31,8 +31,8 @@ import { UserModalComponent, UserModalView } from '@components/user-modal';
         MatMenuItem,
         MatMenuTrigger,
         MatToolbar,
-        AsyncPipe
-    ]
+        AsyncPipe,
+    ],
 })
 export class HeaderComponent implements OnInit {
     sidenavOpen = input(false);
@@ -48,10 +48,11 @@ export class HeaderComponent implements OnInit {
     private destroyRef = inject(DestroyRef);
 
     ngOnInit(): void {
-        this.isAuthenticated$ = this.auth.isAuthenticated$
-        this.auth.user$.pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(user => {
-                this.profilePictureUrl = user?.picture
+        this.isAuthenticated$ = this.auth.isAuthenticated$;
+        this.auth.user$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((user) => {
+                this.profilePictureUrl = user?.picture;
             });
     }
 
@@ -61,13 +62,13 @@ export class HeaderComponent implements OnInit {
 
     logout(): void {
         this.auth.logout({
-            logoutParams: { returnTo: this.doc.location.origin }
+            logoutParams: { returnTo: this.doc.location.origin },
         });
     }
 
     signup(): void {
         this.auth.loginWithPopup({
-            authorizationParams: { screen_hint: 'signup', },
+            authorizationParams: { screen_hint: 'signup' },
         });
     }
 
@@ -75,7 +76,7 @@ export class HeaderComponent implements OnInit {
         this.dialog.open(UserModalComponent, {
             minHeight: '50vh',
             minWidth: '60vw',
-            data: { view, showTabs }
+            data: { view, showTabs },
         });
     }
 }

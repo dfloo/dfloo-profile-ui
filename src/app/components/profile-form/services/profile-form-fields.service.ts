@@ -7,35 +7,42 @@ import { SelectOption } from '@core/form-fields';
 
 @Injectable()
 export class ProfileFormFieldsService {
-    
     getFields(): FormlyFieldConfig[] {
         const {
-            firstName, middleName, lastName, address1, address2, city, state,
-            zipCode, country, email, socialAccounts, phoneNumber
+            firstName,
+            middleName,
+            lastName,
+            address1,
+            address2,
+            city,
+            state,
+            zipCode,
+            country,
+            email,
+            socialAccounts,
+            phoneNumber,
         } = this.getFieldConfigs();
 
         return [
             {
                 fieldGroupClassName: 'd-flex',
-                fieldGroup: [firstName, middleName, lastName]
+                fieldGroup: [firstName, middleName, lastName],
             },
             {
                 fieldGroupClassName: 'd-flex',
-                fieldGroup: [address1, address2]
+                fieldGroup: [address1, address2],
             },
             {
                 fieldGroupClassName: 'd-flex',
-                fieldGroup: [city, state, zipCode, country]
+                fieldGroup: [city, state, zipCode, country],
             },
             {
                 fieldGroupClassName: 'd-flex',
-                fieldGroup: [phoneNumber, email]
+                fieldGroup: [phoneNumber, email],
             },
-            socialAccounts
+            socialAccounts,
         ];
     }
-
-    
 
     private getFieldConfigs(): Record<string, FormlyFieldConfig> {
         return {
@@ -46,13 +53,14 @@ export class ProfileFormFieldsService {
                 props: {
                     label: 'Email',
                     type: 'email',
-                    pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'
+                    pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$',
                 },
                 validation: {
                     messages: {
-                        pattern: (_, field) => `"${field?.formControl?.value}" is not a valid email address`
-                    }
-                }
+                        pattern: (_, field) =>
+                            `"${field?.formControl?.value}" is not a valid email address`,
+                    },
+                },
             },
             socialAccounts: {
                 key: 'socialAccounts',
@@ -61,66 +69,71 @@ export class ProfileFormFieldsService {
                 props: {
                     label: 'Social Accounts',
                     sectionName: 'Social Account',
-                    expand: 'all'
+                    expand: 'all',
                 },
                 fieldArray: {
-                    fieldGroup:[{
-                        fieldGroupClassName: 'd-flex',
-                        fieldGroup: [{
-                            key: 'label',
-                            type: 'input',
-                            className: 'flex-grow',
-                            props: { label: 'Label' }
-                        }, {
-                            key: 'href',
-                            type: 'input',
-                            className: 'flex-grow',
-                            props: { label: 'Link' }
-                        }]
-                    }]
-                }
+                    fieldGroup: [
+                        {
+                            fieldGroupClassName: 'd-flex',
+                            fieldGroup: [
+                                {
+                                    key: 'label',
+                                    type: 'input',
+                                    className: 'flex-grow',
+                                    props: { label: 'Label' },
+                                },
+                                {
+                                    key: 'href',
+                                    type: 'input',
+                                    className: 'flex-grow',
+                                    props: { label: 'Link' },
+                                },
+                            ],
+                        },
+                    ],
+                },
             },
             phoneNumber: {
                 key: 'phoneNumber',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Phone Number' }
+                props: { label: 'Phone Number' },
             },
             firstName: {
                 key: 'firstName',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'First Name' }
+                props: { label: 'First Name' },
             },
             middleName: {
                 key: 'middleName',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Middle Name' }
+                props: { label: 'Middle Name' },
             },
             lastName: {
                 key: 'lastName',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Last Name' }
+                props: { label: 'Last Name' },
             },
             address1: {
                 key: 'address1',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Address' }
+                props: { label: 'Address' },
             },
             address2: {
                 key: 'address2',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Address Cont.' }
+                props: { label: 'Address Cont.' },
             },
             city: {
                 key: 'city',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'City' }
+                props: { label: 'City' },
             },
             state: {
                 key: 'state',
@@ -128,15 +141,15 @@ export class ProfileFormFieldsService {
                 className: 'flex-grow',
                 props: {
                     label: 'State/Province',
-                    options: []
+                    options: [],
                 },
-                expressions: { 'props.options': this.getStates }
+                expressions: { 'props.options': this.getStates },
             },
             zipCode: {
                 key: 'zipCode',
                 type: 'input',
                 className: 'flex-grow',
-                props: { label: 'Zip/Postal Code' }
+                props: { label: 'Zip/Postal Code' },
             },
             country: {
                 key: 'country',
@@ -144,47 +157,49 @@ export class ProfileFormFieldsService {
                 className: 'flex-grow',
                 props: {
                     label: 'Country',
-                    options: []
+                    options: [],
                 },
                 expressions: { 'props.options': this.getCountries },
-                hooks: { onInit: this.onCountryInit }
-            }
+                hooks: { onInit: this.onCountryInit },
+            },
         };
     }
 
-    private onCountryInit(
-        { form, formControl, model }: FormlyFieldConfig
-    ): void {
-        formControl?.valueChanges.pipe(skip(1))
-            .subscribe(value => {
-                if (value !== model.country) {
-                    form?.get('state')?.setValue(null);
-                }
-            })
+    private onCountryInit({
+        form,
+        formControl,
+        model,
+    }: FormlyFieldConfig): void {
+        formControl?.valueChanges.pipe(skip(1)).subscribe((value) => {
+            if (value !== model.country) {
+                form?.get('state')?.setValue(null);
+            }
+        });
     }
 
-    private getCountries(
-        { model: { country } }: FormlyFieldConfig
-    ): SelectOption[] {
+    private getCountries({
+        model: { country },
+    }: FormlyFieldConfig): SelectOption[] {
         return [
             ...(country ? [{ label: 'Clear Selection' }] : []),
             ...iso31661.map(({ alpha2, name }) => ({
                 value: alpha2,
-                label: name
-            }))
+                label: name,
+            })),
         ];
     }
 
-    private getStates(
-        { model: { state, country } }: FormlyFieldConfig
-    ): SelectOption[] {
+    private getStates({
+        model: { state, country },
+    }: FormlyFieldConfig): SelectOption[] {
         return [
             ...(state ? [{ label: 'Clear Selection' }] : []),
-            ...iso31662.filter(({ parent }) => parent === (country || 'US'))
+            ...iso31662
+                .filter(({ parent }) => parent === (country || 'US'))
                 .map(({ code, name }) => ({
                     value: code,
-                    label: name
-                }))
+                    label: name,
+                })),
         ];
     }
 }

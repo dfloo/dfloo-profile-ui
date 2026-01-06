@@ -2,7 +2,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
     ApplicationConfig,
     provideBrowserGlobalErrorListeners,
-    provideZoneChangeDetection
+    provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
@@ -21,20 +21,24 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
-        provideHttpClient(withInterceptors([
-            authHttpInterceptorFn,
-            errorInterceptorFn
-        ])),
+        provideHttpClient(
+            withInterceptors([authHttpInterceptorFn, errorInterceptorFn]),
+        ),
         provideAuth0(environment.auth0),
         provideFormlyCore([
             ...withFormlyMaterial(),
             {
-                types: [{
-                    name: 'repeat-section', component: RepeatSectionComponent
-                }, {
-                    name: 'toggle', component: FormlyFieldToggle
-                }]
-            }
-        ])
-    ]
+                types: [
+                    {
+                        name: 'repeat-section',
+                        component: RepeatSectionComponent,
+                    },
+                    {
+                        name: 'toggle',
+                        component: FormlyFieldToggle,
+                    },
+                ],
+            },
+        ]),
+    ],
 };

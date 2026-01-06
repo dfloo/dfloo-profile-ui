@@ -9,57 +9,69 @@ import { JobApplicationModalData } from '../components';
 
 @Injectable()
 export class JobApplicationFormFieldsService {
-    getFields(
-        { isNew, resumes }: JobApplicationModalData
-    ): FormlyFieldConfig[] {
-        return [{
-            fieldGroupClassName: 'd-flex',
-            fieldGroup: [
+    getFields({
+        isNew,
+        resumes,
+    }: JobApplicationModalData): FormlyFieldConfig[] {
+        return [
+            {
+                fieldGroupClassName: 'd-flex',
+                fieldGroup: [
                     {
-                    key: 'company',
-                    type: 'input',
-                    className: 'flex-grow',
-                    props: { label: 'Company' }
-                }, {
-                    key: 'role',
-                    type: 'input',
-                    className: 'flex-grow',
-                    props: { label: 'Role' }
-                }, {
-                    key: 'resumeId',
-                    type: 'select',
-                    className: 'flex-grow',
-                    props: {
-                        label: 'Resume',
-                        options: this.getResumeOptions(resumes)
-                    }
-                }, ...(isNew ? [] : [{
-                    key: 'status',
-                    type: 'select',
-                    className: 'flex-grow',
-                    props: {
-                        label: 'Status',
-                        options: this.getStatusOptions()
-                    }
-                }])
-            ]
-        }, {
-            key: 'description',
-            type: 'textarea',
-            props: {
-                label: 'Description',
-                autosize: true,
-                autosizeMaxRows: 8
-            }
-        }, {
-            key: 'notes',
-            type: 'textarea',
-            props: {
-                label: 'Notes',
-                autosize: true,
-                autosizeMaxRows: 8
-            }
-        }];
+                        key: 'company',
+                        type: 'input',
+                        className: 'flex-grow',
+                        props: { label: 'Company' },
+                    },
+                    {
+                        key: 'role',
+                        type: 'input',
+                        className: 'flex-grow',
+                        props: { label: 'Role' },
+                    },
+                    {
+                        key: 'resumeId',
+                        type: 'select',
+                        className: 'flex-grow',
+                        props: {
+                            label: 'Resume',
+                            options: this.getResumeOptions(resumes),
+                        },
+                    },
+                    ...(isNew
+                        ? []
+                        : [
+                              {
+                                  key: 'status',
+                                  type: 'select',
+                                  className: 'flex-grow',
+                                  props: {
+                                      label: 'Status',
+                                      options: this.getStatusOptions(),
+                                  },
+                              },
+                          ]),
+                ],
+            },
+            {
+                key: 'description',
+                type: 'textarea',
+                props: {
+                    label: 'Description',
+                    autosize: true,
+                    autosizeMaxRows: 8,
+                },
+            },
+            {
+                key: 'notes',
+                type: 'textarea',
+                props: {
+                    label: 'Notes',
+                    autosize: true,
+                    autosizeMaxRows: 8,
+                },
+            },
+        ];
     }
 
     private getResumeOptions(resumes: Resume[]): SelectOption[] {
@@ -71,12 +83,14 @@ export class JobApplicationFormFieldsService {
                 }
 
                 return options;
-            }, [] as SelectOption[])
+            }, [] as SelectOption[]),
         ];
     }
 
     private getStatusOptions(): SelectOption[] {
-        return Object.values(JobApplicationStatus)
-            .map(status => ({ value: status, label: status }));
+        return Object.values(JobApplicationStatus).map((status) => ({
+            value: status,
+            label: status,
+        }));
     }
 }

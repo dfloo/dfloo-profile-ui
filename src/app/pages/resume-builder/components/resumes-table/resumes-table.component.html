@@ -12,7 +12,7 @@
         <div>
             @if (singleSelection) {
                 <button
-                    matIconButton 
+                    matIconButton
                     (click)="onEditResume(selectedResume)"
                     matTooltip="Edit Resume"
                 >
@@ -30,7 +30,7 @@
                     </button>
                 }
                 <button
-                    matIconButton 
+                    matIconButton
                     (click)="onCopyResume(selectedResume)"
                     matTooltip="Copy Resume"
                 >
@@ -124,7 +124,7 @@
                 <th mat-header-cell *matHeaderCellDef>Last Updated</th>
                 <td mat-cell *matCellDef="let resume">{{ resume.updated }}</td>
             </ng-container>
-        
+
             <tr mat-header-row *matHeaderRowDef="columns"></tr>
             <tr
                 mat-row

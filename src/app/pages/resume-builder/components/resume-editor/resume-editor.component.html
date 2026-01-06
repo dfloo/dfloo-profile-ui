@@ -45,18 +45,14 @@
                 (click)="viewResume.emit(resume()!)"
                 matTooltip="View Resume"
             >
-                <mat-icon class="material-icons-outlined">
-                    pageview
-                </mat-icon>
+                <mat-icon class="material-icons-outlined"> pageview </mat-icon>
             </button>
             <button
                 matIconButton
                 (click)="downloadResume.emit(resume()!)"
                 matTooltip="Download Resume"
             >
-                <mat-icon class="material-icons-outlined">
-                    download
-                </mat-icon>
+                <mat-icon class="material-icons-outlined"> download </mat-icon>
             </button>
             <button
                 matIconButton
@@ -85,9 +81,7 @@
                     <mat-expansion-panel-header>
                         <span>Profile</span>
                     </mat-expansion-panel-header>
-                    <profile-form
-                        [profile]="resume()?.profile"
-                    ></profile-form>
+                    <profile-form [profile]="resume()?.profile"></profile-form>
                 </mat-expansion-panel>
             </div>
             <div cdkDropList (cdkDropListDropped)="moveSection($event)">
@@ -99,7 +93,8 @@
                                     <mat-icon
                                         cdkDragHandle
                                         matTooltip="Move Section"
-                                    >drag_handle</mat-icon>
+                                        >drag_handle</mat-icon
+                                    >
                                     <button
                                         matButton
                                         matTooltip="Remove Section"

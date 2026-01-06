@@ -3,7 +3,7 @@ import {
     Component,
     inject,
     model,
-    OnInit
+    OnInit,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
@@ -18,7 +18,7 @@ import { ProfileFormFieldsService } from './services';
     styleUrl: './profile-form.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ProfileFormFieldsService],
-    imports: [FormlyForm, ReactiveFormsModule]
+    imports: [FormlyForm, ReactiveFormsModule],
 })
 export class ProfileFormComponent implements OnInit {
     profile = model<Profile>();

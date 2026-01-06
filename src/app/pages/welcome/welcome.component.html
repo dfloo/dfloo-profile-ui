@@ -6,20 +6,13 @@
     </div>
     <div class="scroll-marker-container">
         @for (id of scrollMarkerIds; track id) {
-            <div
-                class="scroll-marker"
-                [attr.data-id]="id"
-                #scrollMarker
-            ></div>
+            <div class="scroll-marker" [attr.data-id]="id" #scrollMarker></div>
         }
     </div>
 </div>
 
 @if (showSnippets()) {
-    <div 
-        class="text-overlay"
-        [innerHTML]="currentSnippet()"
-    ></div>
+    <div class="text-overlay" [innerHTML]="currentSnippet()"></div>
 } @else {
     <div class="contact-section">
         <div class="profile-picture"></div>
@@ -38,11 +31,7 @@
             >
                 LinkedIn
             </button>
-            <button
-                matButton="filled"
-                color="primary"
-                (click)="viewResume()"
-            >
+            <button matButton="filled" color="primary" (click)="viewResume()">
                 View Resume
             </button>
         </div>

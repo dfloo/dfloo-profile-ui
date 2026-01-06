@@ -8,7 +8,7 @@ import { JobApplication } from '@models/job-application';
     templateUrl: './job-application-card.component.html',
     styleUrl: './job-application-card.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatCard, MatCardContent]
+    imports: [MatCard, MatCardContent],
 })
 export class JobApplicationCardComponent {
     jobApplication = model<JobApplication>();

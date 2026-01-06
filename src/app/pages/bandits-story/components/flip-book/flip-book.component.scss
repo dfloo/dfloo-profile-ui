@@ -4,7 +4,9 @@
     height: 83.2vh;
 }
 
-.front-cover-container, .back-cover-container, .page-container {
+.front-cover-container,
+.back-cover-container,
+.page-container {
     position: absolute;
     perspective: 3000px;
     transform-style: preserve-3d;
@@ -17,7 +19,8 @@
     will-change: transform;
 }
 
-.front-cover, .back-cover {
+.front-cover,
+.back-cover {
     position: relative;
     width: 100%;
     height: 100%;
@@ -25,13 +28,15 @@
     transform-origin: left center;
 }
 
-.front-cover, .back-cover, .page {
+.front-cover,
+.back-cover,
+.page {
     cursor: pointer;
 }
 
-
 .back-cover {
-    img, .back-cover-buttons {
+    img,
+    .back-cover-buttons {
         position: absolute;
     }
 
@@ -60,7 +65,8 @@
     transform: rotateY(-180deg) translateX(-64vh);
 }
 
-.back-cover.open, .page.open {
+.back-cover.open,
+.page.open {
     transform: translateX(32vh);
     transition-duration: 0.5s;
 }
@@ -114,7 +120,7 @@
     }
 }
 
-[class*="-face"] {
+[class*='-face'] {
     position: absolute;
     height: 100%;
     width: 100%;
