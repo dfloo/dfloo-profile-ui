@@ -58,8 +58,8 @@ export class ThemeService {
     }
 
     applyCustomTheme(config?: CustomThemeConfig): void {
-        const primaryColor = config?.primary ?? '#005cbb'
-        const accentColor = config?.accent ?? '#FFEB3B'
+        const primaryColor = config?.primary ?? '#005cbb';
+        const accentColor = config?.accent ?? '#FFEB3B';
         const theme = themeFromSourceColor(
             argbFromHex(primaryColor),
             [{
@@ -70,9 +70,9 @@ export class ThemeService {
         );
         const scheme = config?.dark ? theme.schemes.dark : theme.schemes.light;
         const [accent] = theme.customColors;
-        const accentScheme = config?.dark ? accent.dark : accent.light
+        const accentScheme = config?.dark ? accent.dark : accent.light;
         const fontFamily = config?.fontFamily ?? FontFamily.Roboto;
-    
+
         const vars: Record<string, string> = {
             '--mat-sys-background': hexFromArgb(scheme.background),
             '--mat-sys-error': hexFromArgb(scheme.error),
@@ -105,7 +105,7 @@ export class ThemeService {
             '--mat-sys-primary-fixed-dim': hexFromArgb(scheme.primary),//
             '--mat-sys-scrim': hexFromArgb(scheme.scrim),
             '--mat-sys-secondary': hexFromArgb(scheme.secondary),
-            '--mat-sys-secondaryContainer': hexFromArgb(scheme.secondaryContainer),
+            '--mat-sys-secondary-container': hexFromArgb(scheme.secondaryContainer),
             '--mat-sys-secondary-fixed': hexFromArgb(scheme.secondaryContainer),//
             '--mat-sys-secondary-fixed-dim': hexFromArgb(scheme.secondary),//
             '--mat-sys-shadow': hexFromArgb(scheme.shadow),

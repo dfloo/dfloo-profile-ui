@@ -37,10 +37,9 @@ export class SettingsFormComponent {
     }, {
         key: 'customThemeConfig',
         expressions: {
-            hide: field => {
-                return field.form?.value.materialTheme !== MaterialTheme.Custom
-            }
-        }, 
+            hide: ({ form }) =>
+                form?.value.materialTheme !== MaterialTheme.Custom
+        },
         fieldGroup: [{
             key: 'fontFamily',
             type: 'select',
