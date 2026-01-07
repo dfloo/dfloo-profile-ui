@@ -1,16 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 
-import { ResumeBuilderComponent } from './resume-builder.component';
 import { ResumeService } from '@api/resume';
 import { ProfileService } from '@api/profile';
-import { of } from 'rxjs';
 import { Profile } from '@models/profile';
+import { UserService } from '@core/services';
+
+import { ResumeBuilderComponent } from './resume-builder.component';
 
 describe('ResumeBuilderComponent', () => {
     let component: ResumeBuilderComponent;
     let fixture: ComponentFixture<ResumeBuilderComponent>;
     let mockResumeService: jasmine.SpyObj<ResumeService>;
     let mockProfileService: jasmine.SpyObj<ProfileService>;
+    let mockUserService: jasmine.SpyObj<UserService>;
 
     beforeEach(async () => {
         mockResumeService = jasmine.createSpyObj('ResumeService', [
@@ -23,9 +26,16 @@ describe('ResumeBuilderComponent', () => {
             'getUserProfile',
         ]);
         mockProfileService.getUserProfile.and.returnValue(of(new Profile({})));
+        mockUserService = jasmine.createSpyObj('UserService', ['hasRole']);
+        mockUserService.hasRole.and.returnValue(of(false));
+
         await TestBed.configureTestingModule({
             imports: [ResumeBuilderComponent],
             providers: [
+                {
+                    provide: UserService,
+                    useValue: mockUserService,
+                },
                 {
                     provide: ResumeService,
                     useValue: mockResumeService,

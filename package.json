@@ -9,7 +9,8 @@
         "build": "ng build",
         "build:prod": "npm run env && ng build --configuration=production",
         "watch": "ng build --watch --configuration development",
-        "test": "ng test"
+        "test": "ng test",
+        "test-ci": "npm ci; npm run env; ng build; ng test"
     },
     "private": true,
     "dependencies": {
