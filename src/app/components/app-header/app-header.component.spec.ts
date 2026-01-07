@@ -26,6 +26,7 @@ describe('HeaderComponent', () => {
                 {
                     provide: AuthService,
                     useValue: {
+                        user$: of({}),
                         isAuthenticated$: of(isAuthenticated),
                         loginWithPopup: jasmine.createSpy('loginWithPopup'),
                         logout: jasmine.createSpy('logout'),
@@ -51,7 +52,7 @@ describe('HeaderComponent', () => {
         });
 
         it('should display the title', () => {
-            const title = fixture.nativeElement.querySelector('h1');
+            const title = fixture.nativeElement.querySelector('.page-title');
             expect(title.textContent).toContain('My Title');
         });
 
@@ -72,7 +73,7 @@ describe('HeaderComponent', () => {
         it('should show the unauthenticated user menu options', async () => {
             const options = await getUserMenuOptions();
 
-            expect(options).toEqual(['Sign Up', 'Log In']);
+            expect(options).toEqual(['Settings', 'Sign Up', 'Log In']);
         });
     });
 
@@ -92,8 +93,12 @@ describe('HeaderComponent', () => {
         (await loader.getHarness(MatButtonHarness.with({ text }))).click();
     };
 
+    const clickButtonBySelector = async (selector: string) => {
+        (await loader.getHarness(MatButtonHarness.with({ selector }))).click();
+    };
+
     const getUserMenuOptions = async (): Promise<string[]> => {
-        await clickButtonByText('account_circle');
+        await clickButtonBySelector('.mat-mdc-menu-trigger');
         const menu = await loader.getHarness(MatMenuHarness);
 
         return Promise.all((await menu.getItems()).map((i) => i.getText()));

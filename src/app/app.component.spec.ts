@@ -18,6 +18,7 @@ describe('App', () => {
                 {
                     provide: AuthService,
                     useValue: {
+                        user$: of({}),
                         isAuthenticated$: of(false),
                         loginWithPopup: jasmine.createSpy('loginWithPopup'),
                         logout: jasmine.createSpy('logout'),

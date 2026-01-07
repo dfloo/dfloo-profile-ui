@@ -83,13 +83,13 @@ describe('ResumeService', () => {
             });
         });
 
-        it("should delete from session storage for unauth'd user", (done) => {
+        it('should delete from session storage for unauthenticated user', (done) => {
             setup(false);
             mockLocalStorage.getData.and.returnValue({
                 resumes: [Resume.normalize(Resume.getMockDTO())],
             });
-            service.deleteResumes(['id']).subscribe((result) => {
-                expect(result).toEqual(true);
+            service.deleteResumes(['resumeId']).subscribe((result) => {
+                expect(result).toEqual(['resumeId']);
                 expect(mockApiService.delete).not.toHaveBeenCalled();
                 expect(mockLocalStorage.setData).toHaveBeenCalledWith({
                     resumes: [],
@@ -151,7 +151,7 @@ describe('ResumeService', () => {
             });
         });
 
-        it("should edit session storage for unauth'd users", (done) => {
+        it('should edit session storage for unauthenticated users', (done) => {
             setup(false);
             const existing = Resume.normalize(Resume.getMockDTO());
             mockLocalStorage.getData.and.returnValue({ resumes: [existing] });
