@@ -1,23 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorPicker } from './color-picker';
+import { ColorPickerComponent } from './color-picker.component';
 
-describe('ColorPicker', () => {
-  let component: ColorPicker;
-  let fixture: ComponentFixture<ColorPicker>;
+describe('ColorPickerComponent', () => {
+    let component: ColorPickerComponent;
+    let fixture: ComponentFixture<ColorPickerComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ColorPicker]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [ColorPickerComponent]
+        })
+            .compileComponents();
 
-    fixture = TestBed.createComponent(ColorPicker);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(ColorPickerComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

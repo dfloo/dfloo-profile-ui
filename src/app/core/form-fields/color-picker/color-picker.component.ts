@@ -27,10 +27,24 @@ export class ColorPickerComponent extends FieldType implements OnInit {
     }
 
     ngOnInit(): void {
-        this.color = this.formControl.value ?? this.props['defaultValue'] ?? '';
+        const controlValue = this.formControl?.value;
+        const defaultValue = this.props['defaultValue'];
+
+        if (this.isValid(controlValue)) {
+            this.color = controlValue;
+        } else if (this.isValid(defaultValue)) {
+            this.color = defaultValue;
+            if (this.formControl.value !== defaultValue) {
+                this.formControl.setValue(defaultValue);
+            }
+        }
     }
 
     onColorChange(color: string): void {
         this.formControl.setValue(color);
+    }
+
+    private isValid(value?: string | null): boolean {
+        return value !== null && value !== undefined && value !== '';
     }
 }
