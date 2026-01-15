@@ -59,13 +59,22 @@ export class SettingsFormComponent {
                 },
                 {
                     key: 'accent',
-                    type: 'select',
+                    type: 'color-picker',
                     props: {
                         label: 'Accent Color',
                         options: materialColorOptions,
                     },
                     defaultValue: '#FFEB3B',
                 },
+                // {
+                //     key: 'accent',
+                //     type: 'select',
+                //     props: {
+                //         label: 'Accent Color',
+                //         options: materialColorOptions,
+                //     },
+                //     defaultValue: '#FFEB3B',
+                // },
                 {
                     key: 'dark',
                     type: 'toggle',
