@@ -50,12 +50,12 @@ export class SettingsFormComponent {
                 },
                 {
                     key: 'primary',
-                    type: 'select',
+                    type: 'color-picker',
                     props: {
                         label: 'Primary Color',
                         options: materialColorOptions,
                     },
-                    defaultValue: '#3F51B5',
+                    defaultValue: '#315BA1',
                 },
                 {
                     key: 'accent',
@@ -64,17 +64,8 @@ export class SettingsFormComponent {
                         label: 'Accent Color',
                         options: materialColorOptions,
                     },
-                    defaultValue: '#FFEB3B',
+                    defaultValue: '#0000FF',
                 },
-                // {
-                //     key: 'accent',
-                //     type: 'select',
-                //     props: {
-                //         label: 'Accent Color',
-                //         options: materialColorOptions,
-                //     },
-                //     defaultValue: '#FFEB3B',
-                // },
                 {
                     key: 'dark',
                     type: 'toggle',
