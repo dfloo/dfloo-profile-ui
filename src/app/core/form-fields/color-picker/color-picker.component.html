@@ -1,0 +1,14 @@
+<mat-form-field>
+    <mat-label>{{ props.label }}</mat-label>
+    <div class="field-wrapper">
+        <input matInput [value]="displayName" readonly/>
+    
+        <input
+            #colorInput
+            [(colorPicker)]="color"
+            cpAlphaChannel="disabled"
+            [style.background]="color"
+            (colorPickerChange)="onColorChange($event)"
+        />
+    </div>
+</mat-form-field>

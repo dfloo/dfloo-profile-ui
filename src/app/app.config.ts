@@ -10,7 +10,10 @@ import { provideFormlyCore } from '@ngx-formly/core';
 import { withFormlyMaterial } from '@ngx-formly/material';
 import { FormlyFieldToggle } from '@ngx-formly/material/toggle';
 
-import { RepeatSectionComponent } from '@core/form-fields';
+import {
+    ColorPickerComponent,
+    RepeatSectionComponent,
+} from '@core/form-fields';
 import { errorInterceptorFn } from '@core/interceptors';
 
 import { environment } from '../environments/environment';
@@ -36,6 +39,10 @@ export const appConfig: ApplicationConfig = {
                     {
                         name: 'toggle',
                         component: FormlyFieldToggle,
+                    },
+                    {
+                        name: 'color-picker',
+                        component: ColorPickerComponent,
                     },
                 ],
             },

@@ -13,9 +13,23 @@
             content-background-color: var(--mat-sys-surface-bright),
         )
     );
-    @include mat.toolbar-overrides(
+    @include mat.checkbox-overrides(
         (
-            container-background-color: var(--mat-sys-primary-container),
+            selected-focus-icon-color: var(--mat-sys-tertiary),
+            selected-focus-state-layer-color: var(--mat-sys-tertiary),
+            selected-hover-icon-color: var(--mat-sys-tertiary),
+            selected-hover-state-layer-color: var(--mat-sys-tertiary),
+            selected-icon-color: var(--mat-sys-tertiary),
+            selected-pressed-icon-color: var(--mat-sys-tertiary),
+            selected-pressed-state-layer-color: var(--mat-sys-tertiary),
+            unselected-focus-state-layer-color: var(--mat-sys-tertiary),
+            unselected-hover-state-layer-color: var(--mat-sys-tertiary),
+            unselected-pressed-state-layer-color: var(--mat-sys-tertiary),
+        )
+    );
+    @include mat.icon-button-overrides(
+        (
+            state-layer-color: var(--mat-sys-tertiary),
         )
     );
 }
