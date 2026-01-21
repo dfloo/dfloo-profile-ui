@@ -180,7 +180,7 @@ export class ResumesTableComponent implements AfterViewInit {
             .afterClosed()
             .subscribe((result) => {
                 if (result === WarningDialogResult.Confirm) {
-                    this.deleteResumes.emit(this.getIDs(resumes));
+                    this.deleteResumes.emit(this.getIds(resumes));
                     this.selectionModel.clear();
                 }
             });
@@ -198,13 +198,13 @@ export class ResumesTableComponent implements AfterViewInit {
         this.visibleRows = this.dataSource.filteredData.slice(start, end);
     }
 
-    private getIDs(resumes: Resume[]): string[] {
-        return resumes.reduce((IDs: string[], resume: Resume) => {
+    private getIds(resumes: Resume[]): string[] {
+        return resumes.reduce((Ids: string[], resume: Resume) => {
             if (resume.id) {
-                IDs.push(resume.id);
+                Ids.push(resume.id);
             }
 
-            return IDs;
+            return Ids;
         }, []);
     }
 }

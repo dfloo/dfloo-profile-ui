@@ -27,7 +27,7 @@
         state-layer-color: var(--mat-sys-tertiary),
     ));
     @include mat.tabs-overrides((
-        background-color: var(white),
+        background-color: white,
     ));
 }
 
