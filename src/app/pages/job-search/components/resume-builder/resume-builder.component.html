@@ -1,0 +1,24 @@
+<div class="resume-builder-container">
+    @if (resume()) {
+        <resume-editor
+            [resume]="resume()"
+            (saveResume)="saveResume($event)"
+            (downloadResume)="downloadResume($event)"
+            (viewResume)="viewResume($event)"
+            (deleteResume)="deleteResumes($event)"
+            (back)="resume.set(undefined)"
+        ></resume-editor>
+    } @else {
+        <resumes-table
+            [isSuperUser]="isSuperUser()"
+            [resumes]="resumes()"
+            (newResume)="newResume()"
+            (editResume)="editResume($event)"
+            (copyResume)="copyResume($event)"
+            (deleteResumes)="deleteResumes($event)"
+            (viewResume)="viewResume($event)"
+            (downloadResume)="downloadResume($event)"
+            (setDefault)="setDefaultResume($event)"
+        ></resumes-table>
+    }
+</div>

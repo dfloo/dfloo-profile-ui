@@ -8,20 +8,10 @@ export const sidenavRoutes = [
             import('@pages/welcome').then((m) => m.WelcomeComponent),
     },
     {
-        path: 'resume-builder',
-        title: 'Resume Builder',
+        path: 'job-search',
+        title: 'Job Search Tools',
         loadComponent: () =>
-            import('@pages/resume-builder').then(
-                (m) => m.ResumeBuilderComponent,
-            ),
-    },
-    {
-        path: 'application-tracker',
-        title: 'Application Tracker',
-        loadComponent: () =>
-            import('@pages/application-tracker').then(
-                (m) => m.ApplicationTrackerComponent,
-            ),
+            import('@pages/job-search').then((m) => m.JobSearchComponent),
     },
     {
         path: 'bandits-story',
