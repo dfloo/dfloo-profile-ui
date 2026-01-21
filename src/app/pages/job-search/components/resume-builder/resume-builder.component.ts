@@ -16,6 +16,7 @@ import { Resume } from '@models/resume';
 import { ResumeEditorComponent, ResumesTableComponent } from './components';
 
 @Component({
+    selector: 'resume-builder',
     templateUrl: './resume-builder.component.html',
     styleUrl: './resume-builder.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

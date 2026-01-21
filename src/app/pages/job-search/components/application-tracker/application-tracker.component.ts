@@ -31,6 +31,7 @@ import {
 } from './components';
 
 @Component({
+    selector: 'application-tracker',
     templateUrl: './application-tracker.component.html',
     styleUrl: './application-tracker.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
