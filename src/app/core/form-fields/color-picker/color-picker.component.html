@@ -1,14 +1,16 @@
 <mat-form-field>
     <mat-label>{{ props.label }}</mat-label>
     <div class="field-wrapper">
-        <input matInput [value]="displayName" readonly/>
-    
-        <input
-            #colorInput
-            [(colorPicker)]="color"
-            cpAlphaChannel="disabled"
-            [style.background]="color"
-            (colorPickerChange)="onColorChange($event)"
-        />
+        <input matInput [value]="displayName" readonly />
+
+        <div class="color-swatch" [style.background]="color"></div>
+
+        <mat-slider [min]="0" [max]="356.25" [step]="3.75">
+            <input
+                matSliderThumb
+                [value]="hue"
+                (input)="onHueChange($event)"
+            />
+        </mat-slider>
     </div>
 </mat-form-field>

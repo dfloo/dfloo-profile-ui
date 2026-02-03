@@ -8,8 +8,11 @@
         container-width: $app-sidenav-width,
         container-shape: 0,
         container-divider-color: var(--mat-sys-outline-variant),
+        container-background-color: var(--mat-sys-inverse-on-surface),
+        content-background-color: var(--mat-sys-surface-bright),
+    ));
+    @include mat.toolbar-overrides((
         container-background-color: var(--mat-sys-primary-container),
-        content-background-color: var(--mat-sys-inverse-on-surface),
     ));
     @include mat.checkbox-overrides((
         selected-focus-icon-color: var(--mat-sys-tertiary),
@@ -23,11 +26,8 @@
         unselected-hover-state-layer-color: var(--mat-sys-tertiary),
         unselected-pressed-state-layer-color: var(--mat-sys-tertiary),
     ));
-    @include mat.icon-button-overrides((
-        state-layer-color: var(--mat-sys-tertiary),
-    ));
-    @include mat.tabs-overrides((
-        background-color: white,
+    @include mat.icon-overrides((
+        color: var(--mat-sys-primary),
     ));
 }
 

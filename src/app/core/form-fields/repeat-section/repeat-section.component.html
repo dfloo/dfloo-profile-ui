@@ -16,11 +16,11 @@
                 @for (field of field.fieldGroup; track field.key) {
                     <div cdkDrag>
                         <div class="repeat-section-container">
-                            <mat-icon cdkDragHandle [matTooltip]="moveText">
+                            <mat-icon cdkDragHandle [matTooltip]="dragText">
                                 drag_handle
                             </mat-icon>
                             <button
-                                matButton
+                                matIconButton
                                 [matTooltip]="removeText"
                                 (click)="remove($index)"
                             >
@@ -48,10 +48,10 @@
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <div class="label-container">
-                                <mat-icon cdkDragHandle [matTooltip]="moveText"
+                                <mat-icon cdkDragHandle [matTooltip]="dragText"
                                     >drag_handle</mat-icon
                                 >
-                                <button matButton (click)="remove($index)">
+                                <button matIconButton (click)="remove($index)">
                                     <mat-icon [matTooltip]="removeText">
                                         remove_circle_outline
                                     </mat-icon>
@@ -80,11 +80,11 @@
             @for (field of field.fieldGroup; track field.key) {
                 <div cdkDrag>
                     <div class="repeat-section-container">
-                        <mat-icon cdkDragHandle [matTooltip]="moveText"
+                        <mat-icon cdkDragHandle [matTooltip]="dragText"
                             >drag_handle</mat-icon
                         >
                         <button
-                            matButton
+                            matIconButton
                             [matTooltip]="removeText"
                             (click)="remove($index)"
                         >

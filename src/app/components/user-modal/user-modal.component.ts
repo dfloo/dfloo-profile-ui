@@ -97,7 +97,8 @@ export class UserModalComponent implements OnInit {
         });
     }
 
-    submit(view: UserModalView): void {
+    submit(): void {
+        const view = this.selectedTab();
         if (view === UserModalView.Profile) {
             this.submitProfile();
         } else if (view === UserModalView.Settings) {
@@ -105,7 +106,8 @@ export class UserModalComponent implements OnInit {
         }
     }
 
-    cancel(view: UserModalView): void {
+    cancel(): void {
+        const view = this.selectedTab();
         if (view === UserModalView.Profile && this.profileSnapshot) {
             this.profile.set(this.profileSnapshot);
         } else if (view === UserModalView.Settings && this.settingsSnapshot) {

@@ -8,9 +8,8 @@ describe('ColorPickerComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ColorPickerComponent]
-        })
-            .compileComponents();
+            imports: [ColorPickerComponent],
+        }).compileComponents();
 
         fixture = TestBed.createComponent(ColorPickerComponent);
         component = fixture.componentInstance;
