@@ -2,8 +2,8 @@
     @for (route of childRoutes; track route.path) {
         <a
             mat-tab-link
-            (click)="activeRoute = route"
-            [active]="activeRoute == route"
+            (click)="activePath.set(route.path)"
+            [active]="activePath() == route.path"
             [routerLink]="route.path"
         >
             {{ route.label }}
