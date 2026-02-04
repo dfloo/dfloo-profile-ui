@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
-
-import { ApplicationTrackerComponent } from './components/application-tracker';
-import { ResumeBuilderComponent } from './components/resume-builder';
+import { RouterLinkWithHref, RouterOutlet } from '@angular/router';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
     templateUrl: './job-search.component.html',
     styleUrl: './job-search.component.scss',
     imports: [
-        ApplicationTrackerComponent,
-        MatTab,
-        MatTabGroup,
-        ResumeBuilderComponent,
+        MatTabLink,
+        MatTabNav,
+        MatTabNavPanel,
+        RouterOutlet,
+        RouterLinkWithHref
     ],
 })
 export class JobSearchComponent {
-    activeTab = 'Overview';
+    childRoutes = [
+        { path: 'resume-builder', label: 'Resume Builder' },
+        { path: 'application-tracker', label: 'Application Tracker' },
+    ];
+    activeRoute = this.childRoutes[0];
 }

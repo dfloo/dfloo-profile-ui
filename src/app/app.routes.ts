@@ -12,6 +12,23 @@ export const sidenavRoutes = [
         title: 'Job Search Tools',
         loadComponent: () =>
             import('@pages/job-search').then((m) => m.JobSearchComponent),
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('@pages/job-search')
+                    .then((m) => m.ResumeBuilderComponent),
+            },
+            {
+                path: 'resume-builder',
+                loadComponent: () => import('@pages/job-search')
+                    .then((m) => m.ResumeBuilderComponent),
+            },
+            {
+                path: 'application-tracker',
+                loadComponent: () => import('@pages/job-search')
+                    .then((m) => m.ApplicationTrackerComponent),
+            },
+        ]
     },
     {
         path: 'bandits-story',
