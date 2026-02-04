@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import {
+    MatOption,
+    MatSelect,
+    MatSelectTrigger
+} from '@angular/material/select';
 import { FieldType } from '@ngx-formly/core';
 import { FormsModule } from '@angular/forms';
 
-import { COLOR_MAP, HUE_MAP } from './color-names';
+import { Color, COLOR_MAP, COLOR_OPTIONS, HUE_MAP } from './colors';
 
 @Component({
     selector: 'color-picker',
@@ -15,13 +21,28 @@ import { COLOR_MAP, HUE_MAP } from './color-names';
         FormsModule,
         MatFormField,
         MatInput,
+        MatSelect,
+        MatSelectTrigger,
+        MatOption,
         MatLabel,
-        MatSlider,
-        MatSliderThumb,
+        MatSliderModule,
+        MatIcon,
     ],
 })
 export class ColorPickerComponent extends FieldType implements OnInit {
     hue = 0;
+    colorFilter = '';
+
+    get filteredColors(): Color[] {
+        const filter = this.colorFilter.trim().toLowerCase();
+        if (!filter) {
+            return COLOR_OPTIONS
+        };
+
+        return COLOR_OPTIONS.filter(
+            ({ label }) => (label.toLowerCase().includes(filter))
+        );
+    }
 
     get displayName(): string {
         return COLOR_MAP.get(this.hue)?.label ?? '';
@@ -52,7 +73,13 @@ export class ColorPickerComponent extends FieldType implements OnInit {
     }
 
     onColorChange(color: string): void {
-        this.formControl.setValue(color);
+        const mappedHue = HUE_MAP.get(color);
+        if (mappedHue !== undefined) {
+            this.hue = mappedHue;
+        }
+        if (this.formControl.value !== color) {
+            this.formControl.setValue(color);
+        }
     }
 
     private isValid(value?: string | null): boolean {

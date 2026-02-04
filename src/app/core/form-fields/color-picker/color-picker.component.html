@@ -1,16 +1,70 @@
 <mat-form-field>
     <mat-label>{{ props.label }}</mat-label>
     <div class="field-wrapper">
-        <input matInput [value]="displayName" readonly />
+        <div class="select-wrapper">
+            <mat-select
+                panelClass="color-options-panel"
+                [value]="formControl.value"
+                (selectionChange)="onColorChange($event.value)"
+                (closed)="colorFilter = ''"
+            >
+                <mat-select-trigger>
+                    <div class="color-option">
+                        <div
+                            class="color-swatch"
+                            [style.background]="color"
+                        ></div>
+                        {{ displayName }}
+                    </div>
+                </mat-select-trigger>
+    
+                <mat-option
+                    class="search-bar"
+                    (click)="$event.stopPropagation()"
+                >
+                    <mat-icon
+                        (click)="searchInput.focus(); $event.stopPropagation()"
+                    >
+                        search
+                    </mat-icon>
+                    <input
+                        matInput
+                        #searchInput
+                        [(ngModel)]="colorFilter"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                    />
+                </mat-option>
+    
+                @for (color of filteredColors; track color.value) {
+                    <mat-option [value]="color.value">
+                        <div class="color-option">
+                            <div
+                                class="color-swatch"
+                                [style.background]="color.value"
+                            ></div>
+                            {{ color.label }}
+                        </div>
+                    </mat-option>
+                }
+            </mat-select>
+        </div>
 
-        <div class="color-swatch" [style.background]="color"></div>
-
-        <mat-slider [min]="0" [max]="356.25" [step]="3.75">
-            <input
-                matSliderThumb
-                [value]="hue"
-                (input)="onHueChange($event)"
-            />
-        </mat-slider>
+        <div class="hue-slider-wrapper">
+            <div class="hue-gradient"></div>
+            <mat-slider
+                [min]="0"
+                [max]="356.25"
+                [step]="3.75"
+                (click)="$event.stopPropagation()"
+                class="hue-slider"
+            >
+                <input
+                    matSliderThumb
+                    [value]="hue"
+                    (input)="onHueChange($event)"
+                />
+            </mat-slider>
+        </div>
     </div>
 </mat-form-field>

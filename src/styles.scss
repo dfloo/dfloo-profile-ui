@@ -31,6 +31,21 @@
     ));
 }
 
+color-picker {
+    @include mat.slider-overrides((
+        handle-color: var(--mat-sys-outline),
+        hover-handle-color: var(--mat-sys-on-surface-variant),
+        focus-handle-color: var(--mat-sys-on-surface-variant),
+        active-track-color: transparent,
+        disabled-active-track-color: transparent,
+        disabled-inactive-track-color: transparent,
+        inactive-track-color: transparent,
+    ));
+}
+.cdk-overlay-container .color-options-panel {
+    width: 50%;
+}
+
 body {
     margin: 0;
     overflow: hidden;

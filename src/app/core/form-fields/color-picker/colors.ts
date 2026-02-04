@@ -1,4 +1,4 @@
-interface Color {
+export interface Color {
     value: string;
     label: string;
 }
@@ -103,7 +103,7 @@ const LABELS: string[] = [
     'Redder Torch Red',
 ];
 
-export const hexValues = [
+export const HEX_VALUES = [
     '#ff0000',
     '#ff1000',
     '#ff2000',
@@ -209,10 +209,14 @@ const HUES: number[] = Array.from(
 
 // Maps hue value to Color
 export const COLOR_MAP = new Map<number, Color>(
-    HUES.map((h, i) => [h, { label: LABELS[i], value: hexValues[i] }]),
+    HUES.map((h, i) => [h, { label: LABELS[i], value: HEX_VALUES[i] }]),
 );
 
 // Maps hex value to hue value
 export const HUE_MAP = new Map<string, number>(
-    HUES.map((h, i) => [hexValues[i], h]),
+    HUES.map((h, i) => [HEX_VALUES[i], h]),
+);
+
+export const COLOR_OPTIONS: Color[] = LABELS.map(
+    (label, i) => ({ label, value: HEX_VALUES[i] })
 );
