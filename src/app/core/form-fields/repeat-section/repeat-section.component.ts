@@ -7,7 +7,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Component, QueryList, ViewChildren } from '@angular/core';
 import { FormArray } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
     MatExpansionPanel,
     MatExpansionPanelHeader,
@@ -27,6 +27,7 @@ import {
     imports: [
         FormlyField,
         MatButton,
+        MatIconButton,
         MatIcon,
         MatTooltip,
         MatExpansionPanel,
@@ -52,8 +53,8 @@ export class RepeatSectionComponent extends FieldArrayType {
         return `Remove ${this.sectionName}`;
     }
 
-    get moveText(): string {
-        return `Move ${this.sectionName}`;
+    get dragText(): string {
+        return `Drag ${this.sectionName}`;
     }
 
     get disableExpansion(): boolean {

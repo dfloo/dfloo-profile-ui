@@ -1,29 +1,55 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import {
+    MatOption,
+    MatSelect,
+    MatSelectTrigger
+} from '@angular/material/select';
 import { FieldType } from '@ngx-formly/core';
-import { ColorPickerDirective } from 'ngx-color-picker';
+import { FormsModule } from '@angular/forms';
 
-import { ColorNameService } from './services';
+import { Color, COLOR_MAP, COLOR_OPTIONS, HUE_MAP } from './colors';
 
 @Component({
     selector: 'color-picker',
     templateUrl: './color-picker.component.html',
     styleUrl: './color-picker.component.scss',
-    providers: [ColorNameService],
     imports: [
-        ColorPickerDirective,
+        FormsModule,
         MatFormField,
         MatInput,
-        MatLabel
+        MatSelect,
+        MatSelectTrigger,
+        MatOption,
+        MatLabel,
+        MatSliderModule,
+        MatIcon,
     ],
 })
 export class ColorPickerComponent extends FieldType implements OnInit {
-    private colorNameService = inject(ColorNameService);
-    color = '';
+    hue = 0;
+    colorFilter = '';
+
+    get filteredColors(): Color[] {
+        const filter = this.colorFilter.trim().toLowerCase();
+        if (!filter) {
+            return COLOR_OPTIONS
+        };
+
+        return COLOR_OPTIONS.filter(
+            ({ label }) => (label.toLowerCase().includes(filter))
+        );
+    }
 
     get displayName(): string {
-        return this.colorNameService.getName(this.color);
+        return COLOR_MAP.get(this.hue)?.label ?? '';
+    }
+
+    get color(): string {
+        return COLOR_MAP.get(this.hue)?.value ?? '';
     }
 
     ngOnInit(): void {
@@ -31,17 +57,29 @@ export class ColorPickerComponent extends FieldType implements OnInit {
         const defaultValue = this.props['defaultValue'];
 
         if (this.isValid(controlValue)) {
-            this.color = controlValue;
+            this.hue = HUE_MAP.get(controlValue) ?? 0;
         } else if (this.isValid(defaultValue)) {
-            this.color = defaultValue;
+            this.hue = HUE_MAP.get(defaultValue) ?? 0;
             if (this.formControl.value !== defaultValue) {
                 this.formControl.setValue(defaultValue);
             }
         }
     }
 
+    onHueChange(event: Event): void {
+        const hue = Number((event.target as HTMLInputElement).value);
+        this.hue = hue ?? 0;
+        this.formControl.setValue(this.color);
+    }
+
     onColorChange(color: string): void {
-        this.formControl.setValue(color);
+        const mappedHue = HUE_MAP.get(color);
+        if (mappedHue !== undefined) {
+            this.hue = mappedHue;
+        }
+        if (this.formControl.value !== color) {
+            this.formControl.setValue(color);
+        }
     }
 
     private isValid(value?: string | null): boolean {

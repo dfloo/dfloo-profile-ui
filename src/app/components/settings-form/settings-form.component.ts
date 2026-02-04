@@ -55,7 +55,7 @@ export class SettingsFormComponent {
                         label: 'Primary Color',
                         options: materialColorOptions,
                     },
-                    defaultValue: '#315BA1',
+                    defaultValue: '#0080ff',
                 },
                 {
                     key: 'accent',

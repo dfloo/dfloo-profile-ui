@@ -3,7 +3,7 @@
 }
 <mat-dialog-content>
     @if (showTabs) {
-        <mat-tab-group [selectedIndex]="selectedTab()">
+        <mat-tab-group [(selectedIndex)]="selectedTab">
             <mat-tab label="Profile">
                 <profile-form [profile]="profile()"></profile-form>
             </mat-tab>
@@ -17,14 +17,8 @@
 </mat-dialog-content>
 @if (showSubmit) {
     <mat-dialog-actions>
-        <button matButton="outlined" (click)="cancel(this.selectedTab())">
-            Cancel
-        </button>
-        <button
-            matButton="filled"
-            color="primary"
-            (click)="submit(this.selectedTab())"
-        >
+        <button matButton="outlined" (click)="cancel()">Cancel</button>
+        <button matButton="filled" color="primary" (click)="submit()">
             Save
         </button>
     </mat-dialog-actions>
