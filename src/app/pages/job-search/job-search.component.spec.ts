@@ -8,6 +8,7 @@ import { UserService } from '@core/services';
 import { Profile } from '@models/profile';
 
 import { JobSearchComponent } from './job-search.component';
+import { ActivatedRoute } from '@angular/router';
 
 describe('JobSearchComponent', () => {
     let component: JobSearchComponent;
@@ -57,6 +58,10 @@ describe('JobSearchComponent', () => {
                 {
                     provide: JobApplicationService,
                     useValue: mockJobApplicationService,
+                },
+                {
+                    provide: ActivatedRoute,
+                    useValue: { snapshot: {} }
                 },
             ],
         })

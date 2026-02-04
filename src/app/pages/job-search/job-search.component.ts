@@ -1,19 +1,35 @@
-import { Component } from '@angular/core';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
-
-import { ApplicationTrackerComponent } from './components/application-tracker';
-import { ResumeBuilderComponent } from './components/resume-builder';
+import { Component, inject, signal } from '@angular/core';
+import {
+    ActivatedRoute,
+    RouterLinkWithHref,
+    RouterOutlet
+} from '@angular/router';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
     templateUrl: './job-search.component.html',
     styleUrl: './job-search.component.scss',
     imports: [
-        ApplicationTrackerComponent,
-        MatTab,
-        MatTabGroup,
-        ResumeBuilderComponent,
+        MatTabLink,
+        MatTabNav,
+        MatTabNavPanel,
+        RouterOutlet,
+        RouterLinkWithHref
     ],
 })
 export class JobSearchComponent {
-    activeTab = 'Overview';
+    childRoutes = [
+        { path: 'resume-builder', label: 'Resume Builder' },
+        { path: 'application-tracker', label: 'Application Tracker' },
+    ];
+    activePath = signal(this.childRoutes[0].path);
+
+    private route = inject(ActivatedRoute);
+
+    ngOnInit(): void {
+        const child = this.route.snapshot.firstChild;
+        const path = child?.routeConfig?.path || 'resume-builder';
+
+        this.activePath.set(path);
+    }
 }
