@@ -1,39 +1,33 @@
-<div class="welcome-container" #container>
-    <div class="background-container">
-        <div class="background-1"></div>
-        <div class="background-2"></div>
-        <div class="background-3"></div>
-    </div>
-    <div class="scroll-marker-container">
-        @for (id of scrollMarkerIds; track id) {
-            <div class="scroll-marker" [attr.data-id]="id" #scrollMarker></div>
-        }
+<div class="welcome-container">
+    @for (card of welcomeCards; track card) {
+        <div [ngStyle]="getBackground(card)" class="page outlined-text">
+            <div class="welcome-text">{{ card.text }}</div>
+        </div>
+    }
+
+    <div class="page">
+        <div class="contact-section">
+            <div class="profile-picture"></div>
+            <div class="contact-buttons">
+                <button
+                    matButton="outlined"
+                    color="primary"
+                    (click)="viewSocial('github')"
+                >
+                    Github
+                </button>
+                <button
+                    matButton="outlined"
+                    color="primary"
+                    (click)="viewSocial('linkedin')"
+                >
+                    LinkedIn
+                </button>
+                <button matButton="filled" color="primary" (click)="viewResume()">
+                    View Resume
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
-@if (showSnippets()) {
-    <div class="text-overlay" [innerHTML]="currentSnippet()"></div>
-} @else {
-    <div class="contact-section">
-        <div class="profile-picture"></div>
-        <div class="contact-buttons">
-            <button
-                matButton="outlined"
-                color="primary"
-                (click)="viewSocial('github')"
-            >
-                Github
-            </button>
-            <button
-                matButton="outlined"
-                color="primary"
-                (click)="viewSocial('linkedin')"
-            >
-                LinkedIn
-            </button>
-            <button matButton="filled" color="primary" (click)="viewResume()">
-                View Resume
-            </button>
-        </div>
-    </div>
-}

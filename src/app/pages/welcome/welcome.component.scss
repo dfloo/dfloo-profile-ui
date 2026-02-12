@@ -2,39 +2,52 @@
 
 .welcome-container {
     height: calc(100vh - $app-header-height);
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: row;
+    overflow-y: auto;
 }
 
-.text-overlay {
-    pointer-events: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    border-radius: 20px;
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    text-align: center;
-    font: var(--mat-sys-headline-large);
-    font-size: 48px;
-    line-height: calc(1.25 * 48px);
-}
-
-.contact-section {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    height: 500px;
-    width: 500px;
+.page {
+    position: sticky;
+    top: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    pointer-events: none;
+    background-size: cover;
+    background-position: center;
+}
+
+.page:not(:last-child) {
+    margin-bottom: 100px;
+}
+
+.welcome-text {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    max-width: 80%;
+    text-align: center;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+}
+
+.outlined-text {
+    font-size: 60px;
+    color: white;
+    text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px  1px 0 black,
+        1px  1px 0 black;
+}
+
+.contact-section {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mat-sys-surface-bright);
 
     .profile-picture {
         background-color: gray;
@@ -43,54 +56,9 @@
     }
 
     .contact-buttons {
-        pointer-events: all;
         margin-top: 30px;
         button:not(:last-child) {
             margin-right: 10px;
         }
     }
-}
-
-$scroll-height: 500vh;
-
-.scroll-marker-container {
-    height: $scroll-height;
-    width: 1px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    div {
-        flex-grow: 1;
-    }
-}
-
-.background-container {
-    height: $scroll-height;
-    width: 100%;
-    z-index: -1;
-}
-
-.background-1,
-.background-2,
-.background-3 {
-    background-size: cover;
-    background-position: center;
-    position: sticky;
-    top: 0;
-}
-
-.background-1 {
-    height: 100vh;
-    margin-bottom: 100vh;
-    background-image: url('/assets/refinery.jpg');
-}
-
-.background-2 {
-    height: 100vh;
-    margin-bottom: 100vh;
-    background-image: url('/assets/golden-gate.jpg');
-}
-
-.background-3 {
-    height: 100vh;
 }
