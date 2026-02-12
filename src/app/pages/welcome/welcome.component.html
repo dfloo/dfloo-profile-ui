@@ -1,11 +1,11 @@
 <div class="welcome-container">
     @for (card of welcomeCards; track card) {
-        <div [ngStyle]="getBackground(card)" class="page outlined-text">
-            <div class="welcome-text">{{ card.text }}</div>
+        <div [ngStyle]="getBackground(card)" class="welcome-card">
+            <div class="welcome-text" [innerHTML]="card.text"></div>
         </div>
     }
 
-    <div class="page">
+    <div class="welcome-card">
         <div class="contact-section">
             <div class="profile-picture"></div>
             <div class="contact-buttons">

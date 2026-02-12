@@ -22,7 +22,7 @@ interface WelcomeCard {
 export class WelcomeComponent {
     private resumeService = inject(ResumeService);
 
-    welcomeCards: WelcomeCard[] = welcomeCards
+    welcomeCards: WelcomeCard[] = welcomeCards;
 
     getBackground({ background }: WelcomeCard): Record<string, string> {
         return { 'background-image': `url('/assets/${background}')` };
@@ -46,30 +46,30 @@ export class WelcomeComponent {
 const welcomeCards: WelcomeCard[] = [
     {
         text: "Hi, I'm Devin, and I'm an engineer.",
-        background: 'bocce.png'
+        background: 'bocce.png',
     },
     {
         text: 'I started my career as a chemical engineer in the oil & gas industry.',
-        background: 'refinery.jpg'
+        background: 'refinery.jpg',
     },
     {
         text: 'During this time I gained an affinity for using code to automate/improve my day to day workflows.',
-        background: 'spreadsheet.jpg'
+        background: 'spreadsheet.jpg',
     },
     {
         text: 'So I decided to embark on a career shift and focus fully on software development.',
-        background: 'golden-gate.jpg'
+        background: 'golden-gate.jpg',
     },
     {
         text: "Since then I've learned to develop, deploy and maintain modern web apps using numerous frameworks and technologies.",
-        background: 'laptop.jpg'
+        background: 'laptop.jpg',
     },
     {
         text: 'I pride myself on delivering above and beyond expectations and doing so with a smile.',
-        background: 'hackathon.png'
+        background: 'hackathon.png',
     },
     {
-        text: "I'm currently looking for my next role. Let's schedule some time to talk.",
-        background: 'office.jpg'
+        text: "I'm currently looking for my next role.</br>Let's schedule some time to talk.",
+        background: 'office.jpg',
     },
-]
+];
