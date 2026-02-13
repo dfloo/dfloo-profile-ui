@@ -219,7 +219,7 @@ export class ApplicationTrackerComponent implements OnInit {
             .subscribe(([edited]) => {
                 this.updateSnapshot(edited);
                 this.jobApplications.update((apps) =>
-                    apps.map((app) => (app.id === edited.id ? edited : app)),
+                    apps.map((app) => (app.id === edited.id ? edited : app))
                 );
             });
     }

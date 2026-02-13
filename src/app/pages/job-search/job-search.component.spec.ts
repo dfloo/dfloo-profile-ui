@@ -39,40 +39,71 @@ describe('JobSearchComponent', () => {
         mockJobApplicationService.getJobApplications.and.returnValue(of([]));
 
         await TestBed.configureTestingModule({
-            imports: [
-                JobSearchComponent,
-            ],
+            imports: [JobSearchComponent],
             providers: [
-                {
-                    provide: ResumeService,
-                    useValue: mockResumeService,
-                },
-                {
-                    provide: ProfileService,
-                    useValue: mockProfileService,
-                },
-                {
-                    provide: UserService,
-                    useValue: mockUserService,
-                },
+                { provide: ResumeService, useValue: mockResumeService },
+                { provide: ProfileService, useValue: mockProfileService },
+                { provide: UserService, useValue: mockUserService },
                 {
                     provide: JobApplicationService,
-                    useValue: mockJobApplicationService,
+                    useValue: mockJobApplicationService
                 },
-                {
-                    provide: ActivatedRoute,
-                    useValue: { snapshot: {} }
-                },
+                { provide: ActivatedRoute, useValue: { snapshot: {} } },
             ],
-        })
-            .compileComponents();
+        }).compileComponents();
+    });
+
+    it('should create', () => {
+        fixture = TestBed.createComponent(JobSearchComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+
+        expect(component).toBeTruthy();
+    });
+
+    it('should set activePath from activated route child path on init', () => {
+        TestBed.overrideProvider(
+            ActivatedRoute,
+            {
+                useValue: {
+                    snapshot: {
+                        firstChild: {
+                            routeConfig: { path: 'application-tracker' }
+                        }
+                    }
+                }
+            }
+        );
 
         fixture = TestBed.createComponent(JobSearchComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+
+        expect(component.activePath()).toBe('application-tracker');
     });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
+    it('should set activePath to resume-builder when no child route', () => {
+        TestBed.overrideProvider(
+            ActivatedRoute,
+            { useValue: { snapshot: {} } }
+        );
+
+        fixture = TestBed.createComponent(JobSearchComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+
+        expect(component.activePath()).toBe('resume-builder');
+    });
+
+    it('should expose two childRoutes with expected paths and labels', () => {
+        fixture = TestBed.createComponent(JobSearchComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+
+        expect(component.childRoutes.length).toBe(2);
+        expect(component.childRoutes[0].path).toBe('resume-builder');
+        expect(component.childRoutes[0].label).toBe('Resume Builder');
+        expect(component.childRoutes[1].path).toBe('application-tracker');
+        expect(component.childRoutes[1].label).toBe('Application Tracker');
     });
 });
