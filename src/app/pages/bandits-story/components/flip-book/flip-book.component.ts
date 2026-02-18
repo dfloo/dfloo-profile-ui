@@ -2,12 +2,9 @@ import {
     ChangeDetectionStrategy,
     Component,
     computed,
-    inject,
     signal,
 } from '@angular/core';
 
-import { ResumeService } from '@api/resume';
-import { Resume } from '@models/resume';
 
 @Component({
     selector: 'flip-book',
@@ -17,9 +14,7 @@ import { Resume } from '@models/resume';
 })
 export class FlipBookComponent {
     open = false;
-    resume = Resume.normalize(Resume.getMockDTO());
 
-    private resumeService = inject(ResumeService);
     private initialPages: Page[] = [
         {
             id: 0,
@@ -72,12 +67,6 @@ export class FlipBookComponent {
                 ),
             );
         }, 1000);
-    }
-
-    viewResume(): void {
-        this.resumeService
-            .downloadResume(this.resume)
-            .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
     }
 }
 
