@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of, switchMap } from 'rxjs';
-import { AuthService } from '@auth0/auth0-angular';
 
-import { LocalStorageService } from '@core/services';
+import { LocalStorageService, UserService } from '@core/services';
 import { JobApplication, JobApplicationDTO } from '@models/job-application';
 
 import { ApiService } from '../api.service';
@@ -12,12 +11,12 @@ import { ApiService } from '../api.service';
 })
 export class JobApplicationService {
     private apiService = inject(ApiService);
-    private auth = inject(AuthService);
+    private userService = inject(UserService);
     private storage = inject(LocalStorageService);
     private readonly path = 'job-applications';
 
     getJobApplications(): Observable<JobApplication[]> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return of(this.getLocalJobApplications());
@@ -37,7 +36,7 @@ export class JobApplicationService {
     }
 
     createJobApplication(app: JobApplication): Observable<JobApplication> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.createLocalJobApplication(app);
@@ -54,7 +53,7 @@ export class JobApplicationService {
     }
 
     updateApplications(apps: JobApplication[]): Observable<JobApplication[]> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.updateLocalJobApplications(apps);

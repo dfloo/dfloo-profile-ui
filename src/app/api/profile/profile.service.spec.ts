@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { InjectionToken } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
+import { UserService } from '@core/services';
 import { ApiService } from '../api.service';
 import { ProfileService } from './profile.service';
 import { Profile } from '@models/profile';
@@ -10,7 +9,6 @@ import { Profile } from '@models/profile';
 describe('ProfileService', () => {
     let service: ProfileService;
     let mockApiService: jasmine.SpyObj<ApiService>;
-    const AUTH0_CLIENT = new InjectionToken('auth0.client');
 
     const setup = (isAuthenticated = true) => {
         mockApiService = jasmine.createSpyObj('ApiService', [
@@ -20,9 +18,8 @@ describe('ProfileService', () => {
         ]);
         TestBed.configureTestingModule({
             providers: [
-                { provide: AUTH0_CLIENT, useValue: {} },
                 {
-                    provide: AuthService,
+                    provide: UserService,
                     useValue: { isAuthenticated$: of(isAuthenticated) },
                 },
                 { provide: ApiService, useValue: mockApiService },

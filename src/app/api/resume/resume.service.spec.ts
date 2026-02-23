@@ -1,9 +1,7 @@
-import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
-import { LocalStorageService } from '@core/services';
+import { LocalStorageService, UserService } from '@core/services';
 import { Resume } from '@models/resume';
 
 import { ApiService } from '../api.service';
@@ -13,7 +11,6 @@ describe('ResumeService', () => {
     let service: ResumeService;
     let mockApiService: jasmine.SpyObj<ApiService>;
     let mockLocalStorage: jasmine.SpyObj<LocalStorageService>;
-    const AUTH0_CLIENT = new InjectionToken('auth0.client');
 
     const setup = (isAuthenticated = true) => {
         mockApiService = jasmine.createSpyObj('ApiService', [
@@ -29,9 +26,8 @@ describe('ResumeService', () => {
         ]);
         TestBed.configureTestingModule({
             providers: [
-                { provide: AUTH0_CLIENT, useValue: {} },
                 {
-                    provide: AuthService,
+                    provide: UserService,
                     useValue: { isAuthenticated$: of(isAuthenticated) },
                 },
                 { provide: ApiService, useValue: mockApiService },

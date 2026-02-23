@@ -4,7 +4,7 @@
     </button>
     <span class="page-title">{{ title() }}</span>
     <button matIconButton [matMenuTriggerFor]="userMenu">
-        @if (profilePictureUrl) {
+        @if (profilePictureUrl$ | async; as profilePictureUrl) {
             <img
                 [src]="profilePictureUrl"
                 alt="Profile Picture"

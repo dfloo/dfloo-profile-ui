@@ -1,13 +1,13 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Component, InjectionToken, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatMenuHarness } from '@angular/material/menu/testing';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
+import { UserService } from '@core/services';
 import { HeaderComponent } from './app-header.component';
 
 describe('HeaderComponent', () => {
@@ -15,23 +15,23 @@ describe('HeaderComponent', () => {
     let fixture: ComponentFixture<WrapperComponent>;
     let loader: HarnessLoader;
     let mockDialog: jasmine.SpyObj<MatDialog>;
-    const AUTH0_CLIENT = new InjectionToken('auth0.client');
+    let mockUserService: jasmine.SpyObj<UserService>;
 
     const setup = async (isAuthenticated: boolean) => {
         mockDialog = jasmine.createSpyObj('MatDialog', ['open']);
+        mockUserService = jasmine.createSpyObj('UserService', [
+            'login',
+            'signup',
+            'logout',
+            'hasRole',
+        ]);
+        mockUserService.isAuthenticated$ = of(isAuthenticated);
+        mockUserService.profilePictureUrl$ = of(undefined);
+
         await TestBed.configureTestingModule({
             imports: [HeaderComponent, WrapperComponent],
             providers: [
-                { provide: AUTH0_CLIENT, useValue: {} },
-                {
-                    provide: AuthService,
-                    useValue: {
-                        user$: of({}),
-                        isAuthenticated$: of(isAuthenticated),
-                        loginWithPopup: jasmine.createSpy('loginWithPopup'),
-                        logout: jasmine.createSpy('logout'),
-                    },
-                },
+                { provide: UserService, useValue: mockUserService },
                 { provide: MatDialog, useValue: mockDialog },
             ],
         }).compileComponents();

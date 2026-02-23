@@ -1,10 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { map, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { LocalStorageService } from '@core/services';
+import { LocalStorageService, UserService } from '@core/services';
 import { Resume, ResumeDTO } from '@models/resume';
 
 import { ApiService } from '../api.service';
@@ -14,12 +13,12 @@ import { ApiService } from '../api.service';
 })
 export class ResumeService {
     private apiService = inject(ApiService);
-    private auth = inject(AuthService);
+    private userService = inject(UserService);
     private storage = inject(LocalStorageService);
     private readonly path = 'resumes';
 
     getResumes(): Observable<Resume[]> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return of(this.getLocalResumes());
@@ -52,7 +51,7 @@ export class ResumeService {
     }
 
     deleteResumes(resumeIds: string[]): Observable<string[]> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.deleteLocalResumes(resumeIds);
@@ -64,7 +63,7 @@ export class ResumeService {
     }
 
     createResume(resume: Resume): Observable<Resume> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.createLocalResume(resume);
@@ -78,7 +77,7 @@ export class ResumeService {
     }
 
     updateResume(resume: Resume): Observable<Resume> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return this.updateLocalResume(resume);
