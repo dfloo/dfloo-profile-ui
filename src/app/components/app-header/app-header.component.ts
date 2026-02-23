@@ -1,22 +1,19 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    DestroyRef,
     inject,
     input,
-    OnInit,
     output,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AsyncPipe, DOCUMENT } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatToolbar } from '@angular/material/toolbar';
-import { AuthService } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
 
+import { UserService } from '@core/services';
 import { UserModalComponent, UserModalView } from '@components/user-modal';
 
 @Component({
@@ -34,42 +31,32 @@ import { UserModalComponent, UserModalView } from '@components/user-modal';
         AsyncPipe,
     ],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
     sidenavOpen = input(false);
     title = input('');
     toggleSidenav = output();
 
-    isAuthenticated$?: Observable<boolean>;
+    isAuthenticated$: Observable<boolean>;
     UserModalView = UserModalView;
-    profilePictureUrl?: string;
-    auth = inject(AuthService);
+    profilePictureUrl$: Observable<string | undefined>;
+    private userService = inject(UserService);
     private dialog = inject(MatDialog);
-    private doc = inject(DOCUMENT);
-    private destroyRef = inject(DestroyRef);
 
-    ngOnInit(): void {
-        this.isAuthenticated$ = this.auth.isAuthenticated$;
-        this.auth.user$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((user) => {
-                this.profilePictureUrl = user?.picture;
-            });
+    constructor() {
+        this.isAuthenticated$ = this.userService.isAuthenticated$;
+        this.profilePictureUrl$ = this.userService.profilePictureUrl$;
     }
 
     login(): void {
-        this.auth.loginWithPopup();
+        this.userService.login();
     }
 
     logout(): void {
-        this.auth.logout({
-            logoutParams: { returnTo: this.doc.location.origin },
-        });
+        this.userService.logout();
     }
 
     signup(): void {
-        this.auth.loginWithPopup({
-            authorizationParams: { screen_hint: 'signup' },
-        });
+        this.userService.signup();
     }
 
     openUserModal(view: UserModalView, showTabs = true): void {

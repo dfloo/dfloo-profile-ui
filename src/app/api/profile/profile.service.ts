@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
 import { map, Observable, of, switchMap } from 'rxjs';
 
+import { UserService } from '@core/services';
 import { Profile, ProfileDTO } from '@models/profile';
 
 import { ApiService } from '../api.service';
@@ -11,11 +11,11 @@ import { ApiService } from '../api.service';
 })
 export class ProfileService {
     private apiService = inject(ApiService);
-    private auth = inject(AuthService);
+    private userService = inject(UserService);
     private path = 'profiles';
 
     getUserProfile(): Observable<Profile> {
-        return this.auth.isAuthenticated$.pipe(
+        return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {
                 if (!isAuthenticated) {
                     return of(new Profile({ firstName: 'Guest' }));

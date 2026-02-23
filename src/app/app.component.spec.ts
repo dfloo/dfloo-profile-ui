@@ -1,26 +1,24 @@
-import { InjectionToken } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
+import { UserService } from '@core/services';
 import { App } from './app.component';
 
 describe('App', () => {
     let app: App;
     let fixture: ComponentFixture<App>;
-    const AUTH0_CLIENT = new InjectionToken('auth0.client');
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [App],
             providers: [
-                { provide: AUTH0_CLIENT, useValue: {} },
                 {
-                    provide: AuthService,
+                    provide: UserService,
                     useValue: {
-                        user$: of({}),
                         isAuthenticated$: of(false),
-                        loginWithPopup: jasmine.createSpy('loginWithPopup'),
+                        profilePictureUrl$: of(undefined),
+                        login: jasmine.createSpy('login'),
+                        signup: jasmine.createSpy('signup'),
                         logout: jasmine.createSpy('logout'),
                     },
                 },
