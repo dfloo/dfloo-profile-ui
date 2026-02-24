@@ -12,12 +12,14 @@ import {
     CdkDropList,
     CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import isEqual from 'lodash-es/isEqual';
 
 import { JobApplicationService } from '@api/job-application';
 import { ResumeService } from '@api/resume';
+import { UserService } from '@core/services';
 import {
     ActiveStatuses,
     JobApplication,
@@ -46,6 +48,7 @@ import {
 export class ApplicationTrackerComponent implements OnInit {
     private jobApplicationService = inject(JobApplicationService);
     private resumeService = inject(ResumeService);
+    private userService = inject(UserService);
     private dialog = inject(MatDialog);
     private appSnapshotMap = new Map<string, JobApplication>();
 
@@ -64,6 +67,14 @@ export class ApplicationTrackerComponent implements OnInit {
         );
     });
     resumes: Resume[] = [];
+    isAuthenticated = false;
+
+    constructor() {
+        this.userService.isAuthenticated$.pipe(takeUntilDestroyed())
+            .subscribe((isAuthenticated: boolean) => {
+                this.isAuthenticated = isAuthenticated;
+            });
+    }
 
     ngOnInit(): void {
         this.jobApplicationService.getJobApplications().subscribe((apps) => {
@@ -79,10 +90,10 @@ export class ApplicationTrackerComponent implements OnInit {
         const isNew = !app;
         this.dialog
             .open(JobApplicationModalComponent, {
-                minHeight: '50vh',
                 minWidth: '60vw',
                 data: {
                     isNew,
+                    isAuthenticated: this.isAuthenticated,
                     resumes: this.resumes,
                     jobApplication: app ? { ...app } : null,
                 },

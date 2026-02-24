@@ -35,6 +35,13 @@ export class JobApplicationService {
         );
     }
 
+    createFromURL(url: string): Observable<JobApplication> {
+        return this.apiService.post<JobApplicationDTO>(
+            `${this.path}/from-url`,
+            { url }
+        ).pipe(map(JobApplication.normalize));
+    }
+
     createJobApplication(app: JobApplication): Observable<JobApplication> {
         return this.userService.isAuthenticated$.pipe(
             switchMap((isAuthenticated) => {

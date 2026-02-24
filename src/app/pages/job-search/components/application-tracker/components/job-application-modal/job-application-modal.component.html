@@ -1,15 +1,46 @@
 <mat-dialog-content>
-    <form [formGroup]="form">
-        <formly-form
-            [form]="form"
-            [fields]="fields"
-            [model]="jobApplication()"
-        ></formly-form>
-    </form>
+    @if (isNew) {
+        @if (isAuthenticated) {
+            <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                <mat-tab label="From Url">
+                    <formly-form
+                        [form]="form"
+                        [fields]="urlFields"
+                        [model]="urlModel"
+                    ></formly-form>
+                </mat-tab>
+                <mat-tab label="Manual Entry">
+                    <form [formGroup]="form">
+                        <formly-form
+                            [form]="form"
+                            [fields]="manualFields"
+                            [model]="jobApplication()"
+                        ></formly-form>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        } @else {
+            <form [formGroup]="form">
+                <formly-form
+                    [form]="form"
+                    [fields]="manualFields"
+                    [model]="jobApplication()"
+                ></formly-form>
+            </form>
+        }
+    } @else {
+        <form [formGroup]="form">
+            <formly-form
+                [form]="form"
+                [fields]="editFields"
+                [model]="jobApplication()"
+            ></formly-form>
+        </form>
+    }
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton="outlined" (click)="close()">Cancel</button>
-    @if (hasChanged) {
+    @if (showSubmit) {
         <button matButton="filled" color="primary" (click)="submit()">
             {{ submitLabel }}
         </button>
