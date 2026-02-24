@@ -8,15 +8,15 @@ import {
 } from '@angular/material/dialog';
 
 @Component({
-    templateUrl: './warning-dialog.component.html',
+    templateUrl: './message-dialog.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatDialogActions, MatButton, MatDialogContent],
 })
-export class WarningDialogComponent {
+export class MessageDialogComponent {
     private data = inject(MAT_DIALOG_DATA);
-    private dialogRef = inject(MatDialogRef<WarningDialogComponent>);
+    private dialogRef = inject(MatDialogRef<MessageDialogComponent>);
 
-    Result = WarningDialogResult;
+    Result = MessageDialogResult;
 
     get confirmLabel(): string {
         return this.data?.confirmLabel ?? 'OK';
@@ -34,12 +34,12 @@ export class WarningDialogComponent {
         return this.data?.message;
     }
 
-    close(result: WarningDialogResult): void {
+    close(result: MessageDialogResult): void {
         this.dialogRef.close(result);
     }
 }
 
-export enum WarningDialogResult {
+export enum MessageDialogResult {
     Confirm = 'Confirm',
     Cancel = 'Cancel',
     Alternate = 'Alternate',

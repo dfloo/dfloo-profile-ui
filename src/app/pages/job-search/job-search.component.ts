@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import {
     ActivatedRoute,
-    RouterLinkWithHref,
+    RouterLink,
     RouterOutlet
 } from '@angular/router';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
@@ -14,7 +14,7 @@ import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
         MatTabNav,
         MatTabNavPanel,
         RouterOutlet,
-        RouterLinkWithHref
+        RouterLink
     ],
 })
 export class JobSearchComponent {
