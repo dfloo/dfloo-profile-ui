@@ -32,9 +32,9 @@ import { MatTooltip } from '@angular/material/tooltip';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import {
-    WarningDialogComponent,
-    WarningDialogResult,
-} from '@components/warning-dialog';
+    MessageDialogComponent,
+    MessageDialogResult,
+} from '@components/message-dialog';
 import { Resume } from '@models/resume';
 
 @Component({
@@ -176,10 +176,10 @@ export class ResumesTableComponent implements AfterViewInit {
             },
         };
         this.dialog
-            .open(WarningDialogComponent, config)
+            .open(MessageDialogComponent, config)
             .afterClosed()
             .subscribe((result) => {
-                if (result === WarningDialogResult.Confirm) {
+                if (result === MessageDialogResult.Confirm) {
                     this.deleteResumes.emit(this.getIds(resumes));
                     this.selectionModel.clear();
                 }

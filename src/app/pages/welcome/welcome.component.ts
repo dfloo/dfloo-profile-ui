@@ -57,7 +57,7 @@ const welcomeCards: WelcomeCard[] = [
         background: 'spreadsheet.jpg',
     },
     {
-        text: 'So I decided to embark on a career shift and focus fully on software development.',
+        text: 'So I decided to embark on a career shift and focus fully on software engineering.',
         background: 'golden-gate.jpg',
     },
     {

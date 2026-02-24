@@ -1,5 +1,10 @@
 <mat-card appearance="outlined">
-    <mat-card-content>
-        {{ displayName }}
-    </mat-card-content>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>{{ displayName }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card-content>
+            {{ jobApplication()?.notes }}
+        </mat-card-content>
+    </mat-expansion-panel>
 </mat-card>

@@ -31,9 +31,9 @@ import isEqual from 'lodash-es/isEqual';
 
 import { ProfileFormComponent } from '@components/profile-form';
 import {
-    WarningDialogComponent,
-    WarningDialogResult,
-} from '@components/warning-dialog';
+    MessageDialogComponent,
+    MessageDialogResult,
+} from '@components/message-dialog';
 import { defaultSections, Resume, Section, SectionType } from '@models/resume';
 
 import { ResumeFormFieldsService } from '../../services';
@@ -145,10 +145,10 @@ export class ResumeEditorComponent implements OnInit {
             },
         };
         this.dialog
-            .open(WarningDialogComponent, config)
+            .open(MessageDialogComponent, config)
             .afterClosed()
             .subscribe((result) => {
-                if (result === WarningDialogResult.Confirm) {
+                if (result === MessageDialogResult.Confirm) {
                     const resume = this.resume();
                     if (resume?.id) {
                         this.deleteResume.emit([resume.id]);
@@ -172,13 +172,13 @@ export class ResumeEditorComponent implements OnInit {
                 },
             };
             this.dialog
-                .open(WarningDialogComponent, config)
+                .open(MessageDialogComponent, config)
                 .afterClosed()
                 .subscribe((result) => {
-                    if (result === WarningDialogResult.Confirm) {
+                    if (result === MessageDialogResult.Confirm) {
                         this.cancelChanges();
                         this.back.emit();
-                    } else if (result === WarningDialogResult.Alternate) {
+                    } else if (result === MessageDialogResult.Alternate) {
                         this.saveChanges();
                         this.back.emit();
                     }

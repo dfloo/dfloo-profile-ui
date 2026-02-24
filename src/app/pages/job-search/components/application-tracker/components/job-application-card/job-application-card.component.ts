@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, Component, model } from '@angular/core';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import {
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle
+} from '@angular/material/expansion';
 
 import { JobApplication } from '@models/job-application';
 
@@ -8,7 +13,13 @@ import { JobApplication } from '@models/job-application';
     templateUrl: './job-application-card.component.html',
     styleUrl: './job-application-card.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatCard, MatCardContent],
+    imports: [
+        MatCard,
+        MatCardContent,
+        MatExpansionPanel,
+        MatExpansionPanelTitle,
+        MatExpansionPanelHeader
+    ],
 })
 export class JobApplicationCardComponent {
     jobApplication = model<JobApplication>();
