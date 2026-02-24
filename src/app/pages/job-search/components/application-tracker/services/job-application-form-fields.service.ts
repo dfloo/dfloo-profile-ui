@@ -9,51 +9,103 @@ import { JobApplicationModalData } from '../components';
 
 @Injectable()
 export class JobApplicationFormFieldsService {
-    getFields({
-        isNew,
-        resumes,
-    }: JobApplicationModalData): FormlyFieldConfig[] {
+    getEditFields(data: JobApplicationModalData): FormlyFieldConfig[] {
+        const {
+            company,
+            role,
+            resumeId,
+            status,
+            description,
+            notes,
+        } = this.getBaseFields(data);
+
         return [
             {
                 fieldGroupClassName: 'd-flex',
                 fieldGroup: [
-                    {
-                        key: 'company',
-                        type: 'input',
-                        className: 'flex-grow',
-                        props: { label: 'Company' },
-                    },
-                    {
-                        key: 'role',
-                        type: 'input',
-                        className: 'flex-grow',
-                        props: { label: 'Role' },
-                    },
-                    {
-                        key: 'resumeId',
-                        type: 'select',
-                        className: 'flex-grow',
-                        props: {
-                            label: 'Resume',
-                            options: this.getResumeOptions(resumes),
-                        },
-                    },
-                    ...(isNew
-                        ? []
-                        : [
-                              {
-                                  key: 'status',
-                                  type: 'select',
-                                  className: 'flex-grow',
-                                  props: {
-                                      label: 'Status',
-                                      options: this.getStatusOptions(),
-                                  },
-                              },
-                          ]),
+                    company,
+                    role,
+                    resumeId,
+                    status,
                 ],
             },
+            description,
+            notes,
+        ];
+    }
+
+    getManualFields(data: JobApplicationModalData): FormlyFieldConfig[] {
+        const {
+            company,
+            role,
+            resumeId,
+            description,
+            notes,
+        } = this.getBaseFields(data);
+
+        return [
             {
+                fieldGroupClassName: 'd-flex',
+                fieldGroup: [
+                    company,
+                    role,
+                    resumeId,
+                ],
+            },
+            description,
+            notes,
+        ];
+    }
+
+    getUrlFields(data: JobApplicationModalData): FormlyFieldConfig[] {
+        const { url } = this.getBaseFields(data);
+
+        return [url];
+    }
+
+    private getBaseFields({
+        isAuthenticated,
+        resumes,
+    }: JobApplicationModalData): Record<string, FormlyFieldConfig> {
+        return {
+            url: {
+                key: 'url',
+                type: 'input',
+                className: 'flex-grow',
+                props: { label: 'Job Posting URL' },
+                expressions: { hide: () => !isAuthenticated }
+            },
+            company: {
+                key: 'company',
+                type: 'input',
+                className: 'flex-grow',
+                props: { label: 'Company' },
+            },
+            role: {
+                key: 'role',
+                type: 'input',
+                className: 'flex-grow',
+                props: { label: 'Role' },
+            },
+            resumeId: {
+                key: 'resumeId',
+                type: 'select',
+                className: 'flex-grow',
+                props: {
+                    label: 'Resume',
+                    options: this.getResumeOptions(resumes),
+                },
+            },
+            status: {
+                key: 'status',
+                type: 'select',
+                className: 'flex-grow',
+                props: {
+                    label: 'Status',
+                    options: this.getStatusOptions(),
+                },
+            },
+            description: {
                 key: 'description',
                 type: 'textarea',
                 props: {
@@ -62,7 +114,7 @@ export class JobApplicationFormFieldsService {
                     autosizeMaxRows: 8,
                 },
             },
-            {
+            notes: {
                 key: 'notes',
                 type: 'textarea',
                 props: {
@@ -71,7 +123,7 @@ export class JobApplicationFormFieldsService {
                     autosizeMaxRows: 8,
                 },
             },
-        ];
+        }
     }
 
     private getResumeOptions(resumes: Resume[]): SelectOption[] {
