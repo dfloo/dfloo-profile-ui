@@ -47,7 +47,11 @@
     background-color: var(--mat-sys-surface-bright);
 
     .profile-picture {
-        background-color: gray;
+        background-image: url('/assets/profile_pic.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        border-radius: 50%;
         width: 350px;
         height: 350px;
     }
