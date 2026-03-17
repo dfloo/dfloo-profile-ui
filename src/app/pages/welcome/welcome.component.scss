@@ -61,5 +61,9 @@
         button:not(:last-child) {
             margin-right: 10px;
         }
+
+        .resume-button {
+            min-width: 134px;
+        }
     }
 }

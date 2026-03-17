@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { of, Subject } from 'rxjs';
 
 import { ResumeService } from '@api/resume';
 
@@ -73,5 +74,58 @@ describe('WelcomeComponent', () => {
         expect(mockResumeService.downloadDefaultResume).toHaveBeenCalled();
         expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
         expect(window.open).toHaveBeenCalledWith('blob:mock');
+    });
+
+    it('shows spinner and disables resume button while downloading', () => {
+        const download$ = new Subject<Blob>();
+        mockResumeService.downloadDefaultResume.and.returnValue(
+            download$.asObservable()
+        );
+
+        const resumeButton = fixture.debugElement.query(
+            By.css('.resume-button')
+        ).nativeElement as HTMLButtonElement;
+
+        resumeButton.click();
+        fixture.detectChanges();
+
+        expect(component.isDownloadingResume()).toBeTrue();
+        expect(resumeButton.disabled).toBeTrue();
+        expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeTruthy();
+    });
+
+    it('hides spinner and re-enables button when download completes', () => {
+        const download$ = new Subject<Blob>();
+        mockResumeService.downloadDefaultResume.and.returnValue(
+            download$.asObservable()
+        );
+
+        const resumeButton = fixture.debugElement.query(
+            By.css('.resume-button')
+        ).nativeElement as HTMLButtonElement;
+
+        resumeButton.click();
+        fixture.detectChanges();
+
+        download$.complete();
+        fixture.detectChanges();
+
+        expect(component.isDownloadingResume()).toBeFalse();
+        expect(resumeButton.disabled).toBeFalse();
+        expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeNull();
+    });
+
+    it('prevents duplicate resume download requests while downloading', () => {
+        const download$ = new Subject<Blob>();
+        mockResumeService.downloadDefaultResume.and.returnValue(
+            download$.asObservable()
+        );
+
+        component.viewResume();
+        component.viewResume();
+
+        expect(
+            mockResumeService.downloadDefaultResume
+        ).toHaveBeenCalledTimes(1);
     });
 });
