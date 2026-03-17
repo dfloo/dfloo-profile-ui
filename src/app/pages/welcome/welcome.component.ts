@@ -2,9 +2,12 @@ import {
     ChangeDetectionStrategy,
     Component,
     inject,
+    signal,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { finalize } from 'rxjs';
 
 import { ResumeService } from '@api/resume';
 
@@ -17,21 +20,32 @@ interface WelcomeCard {
     templateUrl: './welcome.component.html',
     styleUrl: './welcome.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatButton, NgStyle],
+    imports: [MatButton, MatProgressSpinner, NgStyle],
 })
 export class WelcomeComponent {
     private resumeService = inject(ResumeService);
 
     welcomeCards: WelcomeCard[] = welcomeCards;
+    isDownloadingResume = signal(false);
 
     getBackground({ background }: WelcomeCard): Record<string, string> {
         return { 'background-image': `url('/assets/${background}')` };
     }
 
     viewResume(): void {
+        if (this.isDownloadingResume()) {
+            return;
+        }
+
+        this.isDownloadingResume.set(true);
         this.resumeService
             .downloadDefaultResume()
-            .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
+            .pipe(finalize(() => this.isDownloadingResume.set(false)))
+            .subscribe((pdf) => {
+                const pdfUrl = URL.createObjectURL(pdf);
+                window.open(pdfUrl);
+                setTimeout(() => URL.revokeObjectURL(pdfUrl), 1000);
+            });
     }
 
     viewSocial(account: 'github' | 'linkedin'): void {

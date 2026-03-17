@@ -23,8 +23,18 @@
                 >
                     LinkedIn
                 </button>
-                <button matButton="filled" color="primary" (click)="viewResume()">
-                    View Resume
+                <button
+                    matButton="filled"
+                    color="primary"
+                    class="resume-button"
+                    [disabled]="isDownloadingResume()"
+                    (click)="viewResume()"
+                >
+                    @if (isDownloadingResume()) {
+                        <mat-spinner [diameter]="18"></mat-spinner>
+                    } @else {
+                        View Resume
+                    }
                 </button>
             </div>
         </div>
