@@ -164,14 +164,12 @@ describe('ResumeService', () => {
         });
     });
 
-    it('#downloadResume serialize and download the resume', () => {
+    it('#downloadResume download resume', () => {
         setup();
-        const resume = new Resume({});
-        service.downloadResume(resume);
+        service.downloadResume('id');
 
         expect(mockApiService.download).toHaveBeenCalledWith(
-            'download/resume',
-            Resume.serialize(resume),
+            'resumes/download/id',
         );
     });
 });
