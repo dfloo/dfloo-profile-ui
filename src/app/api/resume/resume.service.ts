@@ -90,10 +90,9 @@ export class ResumeService {
         );
     }
 
-    downloadResume(resume: Resume): Observable<Blob> {
+    downloadResume(resumeId: string): Observable<Blob> {
         return this.apiService.download<Blob>(
-            'download/resume',
-            Resume.serialize(resume),
+            `${this.path}/download/${resumeId}`,
         );
     }
 

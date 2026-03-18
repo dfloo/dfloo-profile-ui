@@ -104,7 +104,11 @@ export class ResumeBuilderComponent implements OnInit {
     }
 
     downloadResume(resume: Resume): void {
-        this.resumeService.downloadResume(resume).subscribe((pdf) => {
+        if (!resume.id) {
+            return;
+        }
+
+        this.resumeService.downloadResume(resume.id).subscribe((pdf) => {
             const downloadLink = document.createElement('a');
             downloadLink.href = URL.createObjectURL(pdf);
             downloadLink.download = `${resume.fileName}.pdf`;
@@ -113,8 +117,12 @@ export class ResumeBuilderComponent implements OnInit {
     }
 
     viewResume(resume: Resume): void {
+        if (!resume.id) {
+            return;
+        }
+
         this.resumeService
-            .downloadResume(resume)
+            .downloadResume(resume.id)
             .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
     }
 

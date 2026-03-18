@@ -188,7 +188,7 @@ describe('ResumeBuilderComponent', () => {
 
         component.downloadResume(r);
 
-        expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r);
+        expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r.id as string);
         expect(fakeAnchor.download).toBe('file.pdf');
         expect(fakeAnchor.click).toHaveBeenCalled();
     });
@@ -202,7 +202,7 @@ describe('ResumeBuilderComponent', () => {
 
         component.viewResume(r);
 
-        expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r);
+        expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r.id as string);
         expect(winSpy).toHaveBeenCalledWith('blob:url');
     });
 
