@@ -6,6 +6,7 @@ import {
     signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
 
 import { ProfileService } from '@api/profile';
@@ -34,6 +35,10 @@ export class ResumeBuilderComponent implements OnInit {
     isSuperUser = toSignal(this.userService.hasRole(Role.SuperUser), {
         initialValue: false,
     });
+    isAuthenticated = toSignal(this.userService.isAuthenticated$, {
+        initialValue: false,
+    });
+    isDownloadingResume = signal(false);
 
     ngOnInit(): void {
         this.resumeService.getResumes().subscribe((resumes) => {
@@ -104,25 +109,37 @@ export class ResumeBuilderComponent implements OnInit {
     }
 
     downloadResume(resume: Resume): void {
-        if (!resume.id) {
+        if (!resume.id || this.isDownloadingResume()) {
             return;
         }
 
-        this.resumeService.downloadResume(resume.id).subscribe((pdf) => {
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(pdf);
-            downloadLink.download = `${resume.fileName}.pdf`;
-            downloadLink.click();
-        });
+        this.isDownloadingResume.set(true);
+        const observable = this.isAuthenticated()
+            ? this.resumeService.downloadResume(resume.id)
+            : this.resumeService.downloadGuestResume(resume);
+
+        observable
+            .pipe(finalize(() => this.isDownloadingResume.set(false)))
+            .subscribe((pdf) => {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(pdf);
+                downloadLink.download = `${resume.fileName}.pdf`;
+                downloadLink.click();
+            });
     }
 
     viewResume(resume: Resume): void {
-        if (!resume.id) {
+        if (!resume.id || this.isDownloadingResume()) {
             return;
         }
 
-        this.resumeService
-            .downloadResume(resume.id)
+        this.isDownloadingResume.set(true);
+        const observable = this.isAuthenticated()
+            ? this.resumeService.downloadResume(resume.id)
+            : this.resumeService.downloadGuestResume(resume);
+
+        observable
+            .pipe(finalize(() => this.isDownloadingResume.set(false)))
             .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
     }
 

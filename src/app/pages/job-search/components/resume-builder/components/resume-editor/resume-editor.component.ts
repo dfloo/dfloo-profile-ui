@@ -9,6 +9,7 @@ import {
     Component,
     effect,
     inject,
+    input,
     model,
     OnInit,
     output,
@@ -24,6 +25,7 @@ import {
 } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import cloneDeep from 'lodash-es/cloneDeep';
@@ -57,6 +59,7 @@ import { ResumeSectionFormComponent } from '../resume-section-form';
         MatMenu,
         MatMenuItem,
         MatMenuTrigger,
+        MatProgressSpinner,
         MatTooltip,
         ProfileFormComponent,
         ResumeSectionFormComponent,
@@ -66,6 +69,7 @@ export class ResumeEditorComponent implements OnInit {
     private formFieldsService = inject(ResumeFormFieldsService);
     private dialog = inject(MatDialog);
 
+    isDownloadingResume = input<boolean>(false);
     saveResume = output<Resume>();
     viewResume = output<Resume>();
     downloadResume = output<Resume>();

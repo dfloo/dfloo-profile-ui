@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
 import { ResumeService } from '@api/resume';
 import { ProfileService } from '@api/profile';
@@ -18,13 +18,14 @@ describe('ResumeBuilderComponent', () => {
     let mockUserService: jasmine.SpyObj<UserService>;
     let mockSnackBar: jasmine.SpyObj<SnackBarService>;
 
-    beforeEach(async () => {
+    const setup = async (isAuthenticated = true) => {
         mockResumeService = jasmine.createSpyObj('ResumeService', [
             'getResumes',
             'deleteResumes',
             'createResume',
             'updateResume',
             'downloadResume',
+            'downloadGuestResume',
             'setDefaultResume',
         ]);
         mockResumeService.getResumes.and.returnValue(of([]));
@@ -32,12 +33,15 @@ describe('ResumeBuilderComponent', () => {
         mockResumeService.createResume.and.returnValue(of());
         mockResumeService.updateResume.and.returnValue(of());
         mockResumeService.downloadResume.and.returnValue(of(new Blob()));
+        mockResumeService.downloadGuestResume.and.returnValue(of(new Blob()));
         mockResumeService.setDefaultResume.and.returnValue(of(new Map()));
         mockProfileService = jasmine.createSpyObj('ProfileService', [
             'getUserProfile',
         ]);
         mockProfileService.getUserProfile.and.returnValue(of(new Profile({})));
-        mockUserService = jasmine.createSpyObj('UserService', ['hasRole']);
+        mockUserService = jasmine.createSpyObj('UserService', ['hasRole'], {
+            isAuthenticated$: of(isAuthenticated),
+        });
         mockUserService.hasRole.and.returnValue(of(false));
 
         mockSnackBar = jasmine.createSpyObj('SnackBarService', ['open']);
@@ -55,171 +59,297 @@ describe('ResumeBuilderComponent', () => {
         fixture = TestBed.createComponent(ResumeBuilderComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-    });
+    };
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+    describe('Authenticated', () => {
+        beforeEach(async () => {
+            await setup();
+        });
 
-    it('should get the user profile', () => {
-        expect(mockProfileService.getUserProfile).toHaveBeenCalled();
-    });
+        it('should create', () => {
+            expect(component).toBeTruthy();
+        });
 
-    it('#deleteResumes should call the resume service', () => {
-        const resumeIDs = ['1', '2'];
-        component.deleteResumes(resumeIDs);
+        it('should get the user profile', () => {
+            expect(mockProfileService.getUserProfile).toHaveBeenCalled();
+        });
 
-        expect(mockResumeService.deleteResumes).toHaveBeenCalledWith(resumeIDs);
-    });
+        it('#deleteResumes should call the resume service', () => {
+            const resumeIDs = ['1', '2'];
+            component.deleteResumes(resumeIDs);
 
-    it('ngOnInit should set resumes from service', () => {
-        const mock = [new Resume({ id: 'r1', fileName: 'one' })];
-        mockResumeService.getResumes.and.returnValue(of(mock));
+            expect(mockResumeService.deleteResumes).toHaveBeenCalledWith(resumeIDs);
+        });
 
-        fixture = TestBed.createComponent(ResumeBuilderComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+        it('ngOnInit should set resumes from service', () => {
+            const mock = [new Resume({ id: 'r1', fileName: 'one' })];
+            mockResumeService.getResumes.and.returnValue(of(mock));
 
-        expect(component.resumes()).toEqual(mock);
-    });
+            fixture = TestBed.createComponent(ResumeBuilderComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
 
-    it('deleteResumes shows success when all deleted', () => {
-        const resumeIDs = ['1'];
-        mockResumeService.deleteResumes.and.returnValue(of(resumeIDs));
-        component.resumes.set([new Resume({ id: '1' })]);
+            expect(component.resumes()).toEqual(mock);
+        });
 
-        component.deleteResumes(resumeIDs);
+        it('deleteResumes shows success when all deleted', () => {
+            const resumeIDs = ['1'];
+            mockResumeService.deleteResumes.and.returnValue(of(resumeIDs));
+            component.resumes.set([new Resume({ id: '1' })]);
 
-        expect(mockResumeService.deleteResumes).toHaveBeenCalledWith(resumeIDs);
-        expect(mockSnackBar.open)
-            .toHaveBeenCalledWith('Resumes deleted successfully');
-        expect(component.resumes().length).toBe(0);
-    });
+            component.deleteResumes(resumeIDs);
 
-    it('deleteResumes shows warning when partial delete', () => {
-        const resumeIDs = ['1', '2'];
-        mockResumeService.deleteResumes.and.returnValue(of(['1']));
-        component.resumes.set(
-            [new Resume({ id: '1' }), new Resume({ id: '2' })]
-        );
+            expect(mockResumeService.deleteResumes).toHaveBeenCalledWith(resumeIDs);
+            expect(mockSnackBar.open)
+                .toHaveBeenCalledWith('Resumes deleted successfully');
+            expect(component.resumes().length).toBe(0);
+        });
 
-        component.deleteResumes(resumeIDs);
+        it('deleteResumes shows warning when partial delete', () => {
+            const resumeIDs = ['1', '2'];
+            mockResumeService.deleteResumes.and.returnValue(of(['1']));
+            component.resumes.set(
+                [new Resume({ id: '1' }), new Resume({ id: '2' })]
+            );
 
-        expect(mockSnackBar.open)
-            .toHaveBeenCalledWith('Some resumes were not deleted', 'warning');
-        expect(component.resumes().length).toBe(1);
-    });
+            component.deleteResumes(resumeIDs);
 
-    it('saveResume should create when isNew', () => {
-        const newRes = new Resume({ id: undefined, isNew: true });
-        const created = new Resume({ id: 'created' });
-        mockResumeService.createResume.and.returnValue(of(created));
+            expect(mockSnackBar.open)
+                .toHaveBeenCalledWith('Some resumes were not deleted', 'warning');
+            expect(component.resumes().length).toBe(1);
+        });
 
-        component.resumes.set([]);
-        component.saveResume(newRes);
+        it('saveResume should create when isNew', () => {
+            const newRes = new Resume({ id: undefined, isNew: true });
+            const created = new Resume({ id: 'created' });
+            mockResumeService.createResume.and.returnValue(of(created));
 
-        expect(mockResumeService.createResume).toHaveBeenCalledWith(newRes);
-        expect(component.resume()).toEqual(created);
-        expect(component.resumes().some((r) => r.id === 'created')).toBeTrue();
-    });
+            component.resumes.set([]);
+            component.saveResume(newRes);
 
-    it('saveResume should update when not new', () => {
-        const existing = new Resume({ id: 'e1', isNew: false, fileName: 'a' });
-        const updated = new Resume({ id: 'e1', isNew: false, fileName: 'b' });
-        component.resumes.set([existing]);
-        mockResumeService.updateResume.and.returnValue(of(updated));
+            expect(mockResumeService.createResume).toHaveBeenCalledWith(newRes);
+            expect(component.resume()).toEqual(created);
+            expect(component.resumes().some((r) => r.id === 'created')).toBeTrue();
+        });
 
-        component.saveResume(existing);
+        it('saveResume should update when not new', () => {
+            const existing = new Resume({ id: 'e1', isNew: false, fileName: 'a' });
+            const updated = new Resume({ id: 'e1', isNew: false, fileName: 'b' });
+            component.resumes.set([existing]);
+            mockResumeService.updateResume.and.returnValue(of(updated));
 
-        expect(mockResumeService.updateResume).toHaveBeenCalledWith(existing);
-        expect(component.resume()).toEqual(updated);
-        expect(component.resumes()[0].fileName).toBe('b');
-    });
+            component.saveResume(existing);
 
-    it('editResume sets the resume signal', () => {
-        const r = new Resume({ id: 'x' });
-        component.editResume(r);
-        expect(component.resume()).toBe(r);
-    });
+            expect(mockResumeService.updateResume).toHaveBeenCalledWith(existing);
+            expect(component.resume()).toEqual(updated);
+            expect(component.resumes()[0].fileName).toBe('b');
+        });
 
-    it('copyResume creates a copy and calls saveResume', () => {
-        const orig = new Resume({ id: '1', isNew: false, fileName: 'orig' });
-        const spy = spyOn(component, 'saveResume');
+        it('editResume sets the resume signal', () => {
+            const r = new Resume({ id: 'x' });
+            component.editResume(r);
+            expect(component.resume()).toBe(r);
+        });
 
-        component.copyResume(orig);
+        it('copyResume creates a copy and calls saveResume', () => {
+            const orig = new Resume({ id: '1', isNew: false, fileName: 'orig' });
+            const spy = spyOn(component, 'saveResume');
 
-        expect(spy).toHaveBeenCalled();
-        const calledArg = spy.calls.mostRecent().args[0] as Resume;
-        expect(calledArg.id).toBeUndefined();
-        expect(calledArg.isNew).toBeTrue();
-        expect(calledArg.default).toBeFalse();
-        expect(calledArg.fileName).toBe(orig.fileName);
-        expect(calledArg.created).toBeDefined();
-        expect(calledArg.updated).toBeDefined();
-    });
+            component.copyResume(orig);
 
-    it('newResume initializes a new Resume with user profile', () => {
-        const profile = new Profile({});
-        mockProfileService.getUserProfile.and.returnValue(of(profile));
+            expect(spy).toHaveBeenCalled();
+            const calledArg = spy.calls.mostRecent().args[0] as Resume;
+            expect(calledArg.id).toBeUndefined();
+            expect(calledArg.isNew).toBeTrue();
+            expect(calledArg.default).toBeFalse();
+            expect(calledArg.fileName).toBe(orig.fileName);
+            expect(calledArg.created).toBeDefined();
+            expect(calledArg.updated).toBeDefined();
+        });
 
-        fixture = TestBed.createComponent(ResumeBuilderComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+        it('newResume initializes a new Resume with user profile', () => {
+            const profile = new Profile({});
+            mockProfileService.getUserProfile.and.returnValue(of(profile));
 
-        component.newResume();
+            fixture = TestBed.createComponent(ResumeBuilderComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
 
-        const r = component.resume();
-        expect(r).toBeInstanceOf(Resume);
-        expect(r?.profile).toEqual(profile);
-    });
+            component.newResume();
 
-    it('downloadResume should create anchor and click', () => {
-        const r = new Resume({ id: 'd1', fileName: 'file' });
-        const blob = new Blob(['pdf'], { type: 'application/pdf' });
-        mockResumeService.downloadResume.and.returnValue(of(blob));
-        spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+            const r = component.resume();
+            expect(r).toBeInstanceOf(Resume);
+            expect(r?.profile).toEqual(profile);
+        });
 
-        const fakeAnchor = {
-            href: '',
-            download: '',
-            click: jasmine.createSpy('click')
-        } as unknown as HTMLAnchorElement;
-        spyOn(document, 'createElement').and.returnValue(fakeAnchor);
+        it('downloadResume should create anchor and click', () => {
+            const r = new Resume({ id: 'd1', fileName: 'file' });
+            const blob = new Blob(['pdf'], { type: 'application/pdf' });
+            mockResumeService.downloadResume.and.returnValue(of(blob));
+            spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
 
-        component.downloadResume(r);
+            const fakeAnchor = {
+                href: '',
+                download: '',
+                click: jasmine.createSpy('click')
+            } as unknown as HTMLAnchorElement;
+            spyOn(document, 'createElement').and.returnValue(fakeAnchor);
 
-        expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r.id as string);
-        expect(fakeAnchor.download).toBe('file.pdf');
-        expect(fakeAnchor.click).toHaveBeenCalled();
-    });
+            component.downloadResume(r);
 
-    it('viewResume should open a new window with blob url', () => {
-        const r = new Resume({ id: 'v1', fileName: 'file' });
-        const blob = new Blob(['pdf'], { type: 'application/pdf' });
-        mockResumeService.downloadResume.and.returnValue(of(blob));
-        spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
-        const winSpy = spyOn(window, 'open');
+            expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r.id as string);
+            expect(fakeAnchor.download).toBe('file.pdf');
+            expect(fakeAnchor.click).toHaveBeenCalled();
+        });
 
-        component.viewResume(r);
+        it('viewResume should open a new window with blob url', () => {
+            const r = new Resume({ id: 'v1', fileName: 'file' });
+            const blob = new Blob(['pdf'], { type: 'application/pdf' });
+            mockResumeService.downloadResume.and.returnValue(of(blob));
+            spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+            const winSpy = spyOn(window, 'open');
 
-        expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r.id as string);
-        expect(winSpy).toHaveBeenCalledWith('blob:url');
-    });
+            component.viewResume(r);
 
-    it('setDefaultResume should update resumes map', () => {
-        const a = new Resume({ id: 'a', fileName: 'a' });
-        const b = new Resume({ id: 'b', fileName: 'b' });
-        component.resumes.set([a, b]);
+            expect(mockResumeService.downloadResume).toHaveBeenCalledWith(r.id as string);
+            expect(winSpy).toHaveBeenCalledWith('blob:url');
+        });
 
-        const updatedA = new Resume({ id: 'a', fileName: 'a-updated' });
-        const map = new Map<string, Resume>();
-        map.set('a', updatedA);
-        mockResumeService.setDefaultResume.and.returnValue(of(map));
+        it('setDefaultResume should update resumes map', () => {
+            const a = new Resume({ id: 'a', fileName: 'a' });
+            const b = new Resume({ id: 'b', fileName: 'b' });
+            component.resumes.set([a, b]);
 
-        component.setDefaultResume('a');
+            const updatedA = new Resume({ id: 'a', fileName: 'a-updated' });
+            const map = new Map<string, Resume>();
+            map.set('a', updatedA);
+            mockResumeService.setDefaultResume.and.returnValue(of(map));
 
-        const res = component.resumes();
-        expect(res.find((r) => r.id === 'a')?.fileName).toBe('a-updated');
-        expect(res.find((r) => r.id === 'b')?.fileName).toBe('b');
+            component.setDefaultResume('a');
+
+            const res = component.resumes();
+            expect(res.find((r) => r.id === 'a')?.fileName).toBe('a-updated');
+            expect(res.find((r) => r.id === 'b')?.fileName).toBe('b');
+        });
+
+        describe('isDownloadingResume', () => {
+            it('should initialize as false', () => {
+                expect(component.isDownloadingResume()).toBeFalse();
+            });
+
+            it('should be true while downloadResume is in progress and false after', () => {
+                const pdfSubject = new Subject<Blob>();
+                mockResumeService.downloadResume.and.returnValue(pdfSubject);
+                spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+                spyOn(document, 'createElement').and.returnValue({
+                    href: '',
+                    download: '',
+                    click: jasmine.createSpy('click'),
+                } as unknown as HTMLAnchorElement);
+                const r = new Resume({ id: 'd1', fileName: 'file' });
+
+                component.downloadResume(r);
+                expect(component.isDownloadingResume()).toBeTrue();
+
+                pdfSubject.next(new Blob());
+                pdfSubject.complete();
+                expect(component.isDownloadingResume()).toBeFalse();
+            });
+
+            it('should be true while viewResume is in progress and false after', () => {
+                const pdfSubject = new Subject<Blob>();
+                mockResumeService.downloadResume.and.returnValue(pdfSubject);
+                spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+                spyOn(window, 'open');
+                const r = new Resume({ id: 'v1', fileName: 'file' });
+
+                component.viewResume(r);
+                expect(component.isDownloadingResume()).toBeTrue();
+
+                pdfSubject.next(new Blob());
+                pdfSubject.complete();
+                expect(component.isDownloadingResume()).toBeFalse();
+            });
+
+            it('should guard against concurrent downloadResume calls', () => {
+                const pdfSubject = new Subject<Blob>();
+                mockResumeService.downloadResume.and.returnValue(pdfSubject);
+                spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+                spyOn(document, 'createElement').and.returnValue({
+                    href: '',
+                    download: '',
+                    click: jasmine.createSpy('click'),
+                } as unknown as HTMLAnchorElement);
+                const r = new Resume({ id: 'd1', fileName: 'file' });
+
+                component.downloadResume(r);
+                component.downloadResume(r); // second call should be a no-op
+
+                expect(mockResumeService.downloadResume).toHaveBeenCalledTimes(1);
+            });
+
+            it('should guard against concurrent viewResume calls', () => {
+                const pdfSubject = new Subject<Blob>();
+                mockResumeService.downloadResume.and.returnValue(pdfSubject);
+                spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+                spyOn(window, 'open');
+                const r = new Resume({ id: 'v1', fileName: 'file' });
+
+                component.viewResume(r);
+                component.viewResume(r); // second call should be a no-op
+
+                expect(mockResumeService.downloadResume).toHaveBeenCalledTimes(1);
+            });
+        });
+    })
+
+
+    describe('Unauthenticated', () => {
+        beforeEach(async () => {
+            await setup(false);
+        });
+
+        it('downloadResume should call downloadGuestResume', () => {
+            mockResumeService.downloadGuestResume.and.returnValue(of(new Blob()));
+            spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+            spyOn(document, 'createElement').and.returnValue({
+                href: '',
+                download: '',
+                click: jasmine.createSpy('click'),
+            } as unknown as HTMLAnchorElement);
+            const r = new Resume({ id: 'd1', fileName: 'file' });
+
+            component.downloadResume(r);
+
+            expect(mockResumeService.downloadGuestResume).toHaveBeenCalledWith(r);
+            expect(mockResumeService.downloadResume).not.toHaveBeenCalled();
+        });
+
+        it('viewResume should call downloadGuestResume', () => {
+            mockResumeService.downloadGuestResume.and.returnValue(of(new Blob()));
+            spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+            spyOn(window, 'open');
+            const r = new Resume({ id: 'v1', fileName: 'file' });
+
+            component.viewResume(r);
+
+            expect(mockResumeService.downloadGuestResume).toHaveBeenCalledWith(r);
+            expect(mockResumeService.downloadResume).not.toHaveBeenCalled();
+        });
+
+        it('isDownloadingResume should reflect guest download in progress', () => {
+            const pdfSubject = new Subject<Blob>();
+            mockResumeService.downloadGuestResume.and.returnValue(pdfSubject);
+            spyOn(URL, 'createObjectURL').and.returnValue('blob:url');
+            spyOn(window, 'open');
+            const r = new Resume({ id: 'v1', fileName: 'file' });
+
+            component.viewResume(r);
+            expect(component.isDownloadingResume()).toBeTrue();
+
+            pdfSubject.next(new Blob());
+            pdfSubject.complete();
+            expect(component.isDownloadingResume()).toBeFalse();
+        });
     });
 });

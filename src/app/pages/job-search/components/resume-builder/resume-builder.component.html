@@ -2,6 +2,7 @@
     @if (resume()) {
         <resume-editor
             [resume]="resume()"
+            [isDownloadingResume]="isDownloadingResume()"
             (saveResume)="saveResume($event)"
             (downloadResume)="downloadResume($event)"
             (viewResume)="viewResume($event)"
@@ -11,6 +12,7 @@
     } @else {
         <resumes-table
             [isSuperUser]="isSuperUser()"
+            [isDownloadingResume]="isDownloadingResume()"
             [resumes]="resumes()"
             (newResume)="newResume()"
             (editResume)="editResume($event)"
