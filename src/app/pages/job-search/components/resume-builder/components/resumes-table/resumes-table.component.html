@@ -15,6 +15,7 @@
                     matIconButton
                     (click)="onEditResume(selectedResume)"
                     matTooltip="Edit Resume"
+                    aria-label="Edit Resume"
                 >
                     <mat-icon class="material-icons-outlined">edit</mat-icon>
                 </button>
@@ -23,6 +24,7 @@
                         matIconButton
                         (click)="setDefaultResume(selectedResume)"
                         matTooltip="Set Default Resume"
+                        aria-label="Set Default Resume"
                     >
                         <mat-icon class="material-icons-outlined">
                             star_outlined
@@ -33,6 +35,7 @@
                     matIconButton
                     (click)="onCopyResume(selectedResume)"
                     matTooltip="Copy Resume"
+                    aria-label="Copy Resume"
                 >
                     <mat-icon class="material-icons-outlined">
                         content_copy
@@ -42,6 +45,7 @@
                     matIconButton
                     (click)="viewResume.emit(selectedResume)"
                     matTooltip="View Resume"
+                    aria-label="View Resume"
                     [disabled]="isDownloadingResume()"
                 >
                     @if (isDownloadingResume()) {
@@ -56,6 +60,7 @@
                     matIconButton
                     (click)="downloadResume.emit(selectedResume)"
                     matTooltip="Download Resume"
+                    aria-label="Download Resume"
                     [disabled]="isDownloadingResume()"
                 >
                     @if (isDownloadingResume()) {
@@ -72,6 +77,7 @@
                     matIconButton
                     (click)="onDeleteResumes(selectedResumes)"
                     matTooltip="Delete Resumes"
+                    aria-label="Delete Resumes"
                 >
                     <mat-icon class="material-icons-outlined">delete</mat-icon>
                 </button>
@@ -101,7 +107,7 @@
                     <th mat-header-cell *matHeaderCellDef>Default</th>
                     <td mat-cell *matCellDef="let resume">
                         @if (resume.default) {
-                            <button matIconButton>
+                            <button matIconButton aria-label="Default Resume">
                                 <mat-icon class="default-star">star</mat-icon>
                             </button>
                         } @else {
@@ -109,6 +115,7 @@
                                 matIconButton
                                 (click)="setDefaultResume(resume)"
                                 matTooltip="Set Default Resume"
+                                aria-label="Set Default Resume"
                             >
                                 <mat-icon>star_outlined</mat-icon>
                             </button>

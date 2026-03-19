@@ -1,7 +1,7 @@
 <div class="resume-editor-container">
     <div class="resume-editor-header">
         <div class="header-buttons">
-            <button matIconButton (click)="exit()">
+            <button matIconButton (click)="exit()" aria-label="Go back">
                 <mat-icon>arrow_back</mat-icon>
             </button>
             @if (resume()?.isNew || resumeHasChanged) {
@@ -44,6 +44,7 @@
                 matIconButton
                 (click)="viewResume.emit(resume()!)"
                 matTooltip="View Resume"
+                aria-label="View Resume"
                 [disabled]="isDownloadingResume()"
             >
                 @if (isDownloadingResume()) {
@@ -56,6 +57,7 @@
                 matIconButton
                 (click)="downloadResume.emit(resume()!)"
                 matTooltip="Download Resume"
+                aria-label="Download Resume"
                 [disabled]="isDownloadingResume()"
             >
                 @if (isDownloadingResume()) {
@@ -68,6 +70,7 @@
                 matIconButton
                 (click)="onDeleteResume()"
                 matTooltip="Delete Resume"
+                aria-label="Delete Resume"
             >
                 <mat-icon class="material-icons-outlined">delete</mat-icon>
             </button>
@@ -108,6 +111,7 @@
                                     <button
                                         matIconButton
                                         matTooltip="Remove Section"
+                                        aria-label="Remove Section"
                                         (click)="removeSection(section)"
                                     >
                                         <mat-icon>
