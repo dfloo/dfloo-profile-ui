@@ -172,4 +172,28 @@ describe('ResumeService', () => {
             'resumes/download/id',
         );
     });
+
+    it('#downloadDefaultResume downloads the default resume', () => {
+        setup();
+        service.downloadDefaultResume();
+
+        expect(mockApiService.download).toHaveBeenCalledWith(
+            'download/resume/default',
+        );
+    });
+
+    describe('#downloadGuestResume', () => {
+        it('should call apiService.download with serialized resume', () => {
+            setup();
+            const resume = Resume.normalize(Resume.getMockDTO());
+            const serialized = Resume.serialize(resume);
+
+            service.downloadGuestResume(resume);
+
+            expect(mockApiService.download).toHaveBeenCalledWith(
+                'download/resume',
+                serialized,
+            );
+        });
+    });
 });

@@ -28,6 +28,7 @@ import {
     MatTable,
     MatTableDataSource,
 } from '@angular/material/table';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import cloneDeep from 'lodash-es/cloneDeep';
 
@@ -57,6 +58,7 @@ import { Resume } from '@models/resume';
         MatPaginator,
         MatRow,
         MatRowDef,
+        MatProgressSpinner,
         MatSort,
         MatTable,
         MatTooltip,
@@ -68,6 +70,7 @@ export class ResumesTableComponent implements AfterViewInit {
     @ViewChild(MatSort, { static: true }) private sort!: MatSort;
 
     isSuperUser = input<boolean>(false);
+    isDownloadingResume = input<boolean>(false);
     resumes = input<Resume[]>([]);
     newResume = output();
     editResume = output<Resume>();

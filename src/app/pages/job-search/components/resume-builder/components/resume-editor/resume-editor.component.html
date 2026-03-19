@@ -44,15 +44,25 @@
                 matIconButton
                 (click)="viewResume.emit(resume()!)"
                 matTooltip="View Resume"
+                [disabled]="isDownloadingResume()"
             >
-                <mat-icon class="material-icons-outlined"> pageview </mat-icon>
+                @if (isDownloadingResume()) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                    <mat-icon class="material-icons-outlined"> pageview </mat-icon>
+                }
             </button>
             <button
                 matIconButton
                 (click)="downloadResume.emit(resume()!)"
                 matTooltip="Download Resume"
+                [disabled]="isDownloadingResume()"
             >
-                <mat-icon class="material-icons-outlined"> download </mat-icon>
+                @if (isDownloadingResume()) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                    <mat-icon class="material-icons-outlined"> download </mat-icon>
+                }
             </button>
             <button
                 matIconButton

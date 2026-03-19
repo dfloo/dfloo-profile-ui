@@ -100,6 +100,13 @@ export class ResumeService {
         return this.apiService.download<Blob>('download/resume/default');
     }
 
+    downloadGuestResume(resume: Resume): Observable<Blob> {
+        return this.apiService.download<Blob>(
+            'download/resume',
+            Resume.serialize(resume),
+        );
+    }
+
     private getLocalResumes(): Resume[] {
         const { resumes } = this.storage.getData();
 
