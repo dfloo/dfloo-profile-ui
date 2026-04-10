@@ -35,6 +35,39 @@
     margin-bottom: 80px;
 }
 
+.connectors-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.connector-group {
+    cursor: pointer;
+}
+
+.connector-hitbox {
+    stroke: transparent;
+    stroke-width: 14;
+    pointer-events: stroke;
+}
+
+.connector {
+    stroke: var(--mat-sys-primary);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.8;
+    pointer-events: none;
+    transition: stroke 120ms ease-out, stroke-width 120ms ease-out,
+        filter 120ms ease-out;
+}
+
+.connector-group:hover .connector {
+    stroke: var(--mat-sys-primary);
+    stroke-width: 3;
+    filter: drop-shadow(0 0 4px rgba(25, 118, 210, 0.55));
+}
+
 .empty-state {
     position: absolute;
     top: 50%;
@@ -46,14 +79,94 @@
 
 .canvas-node {
     position: absolute;
-    min-width: 120px;
-    padding: 0.75rem 1rem;
+    width: 160px;
+    height: 72px;
+    padding: 0;
     border: 1px solid var(--mat-sys-outline);
     border-radius: 8px;
     background: white;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
     cursor: move;
     user-select: none;
+    overflow: visible;
     text-align: center;
     font: var(--mat-sys-title-small);
+    z-index: 1;
+}
+
+.connector-source {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--mat-sys-outline);
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-primary);
+    font: var(--mat-sys-title-small);
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9);
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    z-index: 2;
+}
+
+.connector-source:hover {
+    border-color: var(--mat-sys-primary);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25),
+        0 2px 8px rgba(15, 23, 42, 0.2);
+}
+
+.canvas-node:hover .connector-source,
+.canvas-node.selected-source .connector-source {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.connector-source.top {
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+}
+
+.connector-source.right {
+    top: 50%;
+    right: -10px;
+    transform: translateY(-50%) scale(0.9);
+}
+
+.connector-source.bottom {
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+}
+
+.connector-source.left {
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%) scale(0.9);
+}
+
+.canvas-node:hover .connector-source.top,
+.canvas-node.selected-source .connector-source.top,
+.canvas-node:hover .connector-source.bottom,
+.canvas-node.selected-source .connector-source.bottom {
+    transform: translateX(-50%) scale(1);
+}
+
+.canvas-node:hover .connector-source.right,
+.canvas-node.selected-source .connector-source.right,
+.canvas-node:hover .connector-source.left,
+.canvas-node.selected-source .connector-source.left {
+    transform: translateY(-50%) scale(1);
+}
+
+.canvas-node.selected-source {
+    border-color: var(--mat-sys-primary);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25),
+        0 8px 18px rgba(15, 23, 42, 0.14);
 }
