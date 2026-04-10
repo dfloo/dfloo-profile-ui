@@ -28,6 +28,11 @@ export const sidenavRoutes = [
                 loadComponent: () => import('@pages/job-search')
                     .then((m) => m.ApplicationTrackerComponent),
             },
+            {
+                path: 'system-design',
+                loadComponent: () => import('@pages/job-search')
+                    .then((m) => m.SystemDesignComponent),
+            },
         ]
     },
     {

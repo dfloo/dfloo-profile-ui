@@ -1,0 +1,38 @@
+<div class="system-design-container">
+    <div class="system-design-header">
+        <button
+            matButton="filled"
+            color="primary"
+            [matMenuTriggerFor]="componentsMenu"
+        >
+            Add Component
+        </button>
+        <mat-menu #componentsMenu="matMenu">
+            @for (type of componentTypes; track type) {
+                <button mat-menu-item (click)="addNode(type)">
+                    {{ type }}
+                </button>
+            }
+        </mat-menu>
+    </div>
+
+    <div class="whiteboard-canvas">
+        @if (!nodes().length) {
+            <div class="empty-state">
+                Add a component to start diagramming.
+            </div>
+        }
+
+        @for (node of nodes(); track node.id) {
+            <div
+                class="canvas-node"
+                cdkDrag
+                [cdkDragBoundary]="'.whiteboard-canvas'"
+                [cdkDragFreeDragPosition]="{ x: node.x, y: node.y }"
+                (cdkDragEnded)="updateNodePosition(node.id, $event)"
+            >
+                {{ node.type }}
+            </div>
+        }
+    </div>
+</div>
