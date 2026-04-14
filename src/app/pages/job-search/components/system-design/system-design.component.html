@@ -14,6 +14,15 @@
                 </button>
             }
         </mat-menu>
+
+        <button
+            matButton="outlined"
+            color="warn"
+            class="clear-all-button"
+            (click)="clearAll()"
+        >
+            Clear All
+        </button>
     </div>
 
     <div class="whiteboard-canvas">
@@ -51,11 +60,23 @@
                 cdkDrag
                 [cdkDragBoundary]="'.whiteboard-canvas'"
                 [cdkDragFreeDragPosition]="{ x: node.x, y: node.y }"
+                (cdkDragMoved)="updateNodePositionDuringDrag(node.id, $event)"
                 (cdkDragEnded)="updateNodePosition(node.id, $event)"
                 (click)="onNodeClick(node.id)"
                 [style.width.px]="node.width"
                 [style.height.px]="node.height"
             >
+                <button
+                    matIconButton
+                    type="button"
+                    class="node-delete-button"
+                    (mousedown)="$event.stopPropagation()"
+                    (click)="deleteNode(node.id, $event)"
+                    aria-label="Delete node"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+
                 <button
                     type="button"
                     class="connector-source top"

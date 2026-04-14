@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     height: $app-header-height;
+    gap: 0.75rem;
 }
 
 .whiteboard-canvas {
@@ -112,6 +113,48 @@
     transform: scale(0.9);
     transition: opacity 120ms ease-out, transform 120ms ease-out;
     z-index: 2;
+}
+
+.node-delete-button {
+    position: absolute;
+    top: -16px;
+    left: -16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0;
+    background: var(--mat-sys-surface);
+    border: 1px solid var(--mat-sys-outline);
+    color: var(--mat-sys-error);
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9);
+    transition: opacity 120ms ease-out, transform 120ms ease-out;
+    z-index: 3;
+}
+
+.node-delete-button mat-icon {
+    color: var(--mat-sys-error);
+    margin: 0;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+}
+
+.node-delete-button:hover {
+    border-color: var(--mat-sys-error);
+    box-shadow: 0 0 0 2px rgba(186, 26, 26, 0.2);
+}
+
+.canvas-node:hover .node-delete-button,
+.canvas-node.selected-source .node-delete-button {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
 }
 
 .connector-source:hover {

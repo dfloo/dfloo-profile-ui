@@ -2,19 +2,27 @@ import {
     ChangeDetectionStrategy,
     Component,
     computed,
+    inject,
     signal,
     Type,
 } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
-import { CdkDrag, CdkDragEnd } from '@angular/cdk/drag-drop';
-import { MatButton } from '@angular/material/button';
+import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import {
+    MessageDialogComponent,
+    MessageDialogResult,
+} from '@components/message-dialog';
 
 import {
     BaseSystemNode,
     ClientNodeComponent,
     createSystemNode,
     DatabaseNodeComponent,
+    NodePoint,
     ServerNodeComponent,
     SystemComponentType,
     SystemNodeEdge,
@@ -36,6 +44,8 @@ interface RenderedEdge {
     imports: [
         CdkDrag,
         MatButton,
+        MatIcon,
+        MatIconButton,
         MatMenu,
         MatMenuItem,
         MatMenuTrigger,
@@ -43,10 +53,14 @@ interface RenderedEdge {
     ],
 })
 export class SystemDesignComponent {
+    private dialog = inject(MatDialog);
+
     componentTypes: SystemComponentType[] = ['Client', 'Server', 'Database'];
     nodes = signal<BaseSystemNode[]>([]);
     edges = signal<SystemNodeEdge[]>([]);
     selectedSourceId = signal<number | null>(null);
+    draggingNodeId = signal<number | null>(null);
+    draggingNodePosition = signal<NodePoint | null>(null);
 
     presenterByType: Record<SystemComponentType, Type<unknown>> = {
         Client: ClientNodeComponent,
@@ -66,8 +80,21 @@ export class SystemDesignComponent {
                     return null;
                 }
 
-                const sourceAnchor = source.getAnchorToward(target);
-                const targetAnchor = target.getAnchorToward(source);
+                const sourcePosition = this.getEffectiveNodePosition(source);
+                const targetPosition = this.getEffectiveNodePosition(target);
+
+                const sourceAnchor = this.getAnchorToward(
+                    source,
+                    target,
+                    sourcePosition,
+                    targetPosition,
+                );
+                const targetAnchor = this.getAnchorToward(
+                    target,
+                    source,
+                    targetPosition,
+                    sourcePosition,
+                );
 
                 return {
                     id: edge.id,
@@ -96,16 +123,64 @@ export class SystemDesignComponent {
     }
 
     updateNodePosition(nodeId: number, event: CdkDragEnd): void {
-        const { x, y } = event.source.getFreeDragPosition();
+        const position = event.source.getFreeDragPosition();
         this.nodes.update((nodes) =>
             nodes.map((node) => {
                 if (node.id === nodeId) {
-                    node.moveTo({ x, y });
+                    node.moveTo(position);
                 }
 
                 return node;
             }),
         );
+        if (this.draggingNodeId() === nodeId) {
+            this.draggingNodeId.set(null);
+            this.draggingNodePosition.set(null);
+        }
+    }
+
+    updateNodePositionDuringDrag(nodeId: number, event: CdkDragMove): void {
+        const { x, y } = event.source.getFreeDragPosition();
+        this.draggingNodeId.set(nodeId);
+        this.draggingNodePosition.set({ x, y });
+    }
+
+    private getEffectiveNodePosition(node: BaseSystemNode): NodePoint {
+        if (this.draggingNodeId() === node.id && this.draggingNodePosition()) {
+            return this.draggingNodePosition() as NodePoint;
+        }
+
+        return { x: node.x, y: node.y };
+    }
+
+    private getAnchorToward(
+        node: BaseSystemNode,
+        target: BaseSystemNode,
+        nodePosition: NodePoint,
+        targetPosition: NodePoint,
+    ): NodePoint {
+        const currentCenter = {
+            x: nodePosition.x + node.width / 2,
+            y: nodePosition.y + node.height / 2,
+        };
+        const targetCenter = {
+            x: targetPosition.x + target.width / 2,
+            y: targetPosition.y + target.height / 2,
+        };
+        const dx = targetCenter.x - currentCenter.x;
+        const dy = targetCenter.y - currentCenter.y;
+
+        if (Math.abs(dx) >= Math.abs(dy)) {
+            return {
+                x: dx >= 0 ? nodePosition.x + node.width : nodePosition.x,
+                y: currentCenter.y,
+            };
+        }
+
+        return {
+            x: currentCenter.x,
+            y: dy >= 0 ? nodePosition.y + node.height : nodePosition.y,
+        };
     }
 
     onNodeClick(nodeId: number): void {
@@ -142,6 +217,71 @@ export class SystemDesignComponent {
         this.edges.update((edges) => edges.filter((edge) => edge.id !== edgeId));
     }
 
+    clearAll(): void {
+        if (!this.nodes().length && !this.edges().length) {
+            return;
+        }
+
+        this.dialog
+            .open(MessageDialogComponent, {
+                data: {
+                    message:
+                        'Are you sure you want to delete all nodes and connections?',
+                    confirmLabel: 'Delete All',
+                    cancelLabel: 'Cancel',
+                },
+            })
+            .afterClosed()
+            .subscribe((result: MessageDialogResult | undefined) => {
+                if (result === MessageDialogResult.Confirm) {
+                    this.nodes.set([]);
+                    this.edges.set([]);
+                    this.selectedSourceId.set(null);
+                    this.draggingNodeId.set(null);
+                    this.draggingNodePosition.set(null);
+                    this.nextNodeId = 1;
+                }
+            });
+    }
+
+    deleteNode(nodeId: number, event: MouseEvent): void {
+        event.stopPropagation();
+
+        this.dialog
+            .open(MessageDialogComponent, {
+                data: {
+                    message:
+                        'Are you sure you want to delete this node and its connections?',
+                    confirmLabel: 'Delete Node',
+                    cancelLabel: 'Cancel',
+                },
+            })
+            .afterClosed()
+            .subscribe((result: MessageDialogResult | undefined) => {
+                if (result !== MessageDialogResult.Confirm) {
+                    return;
+                }
+
+                this.nodes.update((nodes) =>
+                    nodes.filter((node) => node.id !== nodeId),
+                );
+                this.edges.update((edges) =>
+                    edges.filter(
+                        (edge) =>
+                            edge.sourceId !== nodeId && edge.targetId !== nodeId,
+                    ),
+                );
+
+                if (this.selectedSourceId() === nodeId) {
+                    this.selectedSourceId.set(null);
+                }
+                if (this.draggingNodeId() === nodeId) {
+                    this.draggingNodeId.set(null);
+                    this.draggingNodePosition.set(null);
+                }
+            });
+    }
+
     private completeConnection(sourceId: number, targetId: number): void {
         if (sourceId === targetId) {
             this.selectedSourceId.set(null);
@@ -169,6 +309,9 @@ export class SystemDesignComponent {
     }
 
     private getEdgeId(sourceId: number, targetId: number): string {
-        return `${sourceId}->${targetId}`;
+        const a = Math.min(sourceId, targetId);
+        const b = Math.max(sourceId, targetId);
+
+        return `${a}-${b}`;
     }
 }

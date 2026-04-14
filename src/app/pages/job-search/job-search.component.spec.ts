@@ -100,10 +100,12 @@ describe('JobSearchComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
 
-        expect(component.childRoutes.length).toBe(2);
+        expect(component.childRoutes.length).toBe(3);
         expect(component.childRoutes[0].path).toBe('resume-builder');
         expect(component.childRoutes[0].label).toBe('Resume Builder');
         expect(component.childRoutes[1].path).toBe('application-tracker');
         expect(component.childRoutes[1].label).toBe('Application Tracker');
+        expect(component.childRoutes[2].path).toBe('system-design');
+        expect(component.childRoutes[2].label).toBe('System Design');
     });
 });
