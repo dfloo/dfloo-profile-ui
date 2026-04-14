@@ -1,0 +1,140 @@
+<div class="system-design-container">
+    <div class="system-design-header">
+        <button matButton="filled" color="primary" (click)="addNode()">
+            Add Component
+        </button>
+
+        <button
+            matButton="outlined"
+            color="warn"
+            class="clear-all-button"
+            (click)="clearAll()"
+        >
+            Clear All
+        </button>
+    </div>
+
+    <div class="whiteboard-canvas">
+        <svg class="connectors-layer">
+            @for (edge of renderedEdges(); track edge.id) {
+                <g class="connector-group" (dblclick)="deleteConnection(edge.id, $event)">
+                    <line
+                        class="connector-hitbox"
+                        [attr.x1]="edge.x1"
+                        [attr.y1]="edge.y1"
+                        [attr.x2]="edge.x2"
+                        [attr.y2]="edge.y2"
+                    />
+                    <line
+                        class="connector"
+                        [attr.x1]="edge.x1"
+                        [attr.y1]="edge.y1"
+                        [attr.x2]="edge.x2"
+                        [attr.y2]="edge.y2"
+                    />
+                </g>
+            }
+        </svg>
+
+        @if (!nodes().length) {
+            <div class="empty-state">
+                Add a component to start diagramming.
+            </div>
+        }
+
+        @for (node of nodes(); track node.id) {
+            <div
+                class="canvas-node"
+                [class.selected-source]="selectedSourceId() === node.id"
+                cdkDrag
+                [cdkDragBoundary]="'.whiteboard-canvas'"
+                [cdkDragFreeDragPosition]="{ x: node.x, y: node.y }"
+                (cdkDragMoved)="updateNodePositionDuringDrag(node.id, $event)"
+                (cdkDragEnded)="updateNodePosition(node.id, $event)"
+                (click)="onNodeClick(node.id)"
+                [style.width.px]="node.width"
+                [style.height.px]="node.height"
+            >
+                <div class="node-title-row">
+                    <div class="node-title-text">{{ node.type }}</div>
+                    <button
+                        matIconButton
+                        type="button"
+                        class="node-edit-button"
+                        [matMenuTriggerFor]="typeMenu"
+                        (mousedown)="$event.stopPropagation()"
+                        (click)="$event.stopPropagation()"
+                        aria-label="Change node type"
+                    >
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <mat-menu #typeMenu="matMenu">
+                        @for (type of componentTypes; track type) {
+                            <button
+                                mat-menu-item
+                                (click)="changeNodeType(node.id, type, $event)"
+                            >
+                                {{ type }}
+                            </button>
+                        }
+                    </mat-menu>
+                </div>
+
+                <button
+                    matIconButton
+                    type="button"
+                    class="node-delete-button"
+                    (mousedown)="$event.stopPropagation()"
+                    (click)="deleteNode(node.id, $event)"
+                    aria-label="Delete node"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+
+                <button
+                    type="button"
+                    class="connector-source top"
+                    (mousedown)="$event.stopPropagation()"
+                    (click)="onConnectorSourceClick(node.id, $event)"
+                >
+                    +
+                </button>
+                <button
+                    type="button"
+                    class="connector-source right"
+                    (mousedown)="$event.stopPropagation()"
+                    (click)="onConnectorSourceClick(node.id, $event)"
+                >
+                    +
+                </button>
+                <button
+                    type="button"
+                    class="connector-source bottom"
+                    (mousedown)="$event.stopPropagation()"
+                    (click)="onConnectorSourceClick(node.id, $event)"
+                >
+                    +
+                </button>
+                <button
+                    type="button"
+                    class="connector-source left"
+                    (mousedown)="$event.stopPropagation()"
+                    (click)="onConnectorSourceClick(node.id, $event)"
+                >
+                    +
+                </button>
+                <div class="node-body">
+                    <ng-container
+                        *ngComponentOutlet="
+                            presenterByType[node.type];
+                            inputs: {
+                                node: node,
+                                selected: selectedSourceId() === node.id,
+                            }
+                        "
+                    />
+                </div>
+            </div>
+        }
+    </div>
+</div>

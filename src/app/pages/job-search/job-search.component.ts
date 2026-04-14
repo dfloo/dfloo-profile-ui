@@ -21,6 +21,7 @@ export class JobSearchComponent {
     childRoutes = [
         { path: 'resume-builder', label: 'Resume Builder' },
         { path: 'application-tracker', label: 'Application Tracker' },
+        { path: 'system-design', label: 'System Design' },
     ];
     activePath = signal(this.childRoutes[0].path);
 
