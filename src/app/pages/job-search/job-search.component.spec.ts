@@ -95,7 +95,7 @@ describe('JobSearchComponent', () => {
         expect(component.activePath()).toBe('resume-builder');
     });
 
-    it('should expose two childRoutes with expected paths and labels', () => {
+    it('should expose three childRoutes with expected paths and labels', () => {
         fixture = TestBed.createComponent(JobSearchComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();

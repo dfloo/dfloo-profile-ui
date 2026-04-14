@@ -1,19 +1,8 @@
 <div class="system-design-container">
     <div class="system-design-header">
-        <button
-            matButton="filled"
-            color="primary"
-            [matMenuTriggerFor]="componentsMenu"
-        >
+        <button matButton="filled" color="primary" (click)="addNode()">
             Add Component
         </button>
-        <mat-menu #componentsMenu="matMenu">
-            @for (type of componentTypes; track type) {
-                <button mat-menu-item (click)="addNode(type)">
-                    {{ type }}
-                </button>
-            }
-        </mat-menu>
 
         <button
             matButton="outlined"
@@ -66,6 +55,31 @@
                 [style.width.px]="node.width"
                 [style.height.px]="node.height"
             >
+                <div class="node-title-row">
+                    <div class="node-title-text">{{ node.type }}</div>
+                    <button
+                        matIconButton
+                        type="button"
+                        class="node-edit-button"
+                        [matMenuTriggerFor]="typeMenu"
+                        (mousedown)="$event.stopPropagation()"
+                        (click)="$event.stopPropagation()"
+                        aria-label="Change node type"
+                    >
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <mat-menu #typeMenu="matMenu">
+                        @for (type of componentTypes; track type) {
+                            <button
+                                mat-menu-item
+                                (click)="changeNodeType(node.id, type, $event)"
+                            >
+                                {{ type }}
+                            </button>
+                        }
+                    </mat-menu>
+                </div>
+
                 <button
                     matIconButton
                     type="button"
@@ -109,15 +123,17 @@
                 >
                     +
                 </button>
-                <ng-container
-                    *ngComponentOutlet="
-                        presenterByType[node.type];
-                        inputs: {
-                            node: node,
-                            selected: selectedSourceId() === node.id,
-                        }
-                    "
-                />
+                <div class="node-body">
+                    <ng-container
+                        *ngComponentOutlet="
+                            presenterByType[node.type];
+                            inputs: {
+                                node: node,
+                                selected: selectedSourceId() === node.id,
+                            }
+                        "
+                    />
+                </div>
             </div>
         }
     </div>

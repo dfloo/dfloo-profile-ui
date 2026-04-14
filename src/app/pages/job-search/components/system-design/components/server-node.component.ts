@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 
 import { BaseSystemNode } from './base-system-node';
 
@@ -6,8 +7,7 @@ import { BaseSystemNode } from './base-system-node';
     selector: 'system-server-node',
     template: `
         <div class="node-card" [class.is-selected]="selected()">
-            <div class="node-type">Server</div>
-            <div class="node-label">{{ node().label }}</div>
+            <mat-icon class="node-icon">dns</mat-icon>
         </div>
     `,
     styles: [
@@ -16,25 +16,21 @@ import { BaseSystemNode } from './base-system-node';
                 height: 100%;
                 width: 100%;
                 display: flex;
-                flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 0.2rem;
             }
 
-            .node-type {
-                font: var(--mat-sys-label-medium);
+            .node-icon {
+                font-size: 32px;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
                 color: var(--mat-sys-primary);
-                text-transform: uppercase;
-                letter-spacing: 0.03em;
-            }
-
-            .node-label {
-                font: var(--mat-sys-title-small);
             }
         `,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatIcon],
 })
 export class ServerNodeComponent {
     node = input.required<BaseSystemNode>();

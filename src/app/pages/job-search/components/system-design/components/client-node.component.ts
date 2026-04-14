@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    input,
+    signal,
+} from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 
 import { BaseSystemNode } from './base-system-node';
 
@@ -6,8 +12,13 @@ import { BaseSystemNode } from './base-system-node';
     selector: 'system-client-node',
     template: `
         <div class="node-card" [class.is-selected]="selected()">
-            <div class="node-type">Client</div>
-            <div class="node-label">{{ node().label }}</div>
+            <mat-icon
+                class="device-icon"
+                (click)="$event.stopPropagation()"
+                (dblclick)="toggleDeviceIcon($event)"
+            >
+                {{ isMobile() ? 'smartphone' : 'desktop_windows' }}
+            </mat-icon>
         </div>
     `,
     styles: [
@@ -16,27 +27,29 @@ import { BaseSystemNode } from './base-system-node';
                 height: 100%;
                 width: 100%;
                 display: flex;
-                flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 0.2rem;
             }
 
-            .node-type {
-                font: var(--mat-sys-label-medium);
-                color: var(--mat-sys-primary);
-                text-transform: uppercase;
-                letter-spacing: 0.03em;
-            }
-
-            .node-label {
-                font: var(--mat-sys-title-small);
+            .device-icon {
+                cursor: pointer;
+                font-size: 36px;
+                width: 36px;
+                height: 36px;
+                line-height: 36px;
             }
         `,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatIcon],
 })
 export class ClientNodeComponent {
     node = input.required<BaseSystemNode>();
     selected = input(false);
+    isMobile = signal(false);
+
+    toggleDeviceIcon(event: MouseEvent): void {
+        event.stopPropagation();
+        this.isMobile.update((isMobile) => !isMobile);
+    }
 }

@@ -6,15 +6,12 @@ export abstract class BaseSystemNode {
         public readonly type: SystemComponentType,
         public x: number,
         public y: number,
-        public readonly width = 160,
-        public readonly height = 72,
+        public readonly width = 140,
+        public readonly height = 140,
     ) { }
 
     get center(): NodePoint {
-        return {
-            x: this.x + this.width / 2,
-            y: this.y + this.height / 2,
-        };
+        return this.getCenterAt({ x: this.x, y: this.y });
     }
 
     get label(): string {
@@ -26,22 +23,45 @@ export abstract class BaseSystemNode {
         this.y = y;
     }
 
+    getCenterAt(position: NodePoint): NodePoint {
+        return {
+            x: position.x + this.width / 2,
+            y: position.y + this.height / 2,
+        };
+    }
+
     getAnchorToward(target: BaseSystemNode): NodePoint {
-        const current = this.center;
-        const other = target.center;
+        return this.getAnchorTowardAt(
+            target,
+            { x: this.x, y: this.y },
+            { x: target.x, y: target.y },
+        );
+    }
+
+    getAnchorTowardAt(
+        target: BaseSystemNode,
+        selfPosition: NodePoint,
+        targetPosition: NodePoint,
+    ): NodePoint {
+        const current = this.getCenterAt(selfPosition);
+        const other = target.getCenterAt(targetPosition);
         const dx = other.x - current.x;
         const dy = other.y - current.y;
 
         if (Math.abs(dx) >= Math.abs(dy)) {
             return {
-                x: dx >= 0 ? this.x + this.width : this.x,
+                x: dx >= 0
+                    ? selfPosition.x + this.width
+                    : selfPosition.x,
                 y: current.y,
             };
         }
 
         return {
             x: current.x,
-            y: dy >= 0 ? this.y + this.height : this.y,
+            y: dy >= 0
+                ? selfPosition.y + this.height
+                : selfPosition.y,
         };
     }
 }

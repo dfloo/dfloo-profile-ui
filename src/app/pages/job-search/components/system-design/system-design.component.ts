@@ -83,14 +83,12 @@ export class SystemDesignComponent {
                 const sourcePosition = this.getEffectiveNodePosition(source);
                 const targetPosition = this.getEffectiveNodePosition(target);
 
-                const sourceAnchor = this.getAnchorToward(
-                    source,
+                const sourceAnchor = source.getAnchorTowardAt(
                     target,
                     sourcePosition,
                     targetPosition,
                 );
-                const targetAnchor = this.getAnchorToward(
-                    target,
+                const targetAnchor = target.getAnchorTowardAt(
                     source,
                     targetPosition,
                     sourcePosition,
@@ -109,10 +107,10 @@ export class SystemDesignComponent {
 
     private nextNodeId = 1;
 
-    addNode(type: SystemComponentType): void {
+    addNode(): void {
         const offset = (this.nextNodeId - 1) * 16;
         const node = createSystemNode(
-            type,
+            'Client',
             this.nextNodeId,
             24 + offset,
             24 + offset,
@@ -120,6 +118,23 @@ export class SystemDesignComponent {
 
         this.nextNodeId += 1;
         this.nodes.update((nodes) => [...nodes, node]);
+    }
+
+    changeNodeType(
+        nodeId: number,
+        type: SystemComponentType,
+        event: MouseEvent,
+    ): void {
+        event.stopPropagation();
+        this.nodes.update((nodes) =>
+            nodes.map((node) => {
+                if (node.id !== nodeId || node.type === type) {
+                    return node;
+                }
+
+                return createSystemNode(type, node.id, node.x, node.y);
+            }),
+        );
     }
 
     updateNodePosition(nodeId: number, event: CdkDragEnd): void {
@@ -151,36 +166,6 @@ export class SystemDesignComponent {
         }
 
         return { x: node.x, y: node.y };
-    }
-
-    private getAnchorToward(
-        node: BaseSystemNode,
-        target: BaseSystemNode,
-        nodePosition: NodePoint,
-        targetPosition: NodePoint,
-    ): NodePoint {
-        const currentCenter = {
-            x: nodePosition.x + node.width / 2,
-            y: nodePosition.y + node.height / 2,
-        };
-        const targetCenter = {
-            x: targetPosition.x + target.width / 2,
-            y: targetPosition.y + target.height / 2,
-        };
-        const dx = targetCenter.x - currentCenter.x;
-        const dy = targetCenter.y - currentCenter.y;
-
-        if (Math.abs(dx) >= Math.abs(dy)) {
-            return {
-                x: dx >= 0 ? nodePosition.x + node.width : nodePosition.x,
-                y: currentCenter.y,
-            };
-        }
-
-        return {
-            x: currentCenter.x,
-            y: dy >= 0 ? nodePosition.y + node.height : nodePosition.y,
-        };
     }
 
     onNodeClick(nodeId: number): void {
