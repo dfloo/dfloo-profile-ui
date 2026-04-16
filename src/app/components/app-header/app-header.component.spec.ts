@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 
 import { UserService } from '@core/services';
+import { environment } from '../../../environments/environment';
 import { HeaderComponent } from './app-header.component';
 
 describe('HeaderComponent', () => {
@@ -17,7 +18,10 @@ describe('HeaderComponent', () => {
     let mockDialog: jasmine.SpyObj<MatDialog>;
     let mockUserService: jasmine.SpyObj<UserService>;
 
-    const setup = async (isAuthenticated: boolean) => {
+    const setup = async (
+        isAuthenticated: boolean,
+        profilePictureUrl?: string,
+    ) => {
         mockDialog = jasmine.createSpyObj('MatDialog', ['open']);
         mockUserService = jasmine.createSpyObj('UserService', [
             'login',
@@ -26,7 +30,7 @@ describe('HeaderComponent', () => {
             'hasRole',
         ]);
         mockUserService.isAuthenticated$ = of(isAuthenticated);
-        mockUserService.profilePictureUrl$ = of(undefined);
+        mockUserService.profilePictureUrl$ = of(profilePictureUrl);
 
         await TestBed.configureTestingModule({
             imports: [HeaderComponent, WrapperComponent],
@@ -44,7 +48,7 @@ describe('HeaderComponent', () => {
 
     describe('Unauthenticated', () => {
         beforeEach(async () => {
-            await setup(false);
+            await setup(false, 'https://example.com/picture.png');
         });
 
         it('should create', () => {
@@ -70,6 +74,16 @@ describe('HeaderComponent', () => {
             expect(await menu.isOpen()).toBeTrue();
         });
 
+        it('should show account_circle in non-production when profile picture exists', async () => {
+            const profilePicture = fixture.nativeElement.querySelector(
+                'img.profile-picture',
+            );
+            const accountIcon = fixture.nativeElement.querySelector('.account-icon');
+
+            expect(profilePicture).toBeNull();
+            expect(accountIcon?.textContent?.trim()).toBe('account_circle');
+        });
+
         it('should show the unauthenticated user menu options', async () => {
             const options = await getUserMenuOptions();
 
@@ -86,6 +100,30 @@ describe('HeaderComponent', () => {
             const options = await getUserMenuOptions();
 
             expect(options).toEqual(['Profile', 'Settings', 'Log Out']);
+        });
+    });
+
+    describe('Production avatar', () => {
+        const originalProduction = environment.production;
+
+        beforeEach(async () => {
+            environment.production = true;
+            await setup(true, 'https://example.com/picture.png');
+        });
+
+        afterEach(() => {
+            environment.production = originalProduction;
+        });
+
+        it('should show profile picture when available in production', () => {
+            const profilePicture = fixture.nativeElement.querySelector(
+                'img.profile-picture',
+            );
+
+            expect(profilePicture).not.toBeNull();
+            expect(profilePicture?.getAttribute('src')).toBe(
+                'https://example.com/picture.png',
+            );
         });
     });
 

@@ -16,6 +16,8 @@ import { Observable } from 'rxjs';
 import { UserService } from '@core/services';
 import { UserModalComponent, UserModalView } from '@components/user-modal';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
     selector: 'app-header',
     templateUrl: './app-header.component.html',
@@ -36,6 +38,7 @@ export class HeaderComponent {
     title = input('');
     toggleSidenav = output();
 
+    isProduction = environment.production;
     isAuthenticated$: Observable<boolean>;
     UserModalView = UserModalView;
     profilePictureUrl$: Observable<string | undefined>;
