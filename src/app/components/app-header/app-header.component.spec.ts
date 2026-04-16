@@ -48,7 +48,7 @@ describe('HeaderComponent', () => {
 
     describe('Unauthenticated', () => {
         beforeEach(async () => {
-            await setup(false);
+            await setup(false, 'https://example.com/picture.png');
         });
 
         it('should create', () => {
@@ -75,12 +75,10 @@ describe('HeaderComponent', () => {
         });
 
         it('should show account_circle in non-production when profile picture exists', async () => {
-            await setup(false, 'https://example.com/picture.png');
-
             const profilePicture = fixture.nativeElement.querySelector(
                 'img.profile-picture',
             );
-            const accountIcon = fixture.nativeElement.querySelector('mat-icon');
+            const accountIcon = fixture.nativeElement.querySelector('.account-icon');
 
             expect(profilePicture).toBeNull();
             expect(accountIcon?.textContent?.trim()).toBe('account_circle');
