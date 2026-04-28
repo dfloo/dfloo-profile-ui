@@ -1,0 +1,18 @@
+<div class="page-header">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-select
+            [value]="activeFeature()"
+            (selectionChange)="activeFeature.set($event.value)"
+        >
+            @for (f of features; track f.value) {
+                <mat-option [value]="f.value">{{ f.label }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+</div>
+
+@if (activeFeature() === 'flip-book') {
+    <flip-book />
+} @else {
+    <slide-puzzle />
+}

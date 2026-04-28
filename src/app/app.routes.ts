@@ -36,10 +36,10 @@ export const sidenavRoutes = [
         ]
     },
     {
-        path: 'bandits-story',
-        title: "Bandit's Story",
+        path: 'bandits-corner',
+        title: "Bandit's Corner",
         loadComponent: () =>
-            import('@pages/bandits-story').then((m) => m.BanditsStoryComponent),
+            import('@pages/bandits-corner').then((m) => m.BanditsCornerComponent),
     },
 ];
 
