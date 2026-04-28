@@ -3,6 +3,7 @@
         [value]="gridSize()"
         (change)="onGridChange($event)"
         hideSingleSelectionIndicator
+        aria-label="Grid size"
     >
         @for (size of gridOptions; track size) {
             <mat-button-toggle [value]="size">{{ size }}×{{ size }}</mat-button-toggle>
@@ -10,39 +11,44 @@
     </mat-button-toggle-group>
 
     <div class="image-selector">
-        <button mat-icon-button [disabled]="imageCount <= 1" (click)="prevImage()">
+        <button mat-icon-button [disabled]="imageCount <= 1" (click)="prevImage()" aria-label="Previous image">
             <mat-icon>chevron_left</mat-icon>
         </button>
         <span class="image-counter">{{ imageIndex() + 1 }} / {{ imageCount }}</span>
-        <button mat-icon-button [disabled]="imageCount <= 1" (click)="nextImage()">
+        <button mat-icon-button [disabled]="imageCount <= 1" (click)="nextImage()" aria-label="Next image">
             <mat-icon>chevron_right</mat-icon>
         </button>
     </div>
 
     <button mat-stroked-button (click)="newGame()">New Game</button>
 
-    <span class="move-count">Moves: {{ moveCount() }}</span>
+    <span class="move-count" aria-live="polite" aria-atomic="true">Moves: {{ moveCount() }}</span>
 </div>
 
 <div
     class="grid"
+    role="group"
+    [attr.aria-label]="gridSize() + '×' + gridSize() + ' slide puzzle'"
     [style.grid-template-columns]="'repeat(' + gridSize() + ', 1fr)'"
+    [style.grid-template-rows]="'repeat(' + gridSize() + ', 1fr)'"
 >
     @for (tile of tiles(); track $index; let i = $index) {
         @if (tile !== null) {
-            <div
+            <button
                 class="tile"
                 [style]="getTileStyle(tile)"
                 (click)="onTileClick(i)"
-            ></div>
+                [attr.aria-label]="getTileLabel(tile, i)"
+                [attr.aria-disabled]="!canMove(i)"
+            ></button>
         } @else {
-            <div class="tile blank"></div>
+            <div class="tile blank" aria-hidden="true"></div>
         }
     }
 </div>
 
 @if (isSolved()) {
-    <div class="solved-banner">
+    <div class="solved-banner" role="status">
         Solved in {{ moveCount() }} moves!
     </div>
 }

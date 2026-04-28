@@ -91,6 +91,23 @@ export class SlidePuzzleComponent implements OnInit {
         this.moveCount.update((c) => c + 1);
     }
 
+    getTileLabel(tileId: number, index: number): string {
+        const n = this.gridSize();
+        const row = Math.floor(index / n) + 1;
+        const col = (index % n) + 1;
+        return `Piece ${tileId + 1} of ${n * n - 1}, row ${row}, column ${col}`;
+    }
+
+    canMove(index: number): boolean {
+        if (this.isSolved()) return false;
+        const ts = this.tiles();
+        const blank = ts.indexOf(null);
+        const n = this.gridSize();
+        const dr = Math.abs(Math.floor(index / n) - Math.floor(blank / n));
+        const dc = Math.abs((index % n) - (blank % n));
+        return dr + dc === 1;
+    }
+
     getTileStyle(tileId: number): Record<string, string> {
         const n = this.gridSize();
         const row = Math.floor(tileId / n);
