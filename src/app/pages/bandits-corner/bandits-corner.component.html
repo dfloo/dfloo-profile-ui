@@ -1,4 +1,4 @@
-<div class="page-header">
+<aside class="feature-sidebar">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-select
             [value]="activeFeature()"
@@ -9,10 +9,12 @@
             }
         </mat-select>
     </mat-form-field>
-</div>
+</aside>
 
-@if (activeFeature() === 'flip-book') {
-    <flip-book />
-} @else {
-    <slide-puzzle />
-}
+<div class="feature-content">
+    @if (activeFeature() === 'flip-book') {
+        <flip-book />
+    } @else {
+        <slide-puzzle />
+    }
+</div>
