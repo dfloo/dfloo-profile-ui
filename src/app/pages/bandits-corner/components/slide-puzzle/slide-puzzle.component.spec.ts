@@ -57,12 +57,13 @@ describe('SlidePuzzleComponent', () => {
 
     it('onTileClick slides an adjacent tile into the blank', () => {
         const n = component.gridSize();
-        // Place blank at last position and a tile adjacent above it
-        const solved = [
+        // Place blank at last position with two tiles swapped so the board is not solved
+        const tiles = [
             ...(Array.from({ length: n * n - 1 }, (_, i) => i) as (number | null)[]),
             null,
         ];
-        component.tiles.set(solved);
+        [tiles[0], tiles[1]] = [tiles[1], tiles[0]];
+        component.tiles.set(tiles);
 
         const blankIndex = n * n - 1;
         const adjacentIndex = blankIndex - n; // tile directly above blank
