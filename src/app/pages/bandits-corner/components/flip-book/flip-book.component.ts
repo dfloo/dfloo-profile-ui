@@ -18,23 +18,23 @@ export class FlipBookComponent {
     private initialPages: Page[] = [
         {
             id: 0,
-            front: 'assets/page_1_front.png',
-            back: 'assets/page_1_back.png',
+            front: 'assets/flip-book/page_1_front.png',
+            back: 'assets/flip-book/page_1_back.png',
         },
         {
             id: 1,
-            front: 'assets/page_2_front.png',
-            back: 'assets/page_2_back.png',
+            front: 'assets/flip-book/page_2_front.png',
+            back: 'assets/flip-book/page_2_back.png',
         },
         {
             id: 2,
-            front: 'assets/page_3_front.png',
-            back: 'assets/page_3_back.png',
+            front: 'assets/flip-book/page_3_front.png',
+            back: 'assets/flip-book/page_3_back.png',
         },
         {
             id: 3,
-            front: 'assets/page_4_front.png',
-            back: 'assets/page_4_back.png',
+            front: 'assets/flip-book/page_4_front.png',
+            back: 'assets/flip-book/page_4_back.png',
         },
     ];
     pages = signal<Page[]>(this.initialPages);
