@@ -5,6 +5,7 @@ import {
     OnInit,
     signal,
 } from '@angular/core';
+import { NgStyle } from '@angular/common';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -22,7 +23,7 @@ const GRID_OPTIONS = [3, 4, 5, 6];
     templateUrl: './slide-puzzle.component.html',
     styleUrl: './slide-puzzle.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatButtonToggleModule, MatIconButton, MatIcon, MatButton],
+    imports: [NgStyle, MatButtonToggleModule, MatIconButton, MatIcon, MatButton],
 })
 export class SlidePuzzleComponent implements OnInit {
     readonly gridOptions = GRID_OPTIONS;

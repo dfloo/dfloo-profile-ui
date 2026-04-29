@@ -36,10 +36,10 @@
         @if (tile !== null) {
             <button
                 class="tile"
-                [style]="getTileStyle(tile)"
+                [ngStyle]="getTileStyle(tile)"
                 (click)="onTileClick(i)"
                 [attr.aria-label]="getTileLabel(tile, i)"
-                [attr.aria-disabled]="!canMove(i)"
+                [disabled]="!canMove(i)"
             ></button>
         } @else {
             <div class="tile blank" aria-hidden="true"></div>
