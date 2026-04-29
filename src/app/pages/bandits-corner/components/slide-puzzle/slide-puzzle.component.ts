@@ -9,9 +9,10 @@ import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
-// TODO: Replace/add Bandit puzzle images here when provided
 const PUZZLE_IMAGES = [
-    'assets/profile_pic.jpg',
+    'assets/slide-puzzle/shopping.png',
+    'assets/slide-puzzle/garden.png',
+    'assets/slide-puzzle/bday.png',
 ];
 
 const GRID_OPTIONS = [3, 4, 5, 6];
