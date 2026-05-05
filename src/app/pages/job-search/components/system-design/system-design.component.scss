@@ -21,16 +21,8 @@
     border: 1px solid var(--mat-sys-outline-variant);
     border-radius: 12px;
     background-image:
-        linear-gradient(
-            to right,
-            rgba(107, 114, 128, 0.12) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            to bottom,
-            rgba(107, 114, 128, 0.12) 1px,
-            transparent 1px
-        );
+        linear-gradient(to right, rgba(107, 114, 128, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(107, 114, 128, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
     background-color: var(--mat-sys-surface);
     margin-bottom: 80px;
@@ -43,9 +35,7 @@
     height: 100%;
 }
 
-.connector-group {
-    cursor: pointer;
-}
+.connector-group { cursor: pointer; }
 
 .connector-hitbox {
     stroke: transparent;
@@ -59,8 +49,7 @@
     stroke-linecap: round;
     opacity: 0.8;
     pointer-events: none;
-    transition: stroke 120ms ease-out, stroke-width 120ms ease-out,
-        filter 120ms ease-out;
+    transition: stroke 120ms ease-out, stroke-width 120ms ease-out, filter 120ms ease-out;
 }
 
 .connector-group:hover .connector {
@@ -109,10 +98,21 @@
     color: var(--mat-sys-primary);
 }
 
-.node-edit-button {
+// Shared hidden state for all overlay controls
+.node-edit-button,
+.node-delete-button,
+.connector-source {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.9);
+    transition: opacity 120ms ease-out, transform 120ms ease-out, visibility 120ms ease-out;
+}
+
+.node-edit-button,
+.node-delete-button {
     position: absolute;
     top: -16px;
-    right: -16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,15 +122,12 @@
     padding: 0;
     background: var(--mat-sys-surface);
     border: 1px solid var(--mat-sys-outline);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: scale(0.9);
-    transition: opacity 120ms ease-out, transform 120ms ease-out,
-        visibility 120ms ease-out;
 }
 
-.node-edit-button mat-icon {
+.node-edit-button { right: -16px; }
+
+.node-edit-button mat-icon,
+.node-delete-button mat-icon {
     margin: 0;
     font-size: 18px;
     width: 18px;
@@ -138,13 +135,17 @@
     line-height: 18px;
 }
 
+.node-delete-button mat-icon { color: var(--mat-sys-error); }
+
 .node-edit-button:hover {
     border-color: var(--mat-sys-primary);
     box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
 }
 
-.canvas-node:hover .node-edit-button,
-.canvas-node.selected-source .node-edit-button {
+// Show overlay controls on hover or when selected as connector source
+.canvas-node:is(:hover, .selected-source) .node-edit-button,
+.canvas-node:is(:hover, .selected-source) .node-delete-button,
+.canvas-node:is(:hover, .selected-source) .connector-source {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -174,45 +175,13 @@
     color: var(--mat-sys-primary);
     font: var(--mat-sys-title-small);
     line-height: 1;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: scale(0.9);
-    transition: opacity 120ms ease-out, transform 120ms ease-out,
-        visibility 120ms ease-out;
     z-index: 2;
 }
 
 .node-delete-button {
-    position: absolute;
-    top: -16px;
     left: -16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    padding: 0;
-    background: var(--mat-sys-surface);
-    border: 1px solid var(--mat-sys-outline);
     color: var(--mat-sys-error);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: scale(0.9);
-    transition: opacity 120ms ease-out, transform 120ms ease-out,
-        visibility 120ms ease-out;
     z-index: 3;
-}
-
-.node-delete-button mat-icon {
-    color: var(--mat-sys-error);
-    margin: 0;
-    font-size: 18px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
 }
 
 .node-delete-button:hover {
@@ -220,68 +189,40 @@
     box-shadow: 0 0 0 2px rgba(186, 26, 26, 0.2);
 }
 
-.canvas-node:hover .node-delete-button,
-.canvas-node.selected-source .node-delete-button {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: scale(1);
-}
-
 .connector-source:hover {
     border-color: var(--mat-sys-primary);
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25),
-        0 2px 8px rgba(15, 23, 42, 0.2);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25), 0 2px 8px rgba(15, 23, 42, 0.2);
 }
 
-.canvas-node:hover .connector-source,
-.canvas-node.selected-source .connector-source {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: scale(1);
-}
-
-.connector-source.top {
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%) scale(0.9);
-}
-
-.connector-source.right {
-    top: 50%;
-    right: -10px;
-    transform: translateY(-50%) scale(0.9);
-}
-
+// Position anchors for directional connector sources
+.connector-source.top,
 .connector-source.bottom {
-    bottom: -10px;
     left: 50%;
     transform: translateX(-50%) scale(0.9);
 }
 
+.connector-source.top { top: -10px; }
+.connector-source.bottom { bottom: -10px; }
+
+.connector-source.right,
 .connector-source.left {
     top: 50%;
-    left: -10px;
     transform: translateY(-50%) scale(0.9);
 }
 
-.canvas-node:hover .connector-source.top,
-.canvas-node.selected-source .connector-source.top,
-.canvas-node:hover .connector-source.bottom,
-.canvas-node.selected-source .connector-source.bottom {
+.connector-source.right { right: -10px; }
+.connector-source.left { left: -10px; }
+
+// Override transform when shown (preserves axis centering)
+.canvas-node:is(:hover, .selected-source) .connector-source:is(.top, .bottom) {
     transform: translateX(-50%) scale(1);
 }
 
-.canvas-node:hover .connector-source.right,
-.canvas-node.selected-source .connector-source.right,
-.canvas-node:hover .connector-source.left,
-.canvas-node.selected-source .connector-source.left {
+.canvas-node:is(:hover, .selected-source) .connector-source:is(.right, .left) {
     transform: translateY(-50%) scale(1);
 }
 
 .canvas-node.selected-source {
     border-color: var(--mat-sys-primary);
-    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25),
-        0 8px 18px rgba(15, 23, 42, 0.14);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25), 0 8px 18px rgba(15, 23, 42, 0.14);
 }

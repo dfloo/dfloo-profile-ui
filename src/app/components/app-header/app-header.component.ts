@@ -14,10 +14,13 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { Observable } from 'rxjs';
 
 import { UserService } from '@core/services';
-import { UserModalComponent, UserModalView } from '@components/user-modal';
-import { SignupModalComponent } from '@components/signup-modal';
 
 import { environment } from '../../../environments/environment';
+
+export enum UserModalView {
+    Profile = 0,
+    Settings = 1,
+}
 
 @Component({
     selector: 'app-header',
@@ -58,17 +61,20 @@ export class HeaderComponent {
     logout(): void {
         this.userService.logout();
     }
+
     signup(): void {
-        this.dialog.open(SignupModalComponent, {
-            minWidth: '40vw',
+        import('@components/signup-modal').then(({ SignupModalComponent }) => {
+            this.dialog.open(SignupModalComponent, { minWidth: '40vw' });
         });
     }
 
     openUserModal(view: UserModalView, showTabs = true): void {
-        this.dialog.open(UserModalComponent, {
-            minHeight: '75vh',
-            minWidth: '65vw',
-            data: { view, showTabs },
+        import('@components/user-modal').then(({ UserModalComponent }) => {
+            this.dialog.open(UserModalComponent, {
+                minHeight: '75vh',
+                minWidth: '65vw',
+                data: { view, showTabs },
+            });
         });
     }
 }
