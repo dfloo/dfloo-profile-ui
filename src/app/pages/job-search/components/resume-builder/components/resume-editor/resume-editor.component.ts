@@ -88,6 +88,7 @@ export class ResumeEditorComponent implements OnInit {
     back = output();
     resume = model<Resume>();
     resumeSnapshot?: Resume;
+    isPdfVisible = signal(true);
     settingsFields: FormlyFieldConfig[] = [];
     summaryFields: FormlyFieldConfig[] = [];
     skillsFields: FormlyFieldConfig[] = [];
@@ -280,6 +281,10 @@ export class ResumeEditorComponent implements OnInit {
         } else {
             this.downloadResume.emit(resume);
         }
+    }
+
+    togglePdfPanel(): void {
+        this.isPdfVisible.update((v) => !v);
     }
 
     fetchPdf(resume: Resume): void {

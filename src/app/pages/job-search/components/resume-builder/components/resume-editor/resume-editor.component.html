@@ -40,6 +40,18 @@
             }
         </div>
         <div>
+            @if (!resume()?.isNew) {
+                <button
+                    matIconButton
+                    (click)="togglePdfPanel()"
+                    [matTooltip]="isPdfVisible() ? 'Hide Preview' : 'Show Preview'"
+                    [attr.aria-label]="isPdfVisible() ? 'Hide PDF Preview' : 'Show PDF Preview'"
+                >
+                    <mat-icon class="material-icons-outlined">
+                        {{ isPdfVisible() ? 'chrome_reader_mode' : 'picture_as_pdf' }}
+                    </mat-icon>
+                </button>
+            }
             <button
                 matIconButton
                 (click)="openInNewTab()"
@@ -154,7 +166,7 @@
             </div>
         </mat-accordion>
         </div>
-        @if (!resume()?.isNew) {
+        @if (!resume()?.isNew && isPdfVisible()) {
             <div class="pdf-viewer-panel">
                 @if (isLoadingPdf()) {
                     <div class="pdf-loading">
