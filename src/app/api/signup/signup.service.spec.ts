@@ -16,12 +16,12 @@ describe('SignupService', () => {
         service = TestBed.inject(SignupService);
     });
 
-    it('#createSignupRequest should POST to invitation-requests with the request body', (done) => {
+    it('#createSignupRequest should POST to signup-requests with the request body', (done) => {
         const req: SignupRequest = { name: 'Test User', email: 'test@example.com', reason: 'I want access' };
         mockApiService.post.and.returnValue(of(undefined));
 
         service.createSignupRequest(req).subscribe(() => {
-            expect(mockApiService.post).toHaveBeenCalledWith('invitation-requests', req);
+            expect(mockApiService.post).toHaveBeenCalledWith('signup-requests', req);
             done();
         });
     });
