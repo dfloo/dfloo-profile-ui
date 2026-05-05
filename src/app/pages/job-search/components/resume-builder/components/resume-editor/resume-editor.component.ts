@@ -31,7 +31,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
-import { finalize, switchMap, take } from 'rxjs';
+import { catchError, EMPTY, map, Subject, switchMap, take, tap } from 'rxjs';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import cloneDeep from 'lodash-es/cloneDeep';
 import isEqual from 'lodash-es/isEqual';
@@ -102,6 +102,7 @@ export class ResumeEditorComponent implements OnInit {
     private lastFetchedResumeId?: string;
     private lastFetchedUpdated?: string;
     private currentBlobUrl?: string;
+    private readonly fetchTrigger$ = new Subject<Resume>();
 
     @ViewChildren(MatExpansionPanel)
     expansionPanels!: QueryList<MatExpansionPanel>;
@@ -142,6 +143,59 @@ export class ResumeEditorComponent implements OnInit {
                     resume.updated !== this.lastFetchedUpdated)
             ) {
                 this.fetchPdf(resume);
+            }
+        });
+
+        // Single pipeline — switchMap cancels any in-flight request when a new
+        // fetch is triggered, preventing stale PDFs from overwriting newer ones.
+        this.fetchTrigger$.pipe(
+            tap(() => {
+                this.isLoadingPdf.set(true);
+                this.pdfError.set(false);
+                this.safePdfUrl.set(null);
+                // Clear immediately so openInNewTab / onDownloadResume can't
+                // serve the old cached blob while the new request is in flight.
+                if (this.currentBlobUrl) {
+                    URL.revokeObjectURL(this.currentBlobUrl);
+                    this.currentBlobUrl = undefined;
+                }
+            }),
+            switchMap((resume) =>
+                this.userService.isAuthenticated$.pipe(
+                    take(1),
+                    switchMap((isAuthenticated) => {
+                        const { id } = resume;
+                        if (isAuthenticated && id) {
+                            return this.resumeService.downloadResume(id);
+                        }
+                        return this.resumeService.downloadGuestResume(resume);
+                    }),
+                    map((pdf) => ({ pdf, resume })),
+                    catchError(() => {
+                        this.pdfError.set(true);
+                        this.isLoadingPdf.set(false);
+                        return EMPTY;
+                    }),
+                )
+            ),
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe(({ pdf, resume: fetchedResume }) => {
+            this.isLoadingPdf.set(false);
+            this.currentBlobUrl = URL.createObjectURL(pdf);
+            this.safePdfUrl.set(
+                this.sanitizer.bypassSecurityTrustResourceUrl(
+                    `${this.currentBlobUrl}#toolbar=0`,
+                ),
+            );
+            this.lastFetchedResumeId = fetchedResume.id;
+            this.lastFetchedUpdated = fetchedResume.updated;
+        });
+
+        // Revoke the cached blob URL when the component is destroyed to avoid
+        // accumulating unreleased object URLs over the page lifetime.
+        this.destroyRef.onDestroy(() => {
+            if (this.currentBlobUrl) {
+                URL.revokeObjectURL(this.currentBlobUrl);
             }
         });
     }
@@ -288,37 +342,6 @@ export class ResumeEditorComponent implements OnInit {
     }
 
     fetchPdf(resume: Resume): void {
-        this.isLoadingPdf.set(true);
-        this.pdfError.set(false);
-
-        this.userService.isAuthenticated$.pipe(
-            take(1),
-            switchMap((isAuthenticated) => {
-                const { id } = resume;
-                if (isAuthenticated && id) {
-                    return this.resumeService.downloadResume(id);
-                }
-                return this.resumeService.downloadGuestResume(resume);
-            }),
-            takeUntilDestroyed(this.destroyRef),
-            finalize(() => this.isLoadingPdf.set(false)),
-        ).subscribe({
-            next: (pdf) => {
-                if (this.currentBlobUrl) {
-                    URL.revokeObjectURL(this.currentBlobUrl);
-                }
-                this.currentBlobUrl = URL.createObjectURL(pdf);
-                this.safePdfUrl.set(
-                    this.sanitizer.bypassSecurityTrustResourceUrl(
-                        `${this.currentBlobUrl}#toolbar=0`,
-                    ),
-                );
-                this.lastFetchedResumeId = resume.id;
-                this.lastFetchedUpdated = resume.updated;
-            },
-            error: () => {
-                this.pdfError.set(true);
-            },
-        });
+        this.fetchTrigger$.next(resume);
     }
 }
