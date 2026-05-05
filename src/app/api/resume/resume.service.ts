@@ -100,6 +100,11 @@ export class ResumeService {
         return this.apiService.download<Blob>('download/resume/default');
     }
 
+    getFonts(): Observable<{ value: string; label: string }[]> {
+        return this.apiService
+            .get<{ value: string; label: string }[]>(`${this.path}/fonts`);
+    }
+
     downloadGuestResume(resume: Resume): Observable<Blob> {
         return this.apiService.download<Blob>(
             'download/resume',
