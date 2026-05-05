@@ -7,6 +7,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import {
     Component,
+    DestroyRef,
     effect,
     inject,
     input,
@@ -14,8 +15,11 @@ import {
     OnInit,
     output,
     QueryList,
+    signal,
     ViewChildren,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import {
@@ -27,6 +31,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
+import { finalize, switchMap, take } from 'rxjs';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import cloneDeep from 'lodash-es/cloneDeep';
 import isEqual from 'lodash-es/isEqual';
@@ -38,6 +43,8 @@ import {
 } from '@components/message-dialog';
 import { defaultSections, Resume, Section, SectionType } from '@models/resume';
 
+import { ResumeService } from '@api/resume';
+import { UserService } from '@core/services';
 import { ResumeFormFieldsService } from '../../services';
 import { ResumeSectionFormComponent } from '../resume-section-form';
 
@@ -68,6 +75,10 @@ import { ResumeSectionFormComponent } from '../resume-section-form';
 export class ResumeEditorComponent implements OnInit {
     private formFieldsService = inject(ResumeFormFieldsService);
     private dialog = inject(MatDialog);
+    private sanitizer = inject(DomSanitizer);
+    private resumeService = inject(ResumeService);
+    private userService = inject(UserService);
+    private destroyRef = inject(DestroyRef);
 
     isDownloadingResume = input<boolean>(false);
     saveResume = output<Resume>();
@@ -84,6 +95,12 @@ export class ResumeEditorComponent implements OnInit {
     educationFields: FormlyFieldConfig[] = [];
     SectionType = SectionType;
     expandLastPanel?: boolean;
+    safePdfUrl = signal<SafeResourceUrl | null>(null);
+    isLoadingPdf = signal(false);
+    pdfError = signal(false);
+    private lastFetchedResumeId?: string;
+    private lastFetchedUpdated?: string;
+    private currentBlobUrl?: string;
 
     @ViewChildren(MatExpansionPanel)
     expansionPanels!: QueryList<MatExpansionPanel>;
@@ -109,13 +126,21 @@ export class ResumeEditorComponent implements OnInit {
 
     constructor() {
         effect(() => {
-            this.resumeSnapshot = cloneDeep(this.resume());
+            const resume = this.resume();
+            this.resumeSnapshot = cloneDeep(resume);
             this.setFormFields();
             if (this.expandLastPanel) {
                 setTimeout(() => {
                     this.expansionPanels.last.expanded = true;
                     this.expandLastPanel = false;
                 });
+            }
+            if (
+                resume?.id &&
+                (resume.id !== this.lastFetchedResumeId ||
+                    resume.updated !== this.lastFetchedUpdated)
+            ) {
+                this.fetchPdf(resume);
             }
         });
     }
@@ -232,5 +257,63 @@ export class ResumeEditorComponent implements OnInit {
         if (sections) {
             moveItemInArray(sections, previousIndex, currentIndex);
         }
+    }
+
+    openInNewTab(): void {
+        const resume = this.resume();
+        if (!resume) return;
+        if (this.currentBlobUrl) {
+            window.open(this.currentBlobUrl);
+        } else {
+            this.viewResume.emit(resume);
+        }
+    }
+
+    onDownloadResume(): void {
+        const resume = this.resume();
+        if (!resume) return;
+        if (this.currentBlobUrl) {
+            const link = document.createElement('a');
+            link.href = this.currentBlobUrl;
+            link.download = `${resume.fileName}.pdf`;
+            link.click();
+        } else {
+            this.downloadResume.emit(resume);
+        }
+    }
+
+    fetchPdf(resume: Resume): void {
+        this.isLoadingPdf.set(true);
+        this.pdfError.set(false);
+
+        this.userService.isAuthenticated$.pipe(
+            take(1),
+            switchMap((isAuthenticated) => {
+                const { id } = resume;
+                if (isAuthenticated && id) {
+                    return this.resumeService.downloadResume(id);
+                }
+                return this.resumeService.downloadGuestResume(resume);
+            }),
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => this.isLoadingPdf.set(false)),
+        ).subscribe({
+            next: (pdf) => {
+                if (this.currentBlobUrl) {
+                    URL.revokeObjectURL(this.currentBlobUrl);
+                }
+                this.currentBlobUrl = URL.createObjectURL(pdf);
+                this.safePdfUrl.set(
+                    this.sanitizer.bypassSecurityTrustResourceUrl(
+                        `${this.currentBlobUrl}#toolbar=0`,
+                    ),
+                );
+                this.lastFetchedResumeId = resume.id;
+                this.lastFetchedUpdated = resume.updated;
+            },
+            error: () => {
+                this.pdfError.set(true);
+            },
+        });
     }
 }
