@@ -23,12 +23,12 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatToolbar } from '@angular/material/toolbar';
 import { finalize } from 'rxjs';
 
-import { InvitationRequestService } from '@api/invitation-request/invitation-request.service';
+import { SignupService } from '@api/signup';
 import { SnackBarService } from '@core/services';
 
 @Component({
-    templateUrl: './request-invitation-modal.component.html',
-    styleUrl: './request-invitation-modal.component.scss',
+    templateUrl: './signup-modal.component.html',
+    styleUrl: './signup-modal.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         MatButton,
@@ -45,7 +45,7 @@ import { SnackBarService } from '@core/services';
 })
 export class SignupModalComponent {
     private dialogRef = inject(MatDialogRef<SignupModalComponent>);
-    private invitationRequestService = inject(InvitationRequestService);
+    private signupService = inject(SignupService);
     private snackBarService = inject(SnackBarService);
 
     isSubmitting = signal(false);
@@ -63,12 +63,12 @@ export class SignupModalComponent {
         if (this.form.invalid || this.isSubmitting()) return;
 
         this.isSubmitting.set(true);
-        this.invitationRequestService
-            .createInvitationRequest(this.form.getRawValue())
+        this.signupService
+            .createSignupRequest(this.form.getRawValue())
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
                 next: () => {
-                    this.snackBarService.open("Invitation request sent! You'll hear back soon.");
+                    this.snackBarService.open("Signup request sent! You'll hear back soon.");
                     this.dialogRef.close();
                 },
             });

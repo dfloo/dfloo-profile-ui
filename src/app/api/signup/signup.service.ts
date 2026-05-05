@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { ApiService } from '../api.service';
 
-export interface InvitationRequest {
+export interface SignupRequest {
     name: string;
     email: string;
     reason: string;
@@ -12,10 +12,10 @@ export interface InvitationRequest {
 @Injectable({
     providedIn: 'root',
 })
-export class InvitationRequestService {
+export class SignupService {
     private apiService = inject(ApiService);
 
-    createInvitationRequest(req: InvitationRequest): Observable<void> {
+    createSignupRequest(req: SignupRequest): Observable<void> {
         return this.apiService.post('invitation-requests', req);
     }
 }

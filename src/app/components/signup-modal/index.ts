@@ -1,1 +1,1 @@
-export * from './request-invitation-modal.component';
+export * from './signup-modal.component';

@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { of, Subject } from 'rxjs';
 
 import { ResumeService } from '@api/resume';
+import { MeetingRequestModalComponent } from '@components/meeting-request-modal';
 
 import { WelcomeComponent } from './welcome.component';
 
@@ -10,18 +12,19 @@ describe('WelcomeComponent', () => {
     let component: WelcomeComponent;
     let fixture: ComponentFixture<WelcomeComponent>;
     let mockResumeService: jasmine.SpyObj<ResumeService>;
+    let mockDialog: jasmine.SpyObj<MatDialog>;
 
     beforeEach(async () => {
         mockResumeService = jasmine.createSpyObj('ResumeService', [
             'downloadDefaultResume',
         ]);
+        mockDialog = jasmine.createSpyObj('MatDialog', ['open']);
+
         await TestBed.configureTestingModule({
             imports: [WelcomeComponent],
             providers: [
-                {
-                    provide: ResumeService,
-                    useValue: mockResumeService,
-                },
+                { provide: ResumeService, useValue: mockResumeService },
+                { provide: MatDialog, useValue: mockDialog },
             ],
         }).compileComponents();
 
@@ -42,90 +45,87 @@ describe('WelcomeComponent', () => {
 
     it('getBackground returns asset url', () => {
         const card = component.welcomeCards[0];
-        const bg = component.getBackground(card);
-        expect(bg).toEqual({
-            'background-image': `url('/assets/${card.background}')`
+        expect(component.getBackground(card)).toEqual({
+            'background-image': `url('/assets/${card.background}')`,
         });
     });
 
-    it('viewSocial opens correct urls', () => {
-        spyOn(window, 'open');
+    describe('viewSocial', () => {
+        beforeEach(() => spyOn(window, 'open'));
 
-        component.viewSocial('github');
-        expect(window.open).toHaveBeenCalledWith('https://github.com/dfloo');
+        it('opens github profile', () => {
+            component.viewSocial('github');
+            expect(window.open).toHaveBeenCalledWith('https://github.com/dfloo');
+        });
 
-        (window.open as jasmine.Spy).calls.reset();
-
-        component.viewSocial('linkedin');
-        expect(window.open).toHaveBeenCalledWith(
-            'https://www.linkedin.com/in/dfloo'
-        );
+        it('opens linkedin profile', () => {
+            component.viewSocial('linkedin');
+            expect(window.open).toHaveBeenCalledWith('https://www.linkedin.com/in/dfloo');
+        });
     });
 
-    it('viewResume downloads resume and opens blob url', () => {
-        const blob = new Blob(['pdf'], { type: 'application/pdf' });
-        mockResumeService.downloadDefaultResume.and.returnValue(of(blob));
-
-        spyOn(URL, 'createObjectURL').and.returnValue('blob:mock');
-        spyOn(window, 'open');
-
-        component.viewResume();
-
-        expect(mockResumeService.downloadDefaultResume).toHaveBeenCalled();
-        expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
-        expect(window.open).toHaveBeenCalledWith('blob:mock');
+    describe('scheduleMeeting', () => {
+        it('opens MeetingRequestModalComponent dialog', () => {
+            component.scheduleMeeting();
+            expect(mockDialog.open).toHaveBeenCalledWith(
+                MeetingRequestModalComponent,
+                jasmine.objectContaining({ minWidth: '40vw' }),
+            );
+        });
     });
 
-    it('shows spinner and disables resume button while downloading', () => {
-        const download$ = new Subject<Blob>();
-        mockResumeService.downloadDefaultResume.and.returnValue(
-            download$.asObservable()
-        );
+    describe('viewResume', () => {
+        it('downloads resume and opens blob url', () => {
+            const blob = new Blob(['pdf'], { type: 'application/pdf' });
+            mockResumeService.downloadDefaultResume.and.returnValue(of(blob));
+            spyOn(URL, 'createObjectURL').and.returnValue('blob:mock');
+            spyOn(window, 'open');
 
-        const resumeButton = fixture.debugElement.query(
-            By.css('.resume-button')
-        ).nativeElement as HTMLButtonElement;
+            component.viewResume();
 
-        resumeButton.click();
-        fixture.detectChanges();
+            expect(mockResumeService.downloadDefaultResume).toHaveBeenCalled();
+            expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
+            expect(window.open).toHaveBeenCalledWith('blob:mock');
+        });
 
-        expect(component.isDownloadingResume()).toBeTrue();
-        expect(resumeButton.disabled).toBeTrue();
-        expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeTruthy();
-    });
+        it('shows spinner and disables button while downloading', () => {
+            const download$ = new Subject<Blob>();
+            mockResumeService.downloadDefaultResume.and.returnValue(download$.asObservable());
+            const resumeButton = fixture.debugElement.query(By.css('.resume-button'))
+                .nativeElement as HTMLButtonElement;
 
-    it('hides spinner and re-enables button when download completes', () => {
-        const download$ = new Subject<Blob>();
-        mockResumeService.downloadDefaultResume.and.returnValue(
-            download$.asObservable()
-        );
+            resumeButton.click();
+            fixture.detectChanges();
 
-        const resumeButton = fixture.debugElement.query(
-            By.css('.resume-button')
-        ).nativeElement as HTMLButtonElement;
+            expect(component.isDownloadingResume()).toBeTrue();
+            expect(resumeButton.disabled).toBeTrue();
+            expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeTruthy();
+        });
 
-        resumeButton.click();
-        fixture.detectChanges();
+        it('hides spinner and re-enables button when download completes', () => {
+            const download$ = new Subject<Blob>();
+            mockResumeService.downloadDefaultResume.and.returnValue(download$.asObservable());
+            const resumeButton = fixture.debugElement.query(By.css('.resume-button'))
+                .nativeElement as HTMLButtonElement;
 
-        download$.complete();
-        fixture.detectChanges();
+            resumeButton.click();
+            fixture.detectChanges();
+            download$.complete();
+            fixture.detectChanges();
 
-        expect(component.isDownloadingResume()).toBeFalse();
-        expect(resumeButton.disabled).toBeFalse();
-        expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeNull();
-    });
+            expect(component.isDownloadingResume()).toBeFalse();
+            expect(resumeButton.disabled).toBeFalse();
+            expect(fixture.debugElement.query(By.css('mat-spinner'))).toBeNull();
+        });
 
-    it('prevents duplicate resume download requests while downloading', () => {
-        const download$ = new Subject<Blob>();
-        mockResumeService.downloadDefaultResume.and.returnValue(
-            download$.asObservable()
-        );
+        it('prevents duplicate download requests while downloading', () => {
+            const download$ = new Subject<Blob>();
+            mockResumeService.downloadDefaultResume.and.returnValue(download$.asObservable());
 
-        component.viewResume();
-        component.viewResume();
+            component.viewResume();
+            component.viewResume();
 
-        expect(
-            mockResumeService.downloadDefaultResume
-        ).toHaveBeenCalledTimes(1);
+            expect(mockResumeService.downloadDefaultResume).toHaveBeenCalledTimes(1);
+        });
     });
 });
