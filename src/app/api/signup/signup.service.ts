@@ -16,6 +16,6 @@ export class SignupService {
     private apiService = inject(ApiService);
 
     createSignupRequest(req: SignupRequest): Observable<void> {
-        return this.apiService.post('invitation-requests', req);
+        return this.apiService.post('signup-requests', req);
     }
 }
