@@ -7,7 +7,10 @@ import {
 import { provideRouter } from '@angular/router';
 import { authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
 import { provideFormlyCore } from '@ngx-formly/core';
-import { withFormlyMaterial } from '@ngx-formly/material';
+import { withFormlyFormField } from '@ngx-formly/material/form-field';
+import { withFormlyFieldInput } from '@ngx-formly/material/input';
+import { withFormlyFieldSelect } from '@ngx-formly/material/select';
+import { withFormlyFieldTextArea } from '@ngx-formly/material/textarea';
 import { FormlyFieldToggle } from '@ngx-formly/material/toggle';
 
 import {
@@ -29,7 +32,10 @@ export const appConfig: ApplicationConfig = {
         ),
         provideAuth0(environment.auth0),
         provideFormlyCore([
-            ...withFormlyMaterial(),
+            withFormlyFormField(),
+            withFormlyFieldInput(),
+            withFormlyFieldTextArea(),
+            withFormlyFieldSelect(),
             {
                 types: [
                     {

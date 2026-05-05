@@ -1,10 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import {
-    argbFromHex,
-    hexFromArgb,
-    themeFromSourceColor,
-} from '@material/material-color-utilities';
 
 import { CustomThemeConfig, FontFamily, SettingsService } from '@api/settings';
 import { MaterialTheme, PremadeMaterialTheme } from '@core/models';
@@ -58,6 +53,13 @@ export class ThemeService {
     }
 
     applyCustomTheme(config?: CustomThemeConfig): void {
+        void this.applyCustomThemeAsync(config);
+    }
+
+    private async applyCustomThemeAsync(config?: CustomThemeConfig): Promise<void> {
+        const { argbFromHex, hexFromArgb, themeFromSourceColor } = await import(
+            '@material/material-color-utilities'
+        );
         const primaryColor = config?.primary ?? '#005cbb';
         const accentColor = config?.accent ?? '#FFEB3B';
         const theme = themeFromSourceColor(argbFromHex(primaryColor), [
