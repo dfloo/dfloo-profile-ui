@@ -40,22 +40,34 @@
             }
         </div>
         <div>
+            @if (!resume()?.isNew) {
+                <button
+                    matIconButton
+                    (click)="togglePdfPanel()"
+                    [matTooltip]="isPdfVisible() ? 'Hide Preview' : 'Show Preview'"
+                    [attr.aria-label]="isPdfVisible() ? 'Hide PDF Preview' : 'Show PDF Preview'"
+                >
+                    <mat-icon class="material-icons-outlined">
+                        {{ isPdfVisible() ? 'chrome_reader_mode' : 'picture_as_pdf' }}
+                    </mat-icon>
+                </button>
+            }
             <button
                 matIconButton
-                (click)="viewResume.emit(resume()!)"
-                matTooltip="View Resume"
-                aria-label="View Resume"
+                (click)="openInNewTab()"
+                matTooltip="Open In New Tab"
+                aria-label="Open In New Tab"
                 [disabled]="isDownloadingResume()"
             >
                 @if (isDownloadingResume()) {
                     <mat-spinner diameter="20"></mat-spinner>
                 } @else {
-                    <mat-icon class="material-icons-outlined"> pageview </mat-icon>
+                    <mat-icon class="material-icons-outlined">open_in_new</mat-icon>
                 }
             </button>
             <button
                 matIconButton
-                (click)="downloadResume.emit(resume()!)"
+                (click)="onDownloadResume()"
                 matTooltip="Download Resume"
                 aria-label="Download Resume"
                 [disabled]="isDownloadingResume()"
@@ -63,7 +75,7 @@
                 @if (isDownloadingResume()) {
                     <mat-spinner diameter="20"></mat-spinner>
                 } @else {
-                    <mat-icon class="material-icons-outlined"> download </mat-icon>
+                    <mat-icon class="material-icons-outlined">download</mat-icon>
                 }
             </button>
             <button
@@ -76,7 +88,8 @@
             </button>
         </div>
     </div>
-    <div class="resume-editor">
+    <div class="resume-editor-content">
+        <div class="resume-form-panel">
         <mat-accordion>
             <div>
                 <mat-expansion-panel expanded="true">
@@ -152,5 +165,28 @@
                 }
             </div>
         </mat-accordion>
+        </div>
+        @if (!resume()?.isNew && isPdfVisible()) {
+            <div class="pdf-viewer-panel">
+                @if (isLoadingPdf()) {
+                    <div class="pdf-loading">
+                        <mat-spinner diameter="40"></mat-spinner>
+                    </div>
+                } @else if (pdfError()) {
+                    <div class="pdf-error">
+                        <mat-icon class="material-icons-outlined">error_outline</mat-icon>
+                        <span>Failed to load PDF preview</span>
+                        <button matButton="outlined" (click)="fetchPdf(resume()!)">
+                            Retry
+                        </button>
+                    </div>
+                } @else if (safePdfUrl()) {
+                    <iframe
+                        [src]="safePdfUrl()"
+                        title="Resume Preview"
+                    ></iframe>
+                }
+            </div>
+        }
     </div>
 </div>

@@ -2,6 +2,9 @@
 
 .content-container {
     height: $app-content-height;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .mat-sidenav-content {
