@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 
 import { UserService } from '@core/services';
 import { UserModalComponent, UserModalView } from '@components/user-modal';
+import { SignupModalComponent } from '@components/signup-modal';
 
 import { environment } from '../../../environments/environment';
 
@@ -57,9 +58,10 @@ export class HeaderComponent {
     logout(): void {
         this.userService.logout();
     }
-
     signup(): void {
-        this.userService.signup();
+        this.dialog.open(SignupModalComponent, {
+            minWidth: '40vw',
+        });
     }
 
     openUserModal(view: UserModalView, showTabs = true): void {
