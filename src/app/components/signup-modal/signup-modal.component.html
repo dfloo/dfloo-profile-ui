@@ -1,0 +1,32 @@
+<mat-toolbar><h2>Request an Invitation</h2></mat-toolbar>
+<mat-dialog-content>
+    <form [formGroup]="form" class="modal-form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" autocomplete="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" autocomplete="email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Why would you like access?</mat-label>
+            <textarea matInput formControlName="reason" rows="5"></textarea>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton="outlined" mat-dialog-close>Cancel</button>
+    <button
+        matButton="filled"
+        color="primary"
+        [disabled]="form.invalid || isSubmitting()"
+        (click)="submit()"
+    >
+        @if (isSubmitting()) {
+            <mat-spinner [diameter]="18"></mat-spinner>
+        } @else {
+            Send Request
+        }
+    </button>
+</mat-dialog-actions>

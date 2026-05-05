@@ -24,7 +24,7 @@
                     LinkedIn
                 </button>
                 <button
-                    matButton="filled"
+                    matButton="outlined"
                     color="primary"
                     class="resume-button"
                     [disabled]="isDownloadingResume()"
@@ -33,8 +33,15 @@
                     @if (isDownloadingResume()) {
                         <mat-spinner [diameter]="18"></mat-spinner>
                     } @else {
-                        View Resume
+                        Resume
                     }
+                </button>
+                <button
+                    matButton="filled"
+                    color="primary"
+                    (click)="scheduleMeeting()"
+                >
+                    Schedule a Meeting
                 </button>
             </div>
         </div>

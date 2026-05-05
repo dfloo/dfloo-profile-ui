@@ -6,10 +6,12 @@ import {
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs';
 
 import { ResumeService } from '@api/resume';
+import { MeetingRequestModalComponent } from '@components/meeting-request-modal';
 
 interface WelcomeCard {
     text: string;
@@ -24,6 +26,7 @@ interface WelcomeCard {
 })
 export class WelcomeComponent {
     private resumeService = inject(ResumeService);
+    private dialog = inject(MatDialog);
 
     welcomeCards: WelcomeCard[] = welcomeCards;
     isDownloadingResume = signal(false);
@@ -46,6 +49,12 @@ export class WelcomeComponent {
                 window.open(pdfUrl);
                 setTimeout(() => URL.revokeObjectURL(pdfUrl), 1000);
             });
+    }
+
+    scheduleMeeting(): void {
+        this.dialog.open(MeetingRequestModalComponent, {
+            minWidth: '40vw',
+        });
     }
 
     viewSocial(account: 'github' | 'linkedin'): void {
@@ -75,7 +84,7 @@ const welcomeCards: WelcomeCard[] = [
         background: 'golden-gate.jpg',
     },
     {
-        text: "Since then I've learned to develop, deploy and maintain modern web apps using numerous frameworks and technologies.",
+        text: "Since then I've developed, deployed and maintained modern web apps using numerous frameworks and technologies.",
         background: 'laptop.jpg',
     },
     {
