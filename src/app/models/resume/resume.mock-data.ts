@@ -120,7 +120,7 @@ export const getMockResumeDTO = (): ResumeDTO => ({
     "fileName": "Devin_Flood_Resume",
     "templateSettings": {
         "templateName": "default",
-        "fontFamily": "default"
+        "fontFamily": "lmodern"
     },
     "created": "0001-01-01T00:00:00Z",
     "updated": "2025-10-23T19:00:08.775604Z"

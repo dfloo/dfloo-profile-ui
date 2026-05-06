@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { LocalStorageService, UserService } from '@core/services';
 import { Resume } from '@models/resume';
@@ -194,6 +194,45 @@ describe('ResumeService', () => {
                 'download/resume',
                 serialized,
             );
+        });
+    });
+
+    describe('#getFonts', () => {
+        it('should call apiService.get with resumes/fonts and map strings to options', (done) => {
+            setup();
+            mockApiService.get.and.returnValue(of(['Arial', 'Times New Roman']));
+
+            service.getFonts().subscribe((fonts) => {
+                expect(mockApiService.get).toHaveBeenCalledWith('resumes/fonts');
+                expect(fonts).toEqual([
+                    { value: 'Arial', label: 'Arial' },
+                    { value: 'Times New Roman', label: 'Times New Roman' },
+                ]);
+                done();
+            });
+        });
+
+        it('should return an empty array when the endpoint errors', (done) => {
+            setup();
+            mockApiService.get.and.returnValue(
+                throwError(() => new Error('network error')),
+            );
+
+            service.getFonts().subscribe((fonts) => {
+                expect(fonts).toEqual([]);
+                done();
+            });
+        });
+
+        it('should not make duplicate requests on multiple subscriptions', (done) => {
+            setup();
+            mockApiService.get.and.returnValue(of(['Arial']));
+
+            service.getFonts().subscribe();
+            service.getFonts().subscribe(() => {
+                expect(mockApiService.get).toHaveBeenCalledTimes(1);
+                done();
+            });
         });
     });
 });
