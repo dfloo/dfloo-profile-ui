@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
+import { provideFormlyCore } from '@ngx-formly/core';
+import { withFormlyFormField } from '@ngx-formly/material/form-field';
+import { withFormlyFieldInput } from '@ngx-formly/material/input';
+import { withFormlyFieldTextArea } from '@ngx-formly/material/textarea';
 import { of, Subject } from 'rxjs';
 
 import { SignupService } from '@api/signup';
@@ -24,6 +28,7 @@ describe('SignupModalComponent', () => {
         await TestBed.configureTestingModule({
             imports: [SignupModalComponent],
             providers: [
+                provideFormlyCore([withFormlyFormField(), withFormlyFieldInput(), withFormlyFieldTextArea()]),
                 { provide: MatDialogRef, useValue: mockDialogRef },
                 { provide: SignupService, useValue: mockSignupService },
                 { provide: SnackBarService, useValue: mockSnackBarService },

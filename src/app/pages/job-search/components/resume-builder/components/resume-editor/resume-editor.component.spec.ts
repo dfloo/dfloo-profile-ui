@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of, Subject, throwError } from 'rxjs';
 
@@ -48,7 +47,6 @@ describe('ResumeEditorComponent', () => {
         await TestBed.configureTestingModule({
             imports: [ResumeEditorComponent],
             providers: [
-                provideNoopAnimations(),
                 { provide: MatDialog, useValue: mockDialog },
                 { provide: ResumeService, useValue: mockResumeService },
                 { provide: UserService, useValue: mockUserService },
