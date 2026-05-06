@@ -4,19 +4,13 @@
     @switch (phase()) {
         @case ('form') {
             @if (applications().length) {
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Job Application</mat-label>
-                    <mat-select
-                        [(ngModel)]="selectedApplication"
-                        placeholder="Select a job application"
-                    >
-                        @for (app of applications(); track app.id) {
-                            <mat-option [value]="app">
-                                {{ app.company }} — {{ app.role }}
-                            </mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+                <form [formGroup]="form">
+                    <formly-form
+                        [form]="form"
+                        [fields]="fields"
+                        [model]="model"
+                    ></formly-form>
+                </form>
             } @else {
                 <p class="empty-state">
                     No unsubmitted job applications found. Add one in the
@@ -47,7 +41,7 @@
                 matButton="filled"
                 color="primary"
                 (click)="submit()"
-                [disabled]="!selectedApplication || !applications().length"
+                [disabled]="!model.application || !applications().length"
             >
                 Tailor
             </button>

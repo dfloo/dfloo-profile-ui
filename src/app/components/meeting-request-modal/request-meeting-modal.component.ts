@@ -4,12 +4,7 @@ import {
     inject,
     signal,
 } from '@angular/core';
-import {
-    FormControl,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators,
-} from '@angular/forms';
+import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
     MatDialogActions,
@@ -17,10 +12,9 @@ import {
     MatDialogContent,
     MatDialogRef,
 } from '@angular/material/dialog';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatToolbar } from '@angular/material/toolbar';
+import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
 import { finalize } from 'rxjs';
 
 import { MeetingRequestService } from '@api/meeting-request';
@@ -31,13 +25,11 @@ import { SnackBarService } from '@core/services';
     styleUrl: './request-meeting-modal.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
+        FormlyForm,
         MatButton,
         MatDialogActions,
         MatDialogClose,
         MatDialogContent,
-        MatFormField,
-        MatInput,
-        MatLabel,
         MatProgressSpinner,
         MatToolbar,
         ReactiveFormsModule,
@@ -50,21 +42,51 @@ export class MeetingRequestModalComponent {
 
     isSubmitting = signal(false);
 
-    form = new FormGroup({
-        name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-        email: new FormControl('', {
-            nonNullable: true,
-            validators: [Validators.required, Validators.email],
-        }),
-        message: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    });
+    form = new FormGroup({});
+    model = { name: '', email: '', message: '' };
+    fields: FormlyFieldConfig[] = [
+        {
+            key: 'name',
+            type: 'input',
+            props: {
+                label: 'Name',
+                required: true,
+                attributes: { autocomplete: 'name' },
+            },
+        },
+        {
+            key: 'email',
+            type: 'input',
+            props: {
+                label: 'Email',
+                required: true,
+                type: 'email',
+                attributes: { autocomplete: 'email' },
+            },
+            validators: {
+                email: {
+                    expression: (c: AbstractControl) => !c.value || Validators.email(c) === null,
+                    message: 'Invalid email address',
+                },
+            },
+        },
+        {
+            key: 'message',
+            type: 'textarea',
+            props: {
+                label: 'Message',
+                required: true,
+                rows: 5,
+            },
+        },
+    ];
 
     submit(): void {
         if (this.form.invalid || this.isSubmitting()) return;
 
         this.isSubmitting.set(true);
         this.meetingRequestService
-            .createMeetingRequest(this.form.getRawValue())
+            .createMeetingRequest(this.model)
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
                 next: () => {

@@ -7,7 +7,7 @@ import {
     signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import {
@@ -17,9 +17,8 @@ import {
     MatDialogRef,
     MatDialogTitle,
 } from '@angular/material/dialog';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatOption, MatSelect } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { FormlyFieldConfig, FormlyForm } from '@ngx-formly/core';
 
 import { JobApplicationService } from '@api/job-application';
 import { ResumeService } from '@api/resume';
@@ -40,16 +39,13 @@ type DialogPhase = 'form' | 'loading' | 'done' | 'error';
     templateUrl: './tailor-resume-dialog.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        FormsModule,
+        FormlyForm,
         MatButton,
         MatDialogActions,
         MatDialogContent,
         MatDialogTitle,
-        MatFormField,
-        MatLabel,
-        MatOption,
         MatProgressSpinner,
-        MatSelect,
+        ReactiveFormsModule,
     ],
 })
 export class TailorResumeDialogComponent implements OnInit {
@@ -61,7 +57,19 @@ export class TailorResumeDialogComponent implements OnInit {
 
     phase = signal<DialogPhase>('form');
     applications = signal<JobApplication[]>([]);
-    selectedApplication: JobApplication | null = null;
+    form = new FormGroup({});
+    model: { application: JobApplication | null } = { application: null };
+    fields: FormlyFieldConfig[] = [
+        {
+            key: 'application',
+            type: 'select',
+            props: {
+                label: 'Job Application',
+                placeholder: 'Select a job application',
+                options: [],
+            },
+        },
+    ];
     private tailoredResume?: Resume;
 
     ngOnInit(): void {
@@ -72,16 +80,22 @@ export class TailorResumeDialogComponent implements OnInit {
                 takeUntilDestroyed(this.destroyRef),
             )
             .subscribe((apps) => {
-                this.applications.set(
-                    apps.filter(
-                        (a) => a.status === JobApplicationStatus.Unsubmitted,
-                    ),
+                const filtered = apps.filter(
+                    (a) => a.status === JobApplicationStatus.Unsubmitted,
                 );
+                this.applications.set(filtered);
+                const props = this.fields[0].props;
+                if (props) {
+                    props.options = filtered.map((app) => ({
+                        label: `${app.company} — ${app.role}`,
+                        value: app,
+                    }));
+                }
             });
     }
 
     submit(): void {
-        const app = this.selectedApplication;
+        const app = this.model.application;
         if (!app) return;
 
         this.phase.set('loading');
