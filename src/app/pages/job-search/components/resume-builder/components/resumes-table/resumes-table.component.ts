@@ -79,6 +79,7 @@ export class ResumesTableComponent implements AfterViewInit {
     downloadResume = output<Resume>();
     deleteResumes = output<string[]>();
     setDefault = output<string>();
+    tailorResume = output<Resume>();
     columns: string[] = [];
     dataSource = new MatTableDataSource<Resume>([]);
     selectionModel = new SelectionModel<Resume>(true, []);

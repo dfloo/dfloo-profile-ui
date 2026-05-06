@@ -4,7 +4,7 @@ import { catchError, map, Observable, of, shareReplay } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { LocalStorageService, UserService } from '@core/services';
-import { Resume, ResumeDTO } from '@models/resume';
+import { Resume, ResumeDTO, TailorResumeRequest } from '@models/resume';
 
 import { ApiService } from '../api.service';
 
@@ -110,6 +110,12 @@ export class ResumeService {
                 shareReplay({ bufferSize: 1, refCount: false }),
             );
         return this.fonts$;
+    }
+
+    tailorResume(resumeId: string, body: TailorResumeRequest): Observable<Resume> {
+        return this.apiService
+            .post<ResumeDTO>(`${this.path}/tailor/${resumeId}`, body)
+            .pipe(map(Resume.normalize));
     }
 
     downloadGuestResume(resume: Resume): Observable<Blob> {

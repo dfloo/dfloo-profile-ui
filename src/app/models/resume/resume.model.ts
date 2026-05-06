@@ -119,3 +119,9 @@ interface TemplateSettings {
     templateName: 'default';
     fontFamily: string;
 }
+
+export interface TailorResumeRequest {
+    jobDescription?: string;
+    company?: string;
+    role?: string;
+}

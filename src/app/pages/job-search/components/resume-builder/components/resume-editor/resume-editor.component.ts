@@ -81,10 +81,12 @@ export class ResumeEditorComponent implements OnInit {
     private destroyRef = inject(DestroyRef);
 
     isDownloadingResume = input<boolean>(false);
+    savedResume = input<Resume | undefined>();
     saveResume = output<Resume>();
     viewResume = output<Resume>();
     downloadResume = output<Resume>();
     deleteResume = output<string[]>();
+    tailorResume = output<Resume>();
     back = output();
     resume = model<Resume>();
     resumeSnapshot?: Resume;
@@ -128,8 +130,11 @@ export class ResumeEditorComponent implements OnInit {
 
     constructor() {
         effect(() => {
+            this.resumeSnapshot = cloneDeep(this.savedResume());
+        });
+
+        effect(() => {
             const resume = this.resume();
-            this.resumeSnapshot = cloneDeep(resume);
             this.setFormFields();
             if (this.expandLastPanel) {
                 setTimeout(() => {
@@ -201,6 +206,7 @@ export class ResumeEditorComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.resumeSnapshot = cloneDeep(this.savedResume());
         this.setFormFields();
     }
 
@@ -334,6 +340,13 @@ export class ResumeEditorComponent implements OnInit {
             link.click();
         } else {
             this.downloadResume.emit(resume);
+        }
+    }
+
+    onTailorResume(): void {
+        const resume = this.resume();
+        if (resume?.id) {
+            this.tailorResume.emit(resume);
         }
     }
 

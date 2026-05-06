@@ -33,6 +33,16 @@
                 }
                 <button
                     matIconButton
+                    (click)="tailorResume.emit(selectedResume)"
+                    matTooltip="Tailor Resume"
+                    aria-label="Tailor Resume"
+                >
+                    <mat-icon class="material-icons-outlined">
+                        auto_fix_high
+                    </mat-icon>
+                </button>
+                <button
+                    matIconButton
                     (click)="onCopyResume(selectedResume)"
                     matTooltip="Copy Resume"
                     aria-label="Copy Resume"

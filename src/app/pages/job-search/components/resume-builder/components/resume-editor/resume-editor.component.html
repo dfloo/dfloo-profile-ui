@@ -43,6 +43,14 @@
             @if (!resume()?.isNew) {
                 <button
                     matIconButton
+                    (click)="onTailorResume()"
+                    matTooltip="Tailor Resume"
+                    aria-label="Tailor Resume"
+                >
+                    <mat-icon class="material-icons-outlined">auto_fix_high</mat-icon>
+                </button>
+                <button
+                    matIconButton
                     (click)="togglePdfPanel()"
                     [matTooltip]="isPdfVisible() ? 'Hide Preview' : 'Show Preview'"
                     [attr.aria-label]="isPdfVisible() ? 'Hide PDF Preview' : 'Show PDF Preview'"
