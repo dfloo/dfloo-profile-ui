@@ -3,6 +3,7 @@
         <resume-editor
             [resume]="resume()"
             [savedResume]="savedResume()"
+            [isAuthenticated]="isAuthenticated()"
             [isDownloadingResume]="isDownloadingResume()"
             (saveResume)="saveResume($event)"
             (downloadResume)="downloadResume($event)"
@@ -14,6 +15,7 @@
     } @else {
         <resumes-table
             [isSuperUser]="isSuperUser()"
+            [isAuthenticated]="isAuthenticated()"
             [isDownloadingResume]="isDownloadingResume()"
             [resumes]="resumes()"
             (newResume)="newResume()"

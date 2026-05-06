@@ -155,6 +155,10 @@ export class ResumeBuilderComponent implements OnInit {
 
     tailorResume(resume: Resume): void {
         if (!resume.id) return;
+        if (!this.isAuthenticated()) {
+            this.snackBar.open('Sign in to tailor resumes', 'warning');
+            return;
+        }
 
         this.dialog
             .open(TailorResumeDialogComponent, {

@@ -70,6 +70,7 @@ export class ResumesTableComponent implements AfterViewInit {
     @ViewChild(MatSort, { static: true }) private sort!: MatSort;
 
     isSuperUser = input<boolean>(false);
+    isAuthenticated = input<boolean>(false);
     isDownloadingResume = input<boolean>(false);
     resumes = input<Resume[]>([]);
     newResume = output();

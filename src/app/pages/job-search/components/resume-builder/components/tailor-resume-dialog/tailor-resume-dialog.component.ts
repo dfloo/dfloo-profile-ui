@@ -1,10 +1,14 @@
 import {
+    ChangeDetectionStrategy,
     Component,
+    DestroyRef,
     inject,
     OnInit,
     signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { catchError, of } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import {
     MAT_DIALOG_DATA,
@@ -34,6 +38,7 @@ type DialogPhase = 'form' | 'loading' | 'done' | 'error';
 @Component({
     selector: 'tailor-resume-dialog',
     templateUrl: './tailor-resume-dialog.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         FormsModule,
         MatButton,
@@ -52,6 +57,7 @@ export class TailorResumeDialogComponent implements OnInit {
     private data: TailorDialogData = inject(MAT_DIALOG_DATA);
     private resumeService = inject(ResumeService);
     private jobApplicationService = inject(JobApplicationService);
+    private destroyRef = inject(DestroyRef);
 
     phase = signal<DialogPhase>('form');
     applications = signal<JobApplication[]>([]);
@@ -59,13 +65,19 @@ export class TailorResumeDialogComponent implements OnInit {
     private tailoredResume?: Resume;
 
     ngOnInit(): void {
-        this.jobApplicationService.getJobApplications().subscribe((apps) => {
-            this.applications.set(
-                apps.filter(
-                    (a) => a.status === JobApplicationStatus.Unsubmitted,
-                ),
-            );
-        });
+        this.jobApplicationService
+            .getJobApplications()
+            .pipe(
+                catchError(() => of([])),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe((apps) => {
+                this.applications.set(
+                    apps.filter(
+                        (a) => a.status === JobApplicationStatus.Unsubmitted,
+                    ),
+                );
+            });
     }
 
     submit(): void {
@@ -79,6 +91,7 @@ export class TailorResumeDialogComponent implements OnInit {
                 role: app.role,
                 jobDescription: app.description,
             })
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
                 next: (resume) => {
                     this.tailoredResume = resume;

@@ -81,6 +81,7 @@ export class ResumeEditorComponent implements OnInit {
     private destroyRef = inject(DestroyRef);
 
     isDownloadingResume = input<boolean>(false);
+    isAuthenticated = input<boolean>(false);
     savedResume = input<Resume | undefined>();
     saveResume = output<Resume>();
     viewResume = output<Resume>();

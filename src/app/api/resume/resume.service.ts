@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { catchError, map, Observable, of, shareReplay } from 'rxjs';
+import { catchError, EMPTY, map, Observable, of, shareReplay } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { LocalStorageService, UserService } from '@core/services';
@@ -113,9 +113,14 @@ export class ResumeService {
     }
 
     tailorResume(resumeId: string, body: TailorResumeRequest): Observable<Resume> {
-        return this.apiService
-            .post<ResumeDTO>(`${this.path}/tailor/${resumeId}`, body)
-            .pipe(map(Resume.normalize));
+        return this.userService.isAuthenticated$.pipe(
+            switchMap((isAuthenticated) => {
+                if (!isAuthenticated) return EMPTY;
+                return this.apiService
+                    .post<ResumeDTO>(`${this.path}/tailor/${resumeId}`, body)
+                    .pipe(map(Resume.normalize));
+            }),
+        );
     }
 
     downloadGuestResume(resume: Resume): Observable<Blob> {
