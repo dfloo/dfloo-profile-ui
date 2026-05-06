@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
+import { provideFormlyCore } from '@ngx-formly/core';
+import { withFormlyFormField } from '@ngx-formly/material/form-field';
+import { withFormlyFieldInput } from '@ngx-formly/material/input';
+import { withFormlyFieldTextArea } from '@ngx-formly/material/textarea';
 import { of, Subject } from 'rxjs';
 
 import { MeetingRequestService } from '@api/meeting-request';
@@ -24,6 +28,7 @@ describe('MeetingRequestModalComponent', () => {
         await TestBed.configureTestingModule({
             imports: [MeetingRequestModalComponent],
             providers: [
+                provideFormlyCore([withFormlyFormField(), withFormlyFieldInput(), withFormlyFieldTextArea()]),
                 { provide: MatDialogRef, useValue: mockDialogRef },
                 { provide: MeetingRequestService, useValue: mockMeetingRequestService },
                 { provide: SnackBarService, useValue: mockSnackBarService },

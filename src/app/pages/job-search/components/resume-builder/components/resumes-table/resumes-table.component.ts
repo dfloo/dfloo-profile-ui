@@ -70,6 +70,7 @@ export class ResumesTableComponent implements AfterViewInit {
     @ViewChild(MatSort, { static: true }) private sort!: MatSort;
 
     isSuperUser = input<boolean>(false);
+    isAuthenticated = input<boolean>(false);
     isDownloadingResume = input<boolean>(false);
     resumes = input<Resume[]>([]);
     newResume = output();
@@ -79,6 +80,7 @@ export class ResumesTableComponent implements AfterViewInit {
     downloadResume = output<Resume>();
     deleteResumes = output<string[]>();
     setDefault = output<string>();
+    tailorResume = output<Resume>();
     columns: string[] = [];
     dataSource = new MatTableDataSource<Resume>([]);
     selectionModel = new SelectionModel<Resume>(true, []);

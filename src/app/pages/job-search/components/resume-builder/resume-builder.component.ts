@@ -6,6 +6,7 @@ import {
     signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
 import { finalize } from 'rxjs';
 import cloneDeep from 'lodash-es/cloneDeep';
 
@@ -14,7 +15,11 @@ import { ResumeService } from '@api/resume';
 import { Role, SnackBarService, UserService } from '@core/services';
 import { Resume } from '@models/resume';
 
-import { ResumeEditorComponent, ResumesTableComponent } from './components';
+import {
+    ResumeEditorComponent,
+    ResumesTableComponent,
+    TailorResumeDialogComponent
+} from './components';
 
 @Component({
     selector: 'resume-builder',
@@ -28,9 +33,11 @@ export class ResumeBuilderComponent implements OnInit {
     private profileService = inject(ProfileService);
     private userService = inject(UserService);
     private snackBar = inject(SnackBarService);
+    private dialog = inject(MatDialog);
 
     resumes = signal<Resume[]>([]);
     resume = signal<Resume | undefined>(undefined);
+    savedResume = signal<Resume | undefined>(undefined);
     userProfile = toSignal(this.profileService.getUserProfile());
     isSuperUser = toSignal(this.userService.hasRole(Role.SuperUser), {
         initialValue: false,
@@ -67,11 +74,13 @@ export class ResumeBuilderComponent implements OnInit {
         }
         if (resume.isNew) {
             this.resumeService.createResume(resume).subscribe((created) => {
+                this.savedResume.set(created);
                 this.resume.set(created);
                 this.resumes.set([...this.resumes(), created]);
             });
         } else {
             this.resumeService.updateResume(resume).subscribe((updated) => {
+                this.savedResume.set(updated);
                 this.resume.set(updated);
                 this.resumes.set(
                     this.resumes().map((resume) =>
@@ -83,6 +92,7 @@ export class ResumeBuilderComponent implements OnInit {
     }
 
     editResume(resume: Resume): void {
+        this.savedResume.set(resume);
         this.resume.set(resume);
     }
 
@@ -99,13 +109,13 @@ export class ResumeBuilderComponent implements OnInit {
     }
 
     newResume(): void {
-        this.resume.set(
-            new Resume({
-                profile: this.userProfile(),
-                experience: [{}],
-                education: [{}],
-            }),
-        );
+        const blank = new Resume({
+            profile: this.userProfile(),
+            experience: [{}],
+            education: [{}],
+        });
+        this.savedResume.set(cloneDeep(blank));
+        this.resume.set(blank);
     }
 
     downloadResume(resume: Resume): void {
@@ -141,6 +151,32 @@ export class ResumeBuilderComponent implements OnInit {
         observable
             .pipe(finalize(() => this.isDownloadingResume.set(false)))
             .subscribe((pdf) => window.open(URL.createObjectURL(pdf)));
+    }
+
+    tailorResume(resume: Resume): void {
+        if (!resume.id) return;
+        if (!this.isAuthenticated()) {
+            this.snackBar.open('Sign in to tailor resumes', 'warning');
+            return;
+        }
+
+        this.dialog
+            .open(TailorResumeDialogComponent, {
+                data: { resumeId: resume.id },
+                width: '500px',
+            })
+            .afterClosed()
+            .subscribe((tailored: Resume | null) => {
+                if (tailored) {
+                    // Keep the pre-tailor version as the snapshot baseline so
+                    // the editor shows "unsaved changes" and cancel can revert.
+                    this.savedResume.set(resume);
+                    this.resume.set(tailored);
+                    this.snackBar.open(
+                        'Resume tailored! Review changes and save when ready.',
+                    );
+                }
+            });
     }
 
     setDefaultResume(resumeId: string): void {

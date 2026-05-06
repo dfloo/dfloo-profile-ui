@@ -2,16 +2,20 @@
     @if (resume()) {
         <resume-editor
             [resume]="resume()"
+            [savedResume]="savedResume()"
+            [isAuthenticated]="isAuthenticated()"
             [isDownloadingResume]="isDownloadingResume()"
             (saveResume)="saveResume($event)"
             (downloadResume)="downloadResume($event)"
             (viewResume)="viewResume($event)"
             (deleteResume)="deleteResumes($event)"
+            (tailorResume)="tailorResume($event)"
             (back)="resume.set(undefined)"
         ></resume-editor>
     } @else {
         <resumes-table
             [isSuperUser]="isSuperUser()"
+            [isAuthenticated]="isAuthenticated()"
             [isDownloadingResume]="isDownloadingResume()"
             [resumes]="resumes()"
             (newResume)="newResume()"
@@ -20,6 +24,7 @@
             (deleteResumes)="deleteResumes($event)"
             (viewResume)="viewResume($event)"
             (downloadResume)="downloadResume($event)"
+            (tailorResume)="tailorResume($event)"
             (setDefault)="setDefaultResume($event)"
         ></resumes-table>
     }

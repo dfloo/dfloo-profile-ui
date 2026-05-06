@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of, Subject, throwError } from 'rxjs';
 
@@ -48,7 +47,6 @@ describe('ResumeEditorComponent', () => {
         await TestBed.configureTestingModule({
             imports: [ResumeEditorComponent],
             providers: [
-                provideNoopAnimations(),
                 { provide: MatDialog, useValue: mockDialog },
                 { provide: ResumeService, useValue: mockResumeService },
                 { provide: UserService, useValue: mockUserService },
@@ -330,6 +328,7 @@ describe('ResumeEditorComponent', () => {
     describe('resumeHasChanged', () => {
         it('should return false when resume matches snapshot', () => {
             fixture.componentRef.setInput('resume', savedResume);
+            fixture.componentRef.setInput('savedResume', savedResume);
             fixture.detectChanges();
             expect(component.resumeHasChanged).toBeFalse();
         });
@@ -359,6 +358,7 @@ describe('ResumeEditorComponent', () => {
     describe('cancelChanges', () => {
         it('should reset resume to snapshot', () => {
             fixture.componentRef.setInput('resume', savedResume);
+            fixture.componentRef.setInput('savedResume', savedResume);
             fixture.detectChanges();
 
             component.resume.set(new Resume({ ...savedResume, fileName: 'modified' }));
@@ -425,6 +425,7 @@ describe('ResumeEditorComponent', () => {
         it('should emit back directly when no unsaved changes', () => {
             const backSpy = jasmine.createSpy('back');
             fixture.componentRef.setInput('resume', savedResume);
+            fixture.componentRef.setInput('savedResume', savedResume);
             fixture.detectChanges();
             component.back.subscribe(backSpy);
 

@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>Tailor Resume</h2>
+
+<mat-dialog-content>
+    @switch (phase()) {
+        @case ('form') {
+            @if (applications().length) {
+                <form [formGroup]="form">
+                    <formly-form
+                        [form]="form"
+                        [fields]="fields"
+                        [model]="model"
+                    ></formly-form>
+                </form>
+            } @else {
+                <p class="empty-state">
+                    No unsubmitted job applications found. Add one in the
+                    Application Tracker to tailor your resume.
+                </p>
+            }
+        }
+        @case ('loading') {
+            <div class="centered">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Tailoring your resume…</p>
+            </div>
+        }
+        @case ('done') {
+            <p>Resume tailored successfully! Click Apply to load the changes into the editor.</p>
+        }
+        @case ('error') {
+            <p class="error-text">Something went wrong. Please try again.</p>
+        }
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    @switch (phase()) {
+        @case ('form') {
+            <button matButton (click)="discard()">Cancel</button>
+            <button
+                matButton="filled"
+                color="primary"
+                (click)="submit()"
+                [disabled]="!model.application || !applications().length"
+            >
+                Tailor
+            </button>
+        }
+        @case ('done') {
+            <button matButton (click)="discard()">Discard</button>
+            <button matButton="filled" color="primary" (click)="apply()">
+                Apply
+            </button>
+        }
+        @case ('error') {
+            <button matButton (click)="discard()">Close</button>
+        }
+    }
+</mat-dialog-actions>

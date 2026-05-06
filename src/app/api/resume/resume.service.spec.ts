@@ -197,6 +197,39 @@ describe('ResumeService', () => {
         });
     });
 
+    describe('#tailorResume', () => {
+        it('should post to the correct endpoint with the request body and normalize the result', (done) => {
+            setup();
+            const mockDTO = Resume.getMockDTO();
+            const normalized = Resume.normalize(mockDTO);
+            mockApiService.post.and.returnValue(of(mockDTO));
+
+            const body = { company: 'Acme', role: 'Engineer', jobDescription: 'Write code' };
+            service.tailorResume('resume-1', body).subscribe((result) => {
+                expect(mockApiService.post).toHaveBeenCalledWith(
+                    'resumes/tailor/resume-1',
+                    body,
+                );
+                expect(result).toEqual(normalized);
+                done();
+            });
+        });
+
+        it('should return EMPTY for unauthenticated users', (done) => {
+            setup(false);
+            let emitted = false;
+
+            service.tailorResume('resume-1', {}).subscribe({
+                next: () => { emitted = true; },
+                complete: () => {
+                    expect(emitted).toBeFalse();
+                    expect(mockApiService.post).not.toHaveBeenCalled();
+                    done();
+                },
+            });
+        });
+    });
+
     describe('#getFonts', () => {
         it('should call apiService.get with resumes/fonts and map strings to options', (done) => {
             setup();
