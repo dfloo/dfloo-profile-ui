@@ -330,6 +330,7 @@ describe('ResumeEditorComponent', () => {
     describe('resumeHasChanged', () => {
         it('should return false when resume matches snapshot', () => {
             fixture.componentRef.setInput('resume', savedResume);
+            fixture.componentRef.setInput('savedResume', savedResume);
             fixture.detectChanges();
             expect(component.resumeHasChanged).toBeFalse();
         });
@@ -359,6 +360,7 @@ describe('ResumeEditorComponent', () => {
     describe('cancelChanges', () => {
         it('should reset resume to snapshot', () => {
             fixture.componentRef.setInput('resume', savedResume);
+            fixture.componentRef.setInput('savedResume', savedResume);
             fixture.detectChanges();
 
             component.resume.set(new Resume({ ...savedResume, fileName: 'modified' }));
@@ -425,6 +427,7 @@ describe('ResumeEditorComponent', () => {
         it('should emit back directly when no unsaved changes', () => {
             const backSpy = jasmine.createSpy('back');
             fixture.componentRef.setInput('resume', savedResume);
+            fixture.componentRef.setInput('savedResume', savedResume);
             fixture.detectChanges();
             component.back.subscribe(backSpy);
 
