@@ -44,15 +44,15 @@
                 <button
                     matIconButton
                     (click)="viewResume.emit(selectedResume)"
-                    matTooltip="View Resume"
-                    aria-label="View Resume"
+                    matTooltip="Open In New Tab"
+                    aria-label="Open In New Tab"
                     [disabled]="isDownloadingResume()"
                 >
                     @if (isDownloadingResume()) {
                         <mat-spinner diameter="18"></mat-spinner>
                     } @else {
                         <mat-icon class="material-icons-outlined">
-                            pageview
+                            open_in_new
                         </mat-icon>
                     }
                 </button>
