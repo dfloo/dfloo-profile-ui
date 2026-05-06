@@ -200,13 +200,14 @@ describe('ResumeService', () => {
     describe('#getFonts', () => {
         it('should call apiService.get with resumes/fonts and map strings to options', (done) => {
             setup();
-            mockApiService.get.and.returnValue(of(['Arial', 'Times New Roman']));
+            mockApiService.get.and.returnValue(of(
+                [{ value: 'ar', label: 'Arial' }]
+            ));
 
             service.getFonts().subscribe((fonts) => {
                 expect(mockApiService.get).toHaveBeenCalledWith('resumes/fonts');
                 expect(fonts).toEqual([
-                    { value: 'Arial', label: 'Arial' },
-                    { value: 'Times New Roman', label: 'Times New Roman' },
+                    { value: 'ar', label: 'Arial' }
                 ]);
                 done();
             });
