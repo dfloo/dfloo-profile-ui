@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
+
+import { ResumeService } from '@api/resume';
 
 @Injectable()
 export class ResumeFormFieldsService {
+    private resumeService = inject(ResumeService);
     getSettingsFields(): FormlyFieldConfig[] {
         return [
             {
@@ -44,11 +47,9 @@ export class ResumeFormFieldsService {
                                 className: 'flex-grow',
                                 props: {
                                     label: 'Font Family',
-                                    options: [
-                                        { value: 'default', label: 'Default' },
-                                    ],
+                                    options: this.resumeService.getFonts(),
                                 },
-                                defaultValue: 'default',
+                                defaultValue: 'lmodern',
                             },
                         ],
                     },

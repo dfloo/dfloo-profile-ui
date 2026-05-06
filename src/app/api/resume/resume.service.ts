@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { map, Observable, of } from 'rxjs';
+import { catchError, defer, map, Observable, of, shareReplay } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { LocalStorageService, UserService } from '@core/services';
@@ -16,6 +16,13 @@ export class ResumeService {
     private userService = inject(UserService);
     private storage = inject(LocalStorageService);
     private readonly path = 'resumes';
+
+    private fonts$ = defer(
+        () => this.apiService.get<{ label: string, value: string }[]>(`${this.path}/fonts`)
+    ).pipe(
+        catchError(() => of([])),
+        shareReplay(1),
+    );
 
     getResumes(): Observable<Resume[]> {
         return this.userService.isAuthenticated$.pipe(
@@ -98,6 +105,10 @@ export class ResumeService {
 
     downloadDefaultResume(): Observable<Blob> {
         return this.apiService.download<Blob>('download/resume/default');
+    }
+
+    getFonts(): Observable<{ value: string; label: string }[]> {
+        return this.fonts$;
     }
 
     downloadGuestResume(resume: Resume): Observable<Blob> {

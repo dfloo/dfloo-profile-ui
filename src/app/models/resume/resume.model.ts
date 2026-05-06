@@ -117,5 +117,5 @@ interface Education {
 
 interface TemplateSettings {
     templateName: 'default';
-    fontFamily: 'default';
+    fontFamily: string;
 }
