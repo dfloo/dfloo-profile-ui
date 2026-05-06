@@ -227,7 +227,7 @@ describe('ResumeService', () => {
 
         it('should not make duplicate requests on multiple subscriptions', (done) => {
             setup();
-            mockApiService.get.and.returnValue(of(['Arial']));
+            mockApiService.get.and.returnValue(of([{ value: 'ar', label: 'Arial' }]));
 
             service.getFonts().subscribe();
             service.getFonts().subscribe(() => {
